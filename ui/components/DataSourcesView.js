@@ -14,7 +14,6 @@ const GET_DATA_SOURCES = gql`
     }
 `;
 
-
 const DataSourceDialog = (props) => {
     return (
         <Modal show={props.visible}>
