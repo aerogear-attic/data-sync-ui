@@ -1,0 +1,5 @@
+{
+  "events": {
+    "restart": "webpack --mode development"
+  }
+}
