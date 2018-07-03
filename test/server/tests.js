@@ -4,23 +4,25 @@ import { run, stop } from "../../server/server";
 describe("Basic", () => {
     let user = null;
 
-    before((done) => {
-        App.run((instance) => {
-            user = request.agent(instance);
+    before(done => {
+        run(instance => {
+            user = agent(instance);
             done();
         });
     });
 
-    after((done) => {
-        App.stop();
+    after(done => {
+        stop();
         done();
     });
 
-    it("should serve the ui", (done) => {
+    it("should serve the ui", done => {
         user.get("/")
             .expect(200)
-            .end((err, res) => {
-                if (err) throw err;
+            .end(err => {
+                if (err) {
+                    throw err;
+                }
                 done();
             });
     });

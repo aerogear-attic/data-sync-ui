@@ -1,5 +1,7 @@
-import { createLogger, format, transports } from "winston";
-import { logging } from "../../server/config";
+import {
+    createLogger, format, transports
+} from "winston";
+import { logging } from "./config";
 
 const logger = createLogger({
     level: logging.level,
