@@ -4,7 +4,7 @@ import { Query } from "react-apollo";
 import {
     ListView, DropdownKebab, Modal, Icon
 } from "patternfly-react";
-import { CommonToolbar } from "./common/CommonToolbar";
+import { CommonToolbar } from "./common";
 
 const GET_DATA_SOURCES = gql`
     {
