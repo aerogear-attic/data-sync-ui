@@ -4,7 +4,8 @@ EXPOSE 8000
 
 USER root
 
-COPY . ./
+COPY dist ./dist
+COPY public ./public
 
 USER default
 

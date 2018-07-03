@@ -2,6 +2,8 @@
 .git
 
 # Non production files
+scripts
+server
 test
 CONTRIBUTING.md
 Jenkinsfile
@@ -9,6 +11,10 @@ LICENSE
 README.md
 examples
 nodemon.json
+
+# Dev files
+webpack.config.js
+eslintrc
 
 # Packages
 node_modules/
