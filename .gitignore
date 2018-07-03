@@ -1,3 +1,9 @@
-node_modules
+# Packages
+node_modules/
+
+# Built files
+dist/
+
+# IDE files
 .idea
 bundle.js
