@@ -3,6 +3,7 @@ node_modules/
 
 # Built files
 dist/
+public/js/bundle.js
 
 # IDE files
 .idea

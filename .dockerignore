@@ -1,5 +1,7 @@
+# SCM
 .git
-node_modules
+
+# Non production files
 test
 CONTRIBUTING.md
 Jenkinsfile
@@ -7,3 +9,10 @@ LICENSE
 README.md
 examples
 nodemon.json
+
+# Packages
+node_modules/
+
+# IDE files
+.idea
+.vscode
