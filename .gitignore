@@ -7,4 +7,4 @@ public/js/bundle.js
 
 # IDE files
 .idea
-bundle.js
+.vscode
