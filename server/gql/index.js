@@ -5,7 +5,7 @@ import { Schema, root } from "./schema";
 
 const GQL_PATH = "graphql";
 
-module.exports = App => {
+export default App => {
     App.use(`/${GQL_PATH}`, ExpressGraphQL({
         schema: Schema,
         rootValue: root,
