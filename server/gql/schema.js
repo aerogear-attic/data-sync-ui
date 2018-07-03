@@ -33,4 +33,4 @@ const root = {
     dataSources: listDataSources
 };
 
-export default { Schema, root };
+export { Schema, root };
