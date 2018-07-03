@@ -9,8 +9,11 @@
     "build": "webpack --mode production",
     "start": "node ./index.js",
     "test": "NODE_ENV=test mocha",
-    "docker:build": "docker build -t aerogear/data-sync-ui:latest .",
-    "docker:push": "echo 'TODO'"
+    "docker:build": "./scripts/docker_build.sh",
+    "docker:build:release": "./scripts/docker_build_release.sh",
+    "docker:push": "./scripts/docker_push.sh",
+    "docker:push:release": "./scripts/docker_push_release.sh",
+    "release:validate": "./scripts/validateRelease.sh"
   },
   "dependencies": {
     "apollo-boost": "^0.1.10",
