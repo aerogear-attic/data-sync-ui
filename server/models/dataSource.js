@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-    const DataSource = sequelize.define('DataSource', {
+    const DataSource = sequelize.define("DataSource", {
         name: DataTypes.STRING,
-        type: DataTypes.ENUM('InMemory', 'Postgres'),
+        type: DataTypes.ENUM("InMemory", "Postgres"),
         config: DataTypes.JSON
-    })
-    return DataSource
-}
+    });
+    return DataSource;
+};

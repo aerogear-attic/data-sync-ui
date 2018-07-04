@@ -22,11 +22,10 @@ setupGraphQLServer(App);
 App.get("*", (_, res) => res.sendStatus(404));
 
 
-export const run = (callback) => {
+export const run = callback => {
     database.sync(() => {
-            server = App.listen(port, () => callback(App));
-        }
-    )
+        server = App.listen(port, () => callback(App));
+    });
 };
 
 export const stop = () => {
