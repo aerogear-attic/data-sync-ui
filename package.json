@@ -27,9 +27,11 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "patternfly-react": "^2.10.2",
+    "pg": "^7.4.3",
     "react": "^16.4.1",
     "react-apollo": "^2.1.8",
     "react-dom": "^16.4.1",
+    "sequelize": "^4.38.0",
     "winston": "^3.0.0"
   },
   "devDependencies": {

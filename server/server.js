@@ -6,6 +6,7 @@ import setupGraphQLServer from "./gql";
 
 const App = express();
 let server = null;
+const database = require("./models");
 
 // Set-up payload parsers. We accept url encoded and json values
 App.use(urlencoded({ extended: false }));
@@ -20,10 +21,14 @@ setupGraphQLServer(App);
 // Catch all other requests and return "Not found"
 App.get("*", (_, res) => res.sendStatus(404));
 
-export function run(callback) {
-    server = App.listen(port, () => callback(App));
-}
 
-export function stop() {
+export const run = (callback) => {
+    database.sync(() => {
+            server = App.listen(port, () => callback(App));
+        }
+    )
+};
+
+export const stop = () => {
     server.close();
-}
+};
