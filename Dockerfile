@@ -4,7 +4,9 @@ EXPOSE 8000
 
 USER root
 
-COPY . ./
+COPY dist ./dist
+COPY public ./public
+COPY package.json ./package.json
 
 USER default
 

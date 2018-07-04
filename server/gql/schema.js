@@ -1,5 +1,5 @@
-const { buildSchema } = require("graphql")
-    , { info } = require("../logger");
+import { buildSchema } from "graphql";
+import { info } from "../logger";
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -27,10 +27,8 @@ function listDataSources() {
         name: "another source",
         type: "InMemory"
     }];
-};
+}
 
-const root = {
-    dataSources: listDataSources
-};
+const root = { dataSources: listDataSources };
 
-module.exports = { Schema, root };
+export { Schema, root };

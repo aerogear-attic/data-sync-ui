@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { CommonToolbar } from "./common/CommonToolbar"
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
-import { ListView, DropdownKebab, Modal, Icon} from "patternfly-react";
+import {
+    ListView, DropdownKebab, Modal, Icon
+} from "patternfly-react";
+import { CommonToolbar } from "./common";
 
 const GET_DATA_SOURCES = gql`
     {
@@ -14,61 +16,63 @@ const GET_DATA_SOURCES = gql`
     }
 `;
 
-const DataSourceDialog = (props) => {
+const DataSourceDialog = props => {
+    const { visible, onClose, text } = props;
+
     return (
-        <Modal show={props.visible}>
+        <Modal show={visible}>
             <Modal.Header>
                 <button
                     className="close"
                     aria-hidden="true"
-                    onClick={props.onClose}
-                    aria-label="Close">
+                    onClick={onClose}
+                    aria-label="Close"
+                    type="submit"
+                >
                     <Icon type="pf" name="close" />
                 </button>
-                <Modal.Title>{props.text}</Modal.Title>
+                <Modal.Title>{text}</Modal.Title>
             </Modal.Header>
         </Modal>
     );
 };
 
-const DataSources = () => {
-    return <Query query={GET_DATA_SOURCES}>
-        {({loading, error, data}) => {
-            if (loading) return "Loading...";
-            if (error) return error.message;
+const DataSources = () => (
+    <Query query={GET_DATA_SOURCES}>
+        {({ loading, error, data }) => {
+            if (loading) {
+                return "Loading...";
+            }
+            if (error) {
+                return error.message;
+            }
 
-            const items = data.dataSources.map((item, idx) => {
-                return (
-                    <ListView.Item
-                        id={idx.toString()}
-                        key={idx}
-                        className="ds-list-item"
-                        heading={item.type}
-                        description="---"
-                        leftContent={<span className="list-item-name">{item.name}</span>}
-                        actions={
-                            <div>
-                                <DropdownKebab id="DataSource Dropdown" pullRight>
-                                </DropdownKebab>
-                            </div>
-                        }
-                    >
-                    </ListView.Item>
-                )
-            });
+            const items = data.dataSources.map(item => (
+                <ListView.Item
+                    key={item.id}
+                    className="ds-list-item"
+                    heading={item.type}
+                    description="---"
+                    leftContent={<span className="list-item-name">{item.name}</span>}
+                    actions={(
+                        <div>
+                            <DropdownKebab id="DataSource Dropdown" pullRight />
+                        </div>
+                    )}
+                />
+            ));
 
             return (
                 <div>
-                    <ListView>
-                        {items}
-                    </ListView>
+                    <ListView>{items}</ListView>
                 </div>
             );
         }}
     </Query>
-};
+);
 
 class DataSourcesView extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -81,9 +85,7 @@ class DataSourcesView extends Component {
     }
 
     getToolbarButtons() {
-        return [
-            {title: "Add new Data Source", cb: this.addDatasource}
-        ];
+        return [{ title: "Add new Data Source", cb: this.addDatasource }];
     }
 
     addDatasource() {
@@ -94,26 +96,26 @@ class DataSourcesView extends Component {
     }
 
     closeDialog() {
-        this.setState({
-            showModal: false
-        });
+        this.setState({ showModal: false });
     }
 
     render() {
+        const { showModal, modalText } = this.state;
         return (
-          <div>
-              <DataSourceDialog
+            <div>
+                <DataSourceDialog
                     onClose={this.closeDialog}
-                    visible={this.state.showModal}
-                    text={this.state.modalText} />
-              <CommonToolbar buttons={this.getToolbarButtons()}/>
-              <div>
-                  <DataSources/>
-              </div>
-          </div>
+                    visible={showModal}
+                    text={modalText}
+                />
+                <CommonToolbar buttons={this.getToolbarButtons()} />
+                <div>
+                    <DataSources />
+                </div>
+            </div>
         );
     }
-}
 
+}
 
 export default DataSourcesView;

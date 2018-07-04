@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Masthead, Nav, NavItem, TabContent, TabPane, TabContainer } from "patternfly-react";
+import {
+    Masthead, Nav, NavItem, TabContent, TabPane, TabContainer
+} from "patternfly-react";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import DataSourcesView from "./components/DataSourcesView";
 
 const App = () => {
-    const client = new ApolloClient({
-       uru: "/graphql"
-    });
+    const client = new ApolloClient({ uru: "/graphql" });
 
     return (
         <ApolloProvider client={client}>
@@ -16,8 +16,8 @@ const App = () => {
                 <Masthead
                     iconImg="img/logo.png"
                     title="AeroGear Sync"
-                    navToggle={false}>
-                </Masthead>
+                    navToggle={false}
+                />
                 <div>
                     <div className="ag-header">
                         <p>My Data Sync API</p>
@@ -31,7 +31,7 @@ const App = () => {
                             </Nav>
                             <TabContent>
                                 <TabPane>
-                                    <DataSourcesView/>
+                                    <DataSourcesView />
                                 </TabPane>
 
                             </TabContent>

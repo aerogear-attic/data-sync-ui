@@ -1,0 +1,4 @@
+# /node_modules/* in the project root are ignored by default
+
+# Ignore built files
+dist/
