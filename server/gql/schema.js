@@ -9,6 +9,9 @@ const Schema = buildSchema(`
     type Query {
         dataSources: [DataSource]
     },
+    type Mutation {
+            createDataSource(id: Int!, name: String!, config: String!): DataSource
+    },    
     type DataSource {
         id: Int!       
         name: String!
@@ -22,6 +25,22 @@ function listDataSources() {
     return dataSource.findAll();
 }
 
-const root = { dataSources: listDataSources };
+function createDataSource(name, type, config) {
+    info("createDataSource request");
+    return dataSource.create({
+        name: name,
+        type: type,
+        config: JSON.stringify({config})
+    }).then((dataSource) => {
+          return info("Data Source created: ", dataSource.name);
+    }).catch((err) => {
+        return info("error creating data source: ", err);
+    });
+}
+
+const root = {
+    dataSources: listDataSources,
+    createDataSource: createDataSource('Test Data Source', 'Postgres', '{test : test}' )
+};
 
 export { Schema, root };
