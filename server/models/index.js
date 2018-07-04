@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { postgresConfig as config }  from "../config";
 import { error } from "../logger";
+import DataSourceModel from "./dataSource";
 
 let db = null;
 
@@ -17,7 +18,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 const database = db;
-const dataSource = require("./dataSource")(database, Sequelize);
+const dataSource = DataSourceModel(database, Sequelize);
 
 const sync = callback => {
     database.sync({ force: false })
