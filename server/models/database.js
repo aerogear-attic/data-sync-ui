@@ -7,6 +7,7 @@ export function createDatabase() {
     }
     return new Sequelize(config.database, config.username, config.password, {
         host: config.host,
-        dialect: "postgres"
+        dialect: "postgres",
+        logging: config.logSql ? console.log : false
     });
 }
