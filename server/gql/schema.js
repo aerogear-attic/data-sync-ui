@@ -1,5 +1,6 @@
 import { buildSchema } from "graphql";
 import { info } from "../logger";
+import { dataSource } from "../models";
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -12,21 +13,13 @@ const Schema = buildSchema(`
         id: Int!       
         name: String!
         type: DataSourceType! 
+        config: String!
     }
 `);
 
 function listDataSources() {
     info("listDataSources request");
-
-    return [{
-        id: 1,
-        name: "best source eva",
-        type: "InMemory"
-    }, {
-        id: 2,
-        name: "another source",
-        type: "InMemory"
-    }];
+    return dataSource.findAll();
 }
 
 const root = { dataSources: listDataSources };
