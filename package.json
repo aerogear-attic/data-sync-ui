@@ -6,7 +6,8 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/aerogear/data-sync-ui",
   "scripts": {
-    "lint": "eslint server test ui webpack.config.js --fix",
+    "lint": "eslint server test ui webpack.config.js",
+    "lint:fix": "eslint server test ui webpack.config.js --fix",
     "server": "webpack --mode development && nodemon --watch ui --exec babel-node server/index.js",
     "build": "webpack --mode production && babel server --out-dir dist/",
     "clean": "rm -rf dist public/js/bundle.js node_modules",
