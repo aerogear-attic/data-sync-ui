@@ -2,7 +2,7 @@ import { urlencoded, json } from "body-parser";
 import express from "express";
 import { join } from "path";
 import { port } from "./config";
-import { sync } from "./models";
+import { sync, database } from "./models";
 import setupGraphQLServer from "./gql";
 
 const App = express();
@@ -29,4 +29,5 @@ export const run = callback => {
 
 export const stop = () => {
     server.close();
+    database.close();
 };
