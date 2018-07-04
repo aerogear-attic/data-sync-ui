@@ -11,7 +11,7 @@
     "build": "webpack --mode production && babel server --out-dir dist/",
     "clean": "rm -rf dist public/js/bundle.js node_modules",
     "start": "node ./dist/index.js",
-    "test": "NODE_ENV=test mocha",
+    "test": "mocha --require babel-core/register --recursive",
     "docker:build": "./scripts/docker_build.sh",
     "docker:build:release": "./scripts/docker_build_release.sh",
     "docker:push": "./scripts/docker_push.sh",
