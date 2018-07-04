@@ -24,9 +24,9 @@ App.get("*", (_, res) => res.sendStatus(404));
 
 export const run = callback => {
     sync().then(() => {
-    	pubSubInit();
-    	server = App.listen(port, () => callback(App));
-	});
+        pubSubInit();
+        server = App.listen(port, () => callback(App));
+    });
 };
 
 export const stop = () => {

@@ -3,11 +3,11 @@ import { postgresConfig } from "../config";
 import { info } from "../logger";
 
 const {
-	database,
-	username,
-	port,
-	host,
-	password
+    database,
+    username,
+    port,
+    host,
+    password
 } = postgresConfig;
 
 const conStr = `postgres://${username}:${password}@${host}:${port}/${database}`;
@@ -18,15 +18,15 @@ let pubSubInstance = null;
  * or push.
  */
 export function init() {
-	pubSubInstance = new PGPubSub(conStr);
-	info("Postgres PubSub initialized");
+    pubSubInstance = new PGPubSub(conStr);
+    info("Postgres PubSub initialized");
 }
 
 /**
  * Gracefully shutdown the pubsub system.
  */
 export const stop = () => {
-	pubSubInstance.close();
+    pubSubInstance.close();
 };
 
 /**
@@ -36,7 +36,7 @@ export const stop = () => {
  * on that channel
  */
 export const register = (channel, cb) => {
-	pubSubInstance.addChannel(channel, cb);
+    pubSubInstance.addChannel(channel, cb);
 };
 
 /**
@@ -46,5 +46,5 @@ export const register = (channel, cb) => {
  * receive
  */
 export const publish = (channel, payload) => {
-	pubSubInstance.publish(channel, payload);
+    pubSubInstance.publish(channel, payload);
 };
