@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
-import {  postgresConfig as config }  from "../config";
+import { postgresConfig as config }  from "../config";
+import { error } from "../logger";
 
 let db = null;
 
@@ -22,7 +23,7 @@ const sync = callback => {
     database.sync({ force: false })
         .then((callback))
         .catch(err => {
-            console.log("Err in sync function", err);
+            error("Err in sync function", err);
         });
 };
 
