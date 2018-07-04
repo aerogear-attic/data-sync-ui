@@ -1,20 +1,21 @@
 import { Sequelize } from "sequelize";
-import {  postgresConfig } from "../config";
+import {  postgresConfig as config }  from "../config";
 
-let database = null;
+let db = null;
 
 // If in test mode use sqlite3 in-memory storage
 if (process.env.NODE_ENV === "test") {
-    database = new Sequelize('sqlite://:memory:', null, null, {
+    db = new Sequelize('sqlite://:memory:', null, null, {
         dialect: "sqlite"
     });
 } else {
-    database = new Sequelize(postgresConfig.database, postgresConfig.username, postgresConfig.password, {
-        host: postgresConfig.host,
+    db = new Sequelize(config.database, config.username, config.password, {
+        host: config.host,
         dialect: "postgres"
     });
 }
 
+const database = db;
 const dataSource = require("./dataSource")(database, Sequelize);
 
 const sync = callback => {
