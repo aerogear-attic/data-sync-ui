@@ -12,14 +12,11 @@ class DataSourcesContainer extends Component {
             showModal: false,
             modalText: null
         };
-
-        this.addDataSource = this.addDataSource.bind(this);
-        this.closeDialog = this.closeDialog.bind(this);
     }
 
     getToolbarButtons() {
         return [
-            { title: "Add new Data Source", cb: this.addDataSource, id: "add_new_data_source" }
+            { title: "Add new Data Source", cb: () => this.addDataSource(), id: "add_new_data_source" }
         ];
     }
 
@@ -38,7 +35,11 @@ class DataSourcesContainer extends Component {
         const { showModal, modalText } = this.state;
         return (
             <div>
-                <DataSourceDialog onClose={this.closeDialog} visible={showModal} text={modalText} />
+                <DataSourceDialog
+                    onClose={() => this.closeDialog()}
+                    visible={showModal}
+                    text={modalText}
+                />
                 <CommonToolbar buttons={this.getToolbarButtons()} />
                 <div>
                     <DataSourcesList />
