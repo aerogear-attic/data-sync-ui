@@ -22,9 +22,10 @@ setupGraphQLServer(App);
 // Catch all other requests and return "Not found"
 App.get("*", (_, res) => res.sendStatus(404));
 
-export const run = async callback => {
-    await sync();
-    server = App.listen(port, () => callback(App));
+export const run = callback => {
+    sync().then(() => {
+        server = App.listen(port, () => callback(App));
+    });
 };
 
 export const stop = () => {
