@@ -12,7 +12,7 @@ const Schema = buildSchema(`
         getOneDataSource(id: Int!): DataSource
     },
     type Mutation {
-            createDataSource(name: String!, type: DataSourceType!,  config: String!): DataSource
+        createDataSource(name: String!, type: DataSourceType!,  config: String!): DataSource
     },  
     input DataSourceInput {
          id: Int!

@@ -1,7 +1,11 @@
 import { agent } from "supertest";
 import { run, stop } from "../../server/server";
-import { root } from "../../server/gql/schema";
-import gql from "graphql-tag";
+import { graphql } from "graphql";
+import { Schema, root } from "../../server/gql/schema";
+
+function assert(condition) {
+    if (!condition) return new Error(`${condition} was not truthy`);
+}
 
 describe("Basic", () => {
     let user = null;
@@ -29,7 +33,7 @@ describe("Basic", () => {
             });
     });
 
-    const CREATE_DATASOURCE_QUERY = gql` 
+    const CREATE_DATASOURCE_QUERY = ` 
         mutation createDataSource {
           createDataSource(
             name: "TestDataSource"
@@ -42,11 +46,21 @@ describe("Basic", () => {
             config
           }
         }
-    `
+    `;
 
     it('should create a new data source', done => {
+        graphql(Schema, CREATE_DATASOURCE_QUERY, root).then(data => {
+            let { createDataSource: { name, type, config }  } = data.data;
 
-           done();
+            let err = assert(data !== undefined)
+            || assert(name === "TestDataSource")
+            || assert(type === "Postgres")
+            || assert(typeof config === typeof "");
+
+            done(err);
+        }).catch(err => {
+            throw err;
+        });
     });
 
 });
