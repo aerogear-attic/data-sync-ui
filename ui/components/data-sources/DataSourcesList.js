@@ -1,8 +1,9 @@
 import React from "react";
 import { Query } from "react-apollo";
-import { ListView, DropdownKebab } from "patternfly-react";
+import { ListView } from "patternfly-react";
 
 import GetDataSources from "../../graphql/GetDataSources.graphql";
+import { DataSourcesListItem } from "./DataSourcesListItem";
 
 const DataSourcesList = () => (
     <Query query={GetDataSources}>
@@ -15,18 +16,7 @@ const DataSourcesList = () => (
             }
 
             const items = data.dataSources.map(item => (
-                <ListView.Item
-                    key={item.id}
-                    className="ds-list-item"
-                    heading={item.type}
-                    description="---"
-                    leftContent={<span className="list-item-name">{item.name}</span>}
-                    actions={(
-                        <div>
-                            <DropdownKebab id="DataSource Dropdown" pullRight />
-                        </div>
-                    )}
-                />
+                <DataSourcesListItem item={item} key={item.id} />
             ));
 
             return (
