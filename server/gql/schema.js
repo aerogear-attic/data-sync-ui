@@ -13,12 +13,8 @@ const Schema = buildSchema(`
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!,  config: String!): DataSource
-    },  
-    input DataSourceInput {
-         id: Int!
-         name: String
-         type: DataSourceType
-         config: String!
+        deleteDataSource(id: Int!): DataSource
+        updateDataSource(id: Int!, name: String!, type: DataSourceType!,  config: String!): DataSource
     },  
     type DataSource {
         id: Int!       
@@ -28,17 +24,37 @@ const Schema = buildSchema(`
     }
 `);
 
-function listDataSources() {
+const listDataSources = () => {
     info("listDataSources request");
     return dataSource.findAll();
 }
 
-function getOneDataSource({id}) {
+const getOneDataSource = ({id}) => {
     info("getOneDataSource request");
     return dataSource.findById(id);
 }
 
-function createDataSource({name, type, config}) {
+const deleteDataSource = ({id}) => {
+    info("deleteDataSource request");
+    dataSource.findById(id)
+        .then((foundDataSource) => {
+            if(!foundDataSource) return;
+            return foundDataSource.destroy({ force:true });
+    });
+}
+
+const updateDataSource = ({id, name, type, config}) => {
+    info("updateDataSource request");
+    return dataSource.findById(id).then((foundDataSource) => {
+        return foundDataSource.update({
+            name: name,
+            type: type,
+            config: config
+        });
+    });
+}
+
+const createDataSource = ({name, type, config}) => {
     info("createDataSource request");
     return dataSource.create({
         name: name,
@@ -50,7 +66,9 @@ function createDataSource({name, type, config}) {
 const root = {
     dataSources: listDataSources,
     createDataSource: createDataSource,
-    getOneDataSource: getOneDataSource
+    getOneDataSource: getOneDataSource,
+    deleteDataSource: deleteDataSource,
+    updateDataSource: updateDataSource
 };
 
 export { Schema, root };
