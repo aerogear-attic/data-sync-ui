@@ -9,3 +9,17 @@ export const postgresConfig = {
     port: process.env.POSTGRES_PORT || "5432",
     logSql: false
 };
+
+
+export const notfier = {
+    enabled: process.env.NODE_ENV !== "test",
+    type: 'postgres',
+    config: {
+        channel: 'aerogear-data-sync-config',
+        database: postgresConfig.database,
+        username: postgresConfig.username,
+        password: postgresConfig.password,
+        host: postgresConfig.host,
+        port: postgresConfig.port
+    }
+};
