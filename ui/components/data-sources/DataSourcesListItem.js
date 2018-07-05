@@ -20,14 +20,10 @@ const DataSourcesListItem = ({ item }) => {
                 <div>
                     <DropdownKebab id="data-source-list-item-dropdown" pullRight>
                         <MenuItem>
-                            Action
+                            Edit Data Source
                         </MenuItem>
                         <MenuItem>
-                            Another Action
-                        </MenuItem>
-                        <MenuItem divider />
-                        <MenuItem>
-                            Separated link
+                            Delete Data Source
                         </MenuItem>
                     </DropdownKebab>
                 </div>
