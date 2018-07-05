@@ -1,6 +1,7 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { ListView, DropdownKebab } from "patternfly-react";
+
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 const DataSourcesList = () => (
