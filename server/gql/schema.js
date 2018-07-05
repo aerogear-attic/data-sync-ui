@@ -4,14 +4,22 @@ import { dataSource } from "../models";
 
 const Schema = buildSchema(`
     enum DataSourceType {
-        InMemory
+        InMemory,
+        Postgres
     },
     type Query {
-        dataSources: [DataSource]
+        dataSources: [DataSource],
+        getOneDataSource(id: Int!): DataSource
     },
     type Mutation {
-            createDataSource(id: Int!, name: String!, config: String!): DataSource
-    },    
+            createDataSource(name: String!, type: DataSourceType!,  config: String!): DataSource
+    },  
+    input DataSourceInput {
+         id: Int!
+         name: String
+         type: DataSourceType
+         config: String!
+    },  
     type DataSource {
         id: Int!       
         name: String!
@@ -25,22 +33,24 @@ function listDataSources() {
     return dataSource.findAll();
 }
 
-function createDataSource(name, type, config) {
+function getOneDataSource({id}) {
+    info("getOneDataSource request");
+    return dataSource.findById(id);
+}
+
+function createDataSource({name, type, config}) {
     info("createDataSource request");
     return dataSource.create({
         name: name,
         type: type,
-        config: JSON.stringify({config})
-    }).then((dataSource) => {
-          return info("Data Source created: ", dataSource.name);
-    }).catch((err) => {
-        return info("error creating data source: ", err);
+        config: config
     });
 }
 
 const root = {
     dataSources: listDataSources,
-    createDataSource: createDataSource('Test Data Source', 'Postgres', '{test : test}' )
+    createDataSource: createDataSource,
+    getOneDataSource: getOneDataSource
 };
 
 export { Schema, root };
