@@ -38,4 +38,4 @@ const DataSourcesList = () => (
     </Query>
 );
 
-export default DataSourcesList;
+export { DataSourcesList };

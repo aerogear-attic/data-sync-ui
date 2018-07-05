@@ -7,7 +7,10 @@ import {
     TabPane,
     TabContainer
 } from "patternfly-react";
-import DataSourcesView from "./data-source/DataSourcesView";
+
+import { DataSourcesContainer } from "./data-sources";
+import { SchemaContainer } from "./schema";
+import { QueriesContainer } from "./queries";
 
 const App = () => (
     <div>
@@ -16,15 +19,32 @@ const App = () => (
             <div className="ag-header">
                 <p>My Data Sync API</p>
             </div>
-            <TabContainer id="basic-tabs">
+
+            <TabContainer id="my-data-sync-tabs" defaultActiveKey={0}>
                 <div>
+                    {/* Tabs */}
                     <Nav bsClass="nav nav-tabs">
-                        <NavItem disabled={false}>
+                        <NavItem eventKey={0}>
                             <div>Data Sources</div>
                         </NavItem>
+                        <NavItem eventKey={1}>
+                            <div>Schema</div>
+                        </NavItem>
+                        <NavItem eventKey={2}>
+                            <div>Queries</div>
+                        </NavItem>
                     </Nav>
+                    {/* Tabs Content */}
                     <TabContent>
-                        <TabPane><DataSourcesView /></TabPane>
+                        <TabPane eventKey={0}>
+                            <DataSourcesContainer />
+                        </TabPane>
+                        <TabPane eventKey={1}>
+                            <SchemaContainer />
+                        </TabPane>
+                        <TabPane eventKey={2}>
+                            <QueriesContainer />
+                        </TabPane>
                     </TabContent>
                 </div>
             </TabContainer>

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
 import { CommonToolbar } from "../common";
-import DataSourceDialog from "./DataSourceDialog";
-import DataSourcesList from "./DataSourcesList";
+import { DataSourceDialog } from "./DataSourceDialog";
+import { DataSourcesList } from "./DataSourcesList";
 
-class DataSourcesView extends Component {
+class DataSourcesContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -49,4 +49,4 @@ class DataSourcesView extends Component {
 
 }
 
-export default DataSourcesView;
+export { DataSourcesContainer };

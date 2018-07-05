@@ -18,4 +18,4 @@ const DataSourceDialog = ({ visible, onClose, text }) => (
     </Modal>
 );
 
-export default DataSourceDialog;
+export { DataSourceDialog };
