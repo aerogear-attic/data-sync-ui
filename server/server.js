@@ -3,7 +3,7 @@ import express from "express";
 import { join } from "path";
 import { port } from "./config";
 import { sync, database } from "./models";
-import { close as stopNotifier, addChannel, publish } from "./configNotifiers/configNotifierCreator";
+import { close as stopNotifier } from "./configNotifiers/configNotifierCreator";
 import setupGraphQLServer from "./gql";
 
 const App = express();

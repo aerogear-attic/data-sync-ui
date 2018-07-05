@@ -1,4 +1,4 @@
-import "babel-polyfill"
+import "babel-polyfill";
 
 import { agent } from "supertest";
 import { run, stop } from "../../server/server";

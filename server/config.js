@@ -13,9 +13,9 @@ export const postgresConfig = {
 
 export const notfier = {
     enabled: process.env.NODE_ENV !== "test",
-    type: 'postgres',
+    type: "postgres",
     config: {
-        channel: 'aerogear-data-sync-config',
+        channel: "aerogear-data-sync-config",
         database: postgresConfig.database,
         username: postgresConfig.username,
         password: postgresConfig.password,
