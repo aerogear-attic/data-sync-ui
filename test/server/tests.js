@@ -2,10 +2,11 @@ import { agent } from "supertest";
 import { run, stop } from "../../server/server";
 import { graphql } from "graphql";
 import { Schema, root } from "../../server/gql/schema";
+import { queries } from "queries"
 
-function assert(condition) {
+const assert = (condition) => {
     if (!condition) return new Error(`${condition} was not truthy`);
-}
+};
 
 describe("Basic", () => {
     let user = null;
@@ -33,34 +34,8 @@ describe("Basic", () => {
             });
     });
 
-    const CREATE_DATASOURCE_QUERY = ` 
-        mutation createDataSource {
-          createDataSource(
-            name: "TestDataSource"
-            type: Postgres
-            config: "config: test"
-          ) {
-            id
-            name
-            type
-            config
-          }
-        }
-    `;
-
-    const GET_DATA_SOURCES_QUERY = `
-       query getDataSourcesQuery {
-         dataSources {
-            id
-            name
-            type
-            config
-          }
-       }
-    `
-
     it('should create a new data source', done => {
-        graphql(Schema, CREATE_DATASOURCE_QUERY, root)
+        graphql(Schema, queries.CREATE_DATASOURCE_QUERY, root)
             .then(data => {
             let { createDataSource: { name, type, config }  } = data.data;
             let err = assert(data !== undefined)
@@ -71,7 +46,7 @@ describe("Basic", () => {
             return {createdDataSource, err};
             })
             .then((createdDataSource, err) => {
-                graphql(Schema, GET_DATA_SOURCES_QUERY, root)
+                graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root)
                     .then((result) => {
                         assert(result.data.dataSources[0].name === "TestDataSource");
                     })
