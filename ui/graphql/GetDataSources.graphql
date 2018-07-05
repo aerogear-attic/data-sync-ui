@@ -1,0 +1,7 @@
+query GetDataSources {
+    dataSources {
+        id
+        name
+        type
+    }
+}
