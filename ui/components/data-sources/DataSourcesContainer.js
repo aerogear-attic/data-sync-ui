@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { CommonToolbar } from "../common";
-import { DataSourceDialog } from "./DataSourceDialog";
+import { AddDataSourceDialog } from "./AddDataSourceDialog";
 import { DataSourcesList } from "./DataSourcesList";
 
 class DataSourcesContainer extends Component {
@@ -40,7 +40,7 @@ class DataSourcesContainer extends Component {
         const { showModal, modalText } = this.state;
         return (
             <div>
-                <DataSourceDialog
+                <AddDataSourceDialog
                     onClose={() => this.closeDialog()}
                     visible={showModal}
                     text={modalText}
