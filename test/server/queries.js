@@ -41,7 +41,7 @@ const queries = {
   `,
     UPDATE_DATA_SOURCE_QUERY: `
       mutation updateDataSource {
-      updateDataSource(id: 3, name: "NEW NAME", type: Postgres, config: "newConfig:config") {
+      updateDataSource(id: 1, name: "NEW NAME", type: Postgres, config: "newConfig:config") {
         id
         name
         type

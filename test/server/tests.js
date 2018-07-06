@@ -34,7 +34,7 @@ describe("Basic", () => {
             });
     });
 
-    it('should create a new data source', done => {
+    it('should delete a new data source', done => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
             let { createDataSource: { name, type, config }  } = data.data;
@@ -57,4 +57,27 @@ describe("Basic", () => {
         });
     });
 
+
+    it('should edit a new data source', done => {
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+            .then(data => {
+                let { createDataSource: { name, type, config }  } = data.data;
+                let err = assert(data !== undefined)
+                    || assert(name === "TestDataSource")
+                    || assert(type === "Postgres")
+                    || assert(typeof config === typeof "");
+                let createdDataSource = data;
+                return {createdDataSource, err};
+            })
+            .then((createdDataSource, err) => {
+                graphql(Schema, queries.UPDATE_DATA_SOURCE_QUERY, root)
+                    .then((result) => {
+                        console.log(result);
+                    })
+                done(err);
+            })
+            .catch(err => {
+                return {err};
+            });
+    });
 });
