@@ -19,7 +19,9 @@
         "react/jsx-one-expression-per-line": "off",
         "react/prop-types": "warn",
         "react/jsx-indent": ["error", 4],
-        "react/jsx-indent-props": ["error", "first"]
+        "react/jsx-indent-props": ["error", "first"],
+        "react/button-has-type": "off",
+        "jsx-a11y/label-has-for": "off"
     },
     "plugins": ["mocha"],
     "env": {
