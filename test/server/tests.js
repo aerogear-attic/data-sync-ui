@@ -36,6 +36,17 @@ describe("Basic", () => {
                 done();
             });
     });
+  
+    it("should expose a health endpoint", done => {
+        user.get("/healthz")
+            .expect(200)
+            .end(err => {
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
 
     it("should delete a new data source", done => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)

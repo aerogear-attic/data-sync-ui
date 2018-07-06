@@ -18,16 +18,12 @@
 
 ul.nav {
     background-color: #f5f5f5;
-    border-bottom: 1px solid lightgrey;
 }
 
 ul.nav li {
     margin-left: 15px;
 }
 
-.nav-tabs > li > a:hover {
-    border-bottom: 1px solid lightgrey !important;
-}
 .toolbar-container {
     border-top: 1px solid lightgrey;
 }
@@ -51,4 +47,12 @@ div.list-view-pf-left {
 span.list-item-name {
     color: #188bcc;
     font-weight: bold;
+}
+
+.nav-tabs {
+    border-bottom: none !important;
+}
+
+.nav-tabs > li > a:hover{
+    border: 1px solid lightgrey;
 }
