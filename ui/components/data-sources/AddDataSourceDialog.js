@@ -164,7 +164,7 @@ class AddDataSourceDialog extends Component {
                         Cancel
                     </Button>
                     <Button bsStyle="primary" onClick={() => this.onSaveClick()}>
-                        Save
+                        Add
                     </Button>
                 </Modal.Footer>
             </Modal>
