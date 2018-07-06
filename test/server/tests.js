@@ -8,6 +8,7 @@ const assert = condition => {
     if (!condition) {
         return new Error(`${condition} was not truthy`);
     }
+    return null;
 };
 
 describe("Basic", () => {
@@ -37,60 +38,62 @@ describe("Basic", () => {
     });
 
     it("should delete a new data source", done => {
-        let currentId = null;
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
-                const { createDataSource: { name, type, config } } = data.data;
-                const err = assert(data !== undefined)
-            || assert(name === "TestDataSource")
-            || assert(type === "Postgres")
-            || assert(typeof config === typeof "");
-                const createdDataSource = data;
-                currentId = createdDataSource.data.createDataSource.id;
-                return { createdDataSource, err };
-            })
-            .then(() => {
-                const queryWithValidId = queries.DELETE_DATA_SOURCE_QUERY.replace("$id", currentId);
-                return graphql(Schema, queryWithValidId, root)
-                    .then(result => {
-                        console.log("delete test result", result.data.deleteDataSource);
-                        const err = assert(result.data.deleteDataSource === null);
-                        return err;
-                    });
-            })
-            .then(err => {
-                graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root)
-                    .then(result => {
-                        console.log("get data result", result.data);
-                        return result;
-                    });
-                done(err);
-            })
-            .catch(err => ({ err }));
-    });
-
-
-    it("should edit a new data source", done => {
-        let currentId = null;
-        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
-            .then(data => {
-                const { createDataSource: { name, type, config } } = data.data;
+                const { createDataSource: { id, name, type, config } } = data.data;
                 const err = assert(data !== undefined)
                     || assert(name === "TestDataSource")
                     || assert(type === "Postgres")
                     || assert(typeof config === typeof "");
-                const createdDataSource = data;
-                currentId = createdDataSource.data.createDataSource.id;
-                return { createdDataSource, err };
+
+                if (err) {
+                    done(err);
+                }
+                return id;
             })
-            .then((createdDataSource, err) => {
-                const queryWithValidId = queries.UPDATE_DATA_SOURCE_QUERY.replace("$id", currentId);
-                graphql(Schema, queryWithValidId, root)
-                    .then(result => {
-                        console.log("edit test result", result);
-                    });
-                done(err);
+            .then(id => graphql(Schema, queries.DELETE_DATA_SOURCE_QUERY, root, null, { id }))
+            .then(result => {
+                // Check if the data source was actually deleted
+                if (result.data.deleteDataSource === null) {
+                    done(new Error("Delete data source failed"));
+                }
             })
-            .catch(err => ({ err }));
+            .then(() => graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root))
+            .then(result => {
+                // Check that no more are present
+                if (result.data.dataSources && result.data.dataSources.length === 0) {
+                    done();
+                } else {
+                    done(new Error("Data source still present after delete"));
+                }
+            })
+            .catch(err => done(err));
+    });
+
+    it("should edit a new data source", done => {
+        const NEW_NAME = "NEW DATA SOURCE NAME";
+
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+            .then(data => {
+                const { createDataSource: { id, name, type, config } } = data.data;
+                const err = assert(data !== undefined)
+                    || assert(name === "TestDataSource")
+                    || assert(type === "Postgres")
+                    || assert(typeof config === typeof "");
+
+                if (err) {
+                    done(err);
+                }
+                return { id, name: NEW_NAME, type, config };
+            })
+            .then(result => graphql(Schema, queries.UPDATE_DATA_SOURCE_QUERY, root, null, result))
+            .then(({ data: { updateDataSource } }) => {
+                // Check if the data source was actually updated
+                if (updateDataSource && updateDataSource.name === NEW_NAME) {
+                    return done();
+                }
+                return done(new Error("Update data source not successfull"));
+            })
+            .catch(err => done(err));
     });
 });

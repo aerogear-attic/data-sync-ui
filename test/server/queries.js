@@ -33,19 +33,16 @@ const queries = {
   }
 }`,
     DELETE_DATA_SOURCE_QUERY: `
-     mutation deleteDataSource {
+     mutation deleteDataSource($id: Int!) {
       deleteDataSource(id: $id) {
         name
       }
     }
   `,
     UPDATE_DATA_SOURCE_QUERY: `
-      mutation updateDataSource {
-      updateDataSource(id: $id, name: "NEW NAME", type: Postgres, config: "newConfig:config") {
-        id
+      mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: String!) {
+       updateDataSource(id: $id, name: $name, type: $type, config: $config) {
         name
-        type
-        config
       }
     }
     `
