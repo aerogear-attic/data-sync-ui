@@ -35,6 +35,7 @@ describe("Basic", () => {
     });
 
     it('should delete a new data source', done => {
+        let currentId = null;
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
             let { createDataSource: { name, type, config }  } = data.data;
@@ -43,12 +44,23 @@ describe("Basic", () => {
             || assert(type === "Postgres")
             || assert(typeof config === typeof "");
             let createdDataSource = data;
+            currentId = createdDataSource.data.createDataSource.id;
             return {createdDataSource, err};
             })
-            .then((createdDataSource, err) => {
-                graphql(Schema, queries.DELETE_DATA_SOURCE_QUERY, root)
+            .then(() => {
+                let queryWithValidId = queries.DELETE_DATA_SOURCE_QUERY.replace("$id", currentId);
+                return graphql(Schema, queryWithValidId, root)
                     .then((result) => {
-                       console.log(result);
+                        console.log("delete test result", result.data.deleteDataSource);
+                        let err = assert(result.data.deleteDataSource === null);
+                       return err;
+                    })
+            })
+            .then((err) => {
+                graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root)
+                    .then((result) => {
+                        console.log("get data result", result.data);
+                        return result;
                     })
                 done(err);
             })
@@ -59,6 +71,7 @@ describe("Basic", () => {
 
 
     it('should edit a new data source', done => {
+        let currentId = null;
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
                 let { createDataSource: { name, type, config }  } = data.data;
@@ -67,12 +80,14 @@ describe("Basic", () => {
                     || assert(type === "Postgres")
                     || assert(typeof config === typeof "");
                 let createdDataSource = data;
+                currentId = createdDataSource.data.createDataSource.id;
                 return {createdDataSource, err};
             })
             .then((createdDataSource, err) => {
-                graphql(Schema, queries.UPDATE_DATA_SOURCE_QUERY, root)
+                let queryWithValidId = queries.UPDATE_DATA_SOURCE_QUERY.replace("$id", currentId);
+                graphql(Schema, queryWithValidId, root)
                     .then((result) => {
-                        console.log(result);
+                        console.log("edit test result", result);
                     })
                 done(err);
             })

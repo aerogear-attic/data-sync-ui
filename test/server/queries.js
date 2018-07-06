@@ -25,7 +25,7 @@ const queries = {
     `,
     GET_ONE_DATA_SOURCE_QUERY: `
     query getSingleDataSource {
-      getOneDataSource(id: 1) {
+      getOneDataSource(id: $id) {
         id
         name
         type
@@ -34,14 +34,14 @@ const queries = {
 }`,
     DELETE_DATA_SOURCE_QUERY: `
      mutation deleteDataSource {
-      deleteDataSource(id: 1) {
+      deleteDataSource(id: $id) {
         name
       }
     }
   `,
     UPDATE_DATA_SOURCE_QUERY: `
       mutation updateDataSource {
-      updateDataSource(id: 1, name: "NEW NAME", type: Postgres, config: "newConfig:config") {
+      updateDataSource(id: $id, name: "NEW NAME", type: Postgres, config: "newConfig:config") {
         id
         name
         type
