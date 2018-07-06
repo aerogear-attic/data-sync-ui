@@ -50,4 +50,4 @@ const queries = {
     }
     `
 };
-export { queries }
+export { queries };

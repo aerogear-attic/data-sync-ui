@@ -27,48 +27,48 @@ const Schema = buildSchema(`
 const listDataSources = () => {
     info("listDataSources request");
     return dataSource.findAll();
-}
+};
 
-const getOneDataSource = ({id}) => {
+const getOneDataSource = ({ id }) => {
     info("getOneDataSource request");
     return dataSource.findById(id);
-}
+};
 
-const deleteDataSource = ({id}) => {
+const deleteDataSource = ({ id }) => {
     info("deleteDataSource request");
     dataSource.findById(id)
-        .then((foundDataSource) => {
-            if(!foundDataSource) return;
-            return foundDataSource.destroy({ force:true });
-    });
-}
-
-const updateDataSource = ({id, name, type, config}) => {
-    info("updateDataSource request");
-    return dataSource.findById(id).then((foundDataSource) => {
-        return foundDataSource.update({
-            name: name,
-            type: type,
-            config: config
+        .then(foundDataSource => {
+            if (!foundDataSource) {
+                return;
+            }
+            return foundDataSource.destroy({ force: true });
         });
-    });
-}
+};
 
-const createDataSource = ({name, type, config}) => {
+const updateDataSource = ({ id, name, type, config }) => {
+    info("updateDataSource request");
+    return dataSource.findById(id).then(foundDataSource => foundDataSource.update({
+        name,
+        type,
+        config
+    }));
+};
+
+const createDataSource = ({ name, type, config }) => {
     info("createDataSource request");
     return dataSource.create({
-        name: name,
-        type: type,
-        config: config
+        name,
+        type,
+        config
     });
-}
+};
 
 const root = {
     dataSources: listDataSources,
-    createDataSource: createDataSource,
-    getOneDataSource: getOneDataSource,
-    deleteDataSource: deleteDataSource,
-    updateDataSource: updateDataSource
+    createDataSource,
+    getOneDataSource,
+    deleteDataSource,
+    updateDataSource
 };
 
 export { Schema, root };
