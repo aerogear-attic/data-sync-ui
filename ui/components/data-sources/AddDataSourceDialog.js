@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Modal, Icon } from "patternfly-react";
 
+const TITLE = "Create new Data Source";
+
 class AddDataSourceDialog extends Component {
 
     constructor(props) {
@@ -9,7 +11,8 @@ class AddDataSourceDialog extends Component {
     }
 
     render() {
-        const { visible, onClose, text } = this.props;
+        const { visible, onClose } = this.props;
+
         return (
             <Modal show={visible}>
                 <Modal.Header>
@@ -22,7 +25,7 @@ class AddDataSourceDialog extends Component {
                     >
                         <Icon type="pf" name="close" />
                     </button>
-                    <Modal.Title>{text}</Modal.Title>
+                    <Modal.Title>{TITLE}</Modal.Title>
                 </Modal.Header>
             </Modal>
         );
