@@ -2,7 +2,7 @@ import { agent } from "supertest";
 import { run, stop } from "../../server/server";
 import { graphql } from "graphql";
 import { Schema, root } from "../../server/gql/schema";
-import { queries } from "queries"
+import { queries } from "./queries"
 
 const assert = (condition) => {
     if (!condition) return new Error(`${condition} was not truthy`);
@@ -35,7 +35,7 @@ describe("Basic", () => {
     });
 
     it('should create a new data source', done => {
-        graphql(Schema, queries.CREATE_DATASOURCE_QUERY, root)
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
             let { createDataSource: { name, type, config }  } = data.data;
             let err = assert(data !== undefined)
@@ -46,14 +46,14 @@ describe("Basic", () => {
             return {createdDataSource, err};
             })
             .then((createdDataSource, err) => {
-                graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root)
+                graphql(Schema, queries.DELETE_DATA_SOURCE_QUERY, root)
                     .then((result) => {
-                        assert(result.data.dataSources[0].name === "TestDataSource");
+                       console.log(result);
                     })
                 done(err);
             })
             .catch(err => {
-            throw err;
+            return {err};
         });
     });
 
