@@ -14,6 +14,7 @@
             }
         ],
         "indent": ["error", 4],
+        "class-methods-use-this": "off",
         "import/prefer-default-export": "off",
         "react/jsx-filename-extension": "off",
         "react/jsx-one-expression-per-line": "off",
@@ -21,6 +22,7 @@
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", "first"],
         "react/button-has-type": "off",
+        "react/destructuring-assignment": "warn",
         "jsx-a11y/label-has-for": "off"
     },
     "plugins": ["mocha"],
