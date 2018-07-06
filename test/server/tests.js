@@ -26,4 +26,15 @@ describe("Basic", () => {
                 done();
             });
     });
+
+    it("should expose a health endpoint", done => {
+        user.get("/healthz")
+            .expect(200)
+            .end(err => {
+                if (err) {
+                    throw err;
+                }
+                done();
+            });
+    });
 });
