@@ -4,11 +4,11 @@ import { run, stop } from "../../server/server";
 import { Schema, root } from "../../server/gql/schema";
 import { queries } from "./queries";
 
-const assert = condition => {
+const assert = (condition, message) => {
     if (!condition) {
-        return new Error(`${condition} was not truthy`);
+        return new Error(`${condition} was not truthy: ${message}`);
     }
-    return null;
+    return // eslint-disable-line
 };
 
 describe("Basic", () => {
@@ -41,13 +41,13 @@ describe("Basic", () => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
-                const err = assert(data !== undefined)
-                    || assert(name === "TestDataSource")
-                    || assert(type === "Postgres")
-                    || assert(typeof config === typeof "");
-
+                const msg = "error creating datasource - problem with: ";
+                const err = assert(data !== undefined, `${msg}data is undefined`)
+                    || assert(name === "TestDataSource", msg + name)
+                    || assert(type === "Postgres", msg + type)
+                    || assert(typeof config === typeof "", msg + config);
                 if (err) {
-                    done(err);
+                    throw err;
                 }
                 return id;
             })
@@ -55,7 +55,7 @@ describe("Basic", () => {
             .then(result => {
                 // Check if the data source was actually deleted
                 if (result.data.deleteDataSource === null) {
-                    done(new Error("Delete data source failed"));
+                    throw new Error("Delete data source failed");
                 }
             })
             .then(() => graphql(Schema, queries.GET_DATA_SOURCES_QUERY, root))
@@ -64,7 +64,7 @@ describe("Basic", () => {
                 if (result.data.dataSources && result.data.dataSources.length === 0) {
                     done();
                 } else {
-                    done(new Error("Data source still present after delete"));
+                    throw new Error("Data source still present after delete");
                 }
             })
             .catch(err => done(err));
@@ -72,17 +72,16 @@ describe("Basic", () => {
 
     it("should edit a new data source", done => {
         const NEW_NAME = "NEW DATA SOURCE NAME";
-
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
-                const err = assert(data !== undefined)
-                    || assert(name === "TestDataSource")
-                    || assert(type === "Postgres")
-                    || assert(typeof config === typeof "");
-
+                const msg = "error creating editing datasource - problem with: ";
+                const err = assert(data !== undefined, msg + data)
+                    || assert(name === "TestDataSource", msg + name)
+                    || assert(type === "Postgres", msg + type)
+                    || assert(typeof config === typeof "", msg + config);
                 if (err) {
-                    done(err);
+                    throw err;
                 }
                 return { id, name: NEW_NAME, type, config };
             })
@@ -92,7 +91,7 @@ describe("Basic", () => {
                 if (updateDataSource && updateDataSource.name === NEW_NAME) {
                     return done();
                 }
-                return done(new Error("Update data source not successfull"));
+                throw new Error("Update data source not successful");
             })
             .catch(err => done(err));
     });
