@@ -8,7 +8,7 @@ const assert = (condition, message) => {
     if (!condition) {
         return new Error(`${condition} was not truthy: ${message}`);
     }
-    return // eslint-disable-line
+    return; // eslint-disable-line
 };
 
 describe("Basic", () => {
@@ -36,7 +36,7 @@ describe("Basic", () => {
                 done();
             });
     });
-  
+
     it("should expose a health endpoint", done => {
         user.get("/healthz")
             .expect(200)
