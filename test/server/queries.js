@@ -24,7 +24,7 @@ const queries = {
        }
     `,
     GET_ONE_DATA_SOURCE_QUERY: `
-    query getSingleDataSource {
+    query getSingleDataSource($id: Int!) {
       getOneDataSource(id: $id) {
         id
         name
