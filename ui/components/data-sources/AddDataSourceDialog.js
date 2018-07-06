@@ -12,7 +12,7 @@ import {
     MenuItem
 } from "patternfly-react";
 
-const TITLE = "Create new Data Source";
+const TITLE = "Add Data Source";
 const INITIAL_STATE = {
     name: "",
     type: "",
