@@ -17,7 +17,7 @@ const Schema = buildSchema(`
         updateDataSource(id: Int!, name: String!, type: DataSourceType!,  config: String!): DataSource
     },  
     type DataSource {
-        id: Int!       
+        id: Int!
         name: String!
         type: DataSourceType! 
         config: String!
@@ -35,13 +35,13 @@ const getOneDataSource = ({ id }) => {
 };
 
 const deleteDataSource = ({ id }) => {
-    info("deleteDataSource request");
-    dataSource.findById(id)
+    info(`deleteDataSource request for id ${id}`);
+    return dataSource.findById(id)
         .then(foundDataSource => {
             if (!foundDataSource) {
                 return;
             }
-            return foundDataSource.destroy({ force: true });
+            return foundDataSource.destroy({ force: true }); // eslint-disable-line
         });
 };
 
