@@ -5,7 +5,7 @@ import { port } from "./config";
 import { sync, database } from "./models";
 import { close as stopNotifier } from "./configNotifiers/configNotifierCreator";
 import { runHealthChecks } from "./health";
-import { info } from "./logger";
+import { info, error } from "./logger";
 import setupGraphQLServer from "./gql";
 
 const App = express();
