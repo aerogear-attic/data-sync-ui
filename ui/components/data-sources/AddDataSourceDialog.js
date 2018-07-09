@@ -13,16 +13,12 @@ import {
 } from "patternfly-react";
 import { InMemoryForms } from "./forms";
 
+import { DATA_SOURCE_IN_MEMORY } from "../model";
+
 const TITLE = "Add Data Source";
 const INITIAL_STATE = {
     name: "",
-    type: "In memory",
-    collection: "",
-    username: "",
-    password: "",
-    database: "",
-    hostname: "",
-    port: ""
+    type: DATA_SOURCE_IN_MEMORY
 };
 
 class AddDataSourceDialog extends Component {
@@ -45,7 +41,7 @@ class AddDataSourceDialog extends Component {
         const { type, collection } = this.state;
 
         switch (type) {
-        case "In memory":
+        case DATA_SOURCE_IN_MEMORY:
             return (
                 <InMemoryForms
                     collection={collection}
@@ -107,7 +103,9 @@ class AddDataSourceDialog extends Component {
                                             title=""
                                             onSelect={key => this.setState({ type: key })}
                                         >
-                                            <MenuItem eventKey="In memory">In memory</MenuItem>
+                                            <MenuItem eventKey={DATA_SOURCE_IN_MEMORY}>
+                                                {DATA_SOURCE_IN_MEMORY}
+                                            </MenuItem>
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
