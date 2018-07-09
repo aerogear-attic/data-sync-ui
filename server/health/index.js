@@ -8,12 +8,12 @@ export function runHealthChecks() {
     /**
      * Summarize the results of all checks in to a report of the form of:
      * {
-   *   ok: <overall status>,
-   *   checks: [
-   *     {check1: <check1 status>},
-   *     {check2: <check2 status>}
-   *   ]
-   * }
+     *   ok: <overall status>,
+     *   checks: [
+     *     {check1: <check1 status>},
+     *     {check2: <check2 status>}
+     *   ]
+     * }
      * @param results
      * @returns {{ok: boolean, checks: *}}
      */
