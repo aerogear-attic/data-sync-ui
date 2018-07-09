@@ -36,13 +36,13 @@ const App = () => (
                     </Nav>
                     {/* Tabs Content */}
                     <TabContent>
-                        <TabPane eventKey={0}>
+                        <TabPane eventKey={0} animation={false}>
                             <DataSourcesContainer />
                         </TabPane>
-                        <TabPane eventKey={1}>
+                        <TabPane eventKey={1} animation={false}>
                             <SchemaContainer />
                         </TabPane>
-                        <TabPane eventKey={2}>
+                        <TabPane eventKey={2} animation={false}>
                             <QueriesContainer />
                         </TabPane>
                     </TabContent>
