@@ -11,11 +11,13 @@ import {
     DropdownButton,
     MenuItem
 } from "patternfly-react";
+import { InMemoryForms } from "./forms";
 
 const TITLE = "Add Data Source";
 const INITIAL_STATE = {
     name: "",
     type: "",
+    collection: "",
     username: "",
     password: "",
     database: "",
@@ -35,9 +37,29 @@ class AddDataSourceDialog extends Component {
         this.props.onClose();
     }
 
+    onAdd() {
+        // TODO: implement add datasource new logic here
+    }
+
+    renderDataSourceForms() {
+        const { type, collection } = this.state;
+
+        switch (type) {
+        case "In memory":
+            return (
+                <InMemoryForms
+                    collection={collection}
+                    onCollectionChange={c => this.setState({ collection: c })}
+                />
+            );
+        default:
+            return null;
+        }
+    }
+
     render() {
         const { visible } = this.props;
-        const { name, type, username, password, database, hostname, port } = this.state;
+        const { name, type } = this.state;
 
         return (
             <Modal show={visible}>
@@ -85,73 +107,14 @@ class AddDataSourceDialog extends Component {
                                             title=""
                                             onSelect={key => this.setState({ type: key })}
                                         >
-                                            <MenuItem eventKey="PostgreSQL">PostgreSQL</MenuItem>
-                                            <MenuItem eventKey="SQLite">SQLite</MenuItem>
+                                            <MenuItem eventKey="In memory" selected>In memory</MenuItem>
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
                             </Col>
                         </FormGroup>
-
-                        {/* Username */}
-                        <FormGroup controlId="username">
-                            <Col sm={3}>Username</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    value={username}
-                                    onChange={e => this.setState({ username: e.target.value })}
-                                />
-                            </Col>
-                        </FormGroup>
-
-                        {/* Password */}
-                        <FormGroup controlId="password">
-                            <Col sm={3}>Password</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="password"
-                                    value={password}
-                                    onChange={e => this.setState({ password: e.target.value })}
-                                />
-                            </Col>
-                        </FormGroup>
-
-                        {/* Database */}
-                        <FormGroup controlId="database">
-                            <Col sm={3}>Database</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    value={database}
-                                    onChange={e => this.setState({ database: e.target.value })}
-                                />
-                            </Col>
-                        </FormGroup>
-
-                        {/* Hostname */}
-                        <FormGroup controlId="hostname">
-                            <Col sm={3}>Hostname</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    value={hostname}
-                                    onChange={e => this.setState({ hostname: e.target.value })}
-                                />
-                            </Col>
-                        </FormGroup>
-
-                        {/* Port */}
-                        <FormGroup controlId="port">
-                            <Col sm={3}>Port</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    value={port}
-                                    onChange={e => this.setState({ port: e.target.value })}
-                                />
-                            </Col>
-                        </FormGroup>
+                        {/* Specific forms depending on Data Source Type */}
+                        {this.renderDataSourceForms()}
                     </Form>
                 </Modal.Body>
 
