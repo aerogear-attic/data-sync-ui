@@ -4,7 +4,7 @@ import { join } from "path";
 import { port } from "./config";
 import { sync, database } from "./models";
 import { close as stopNotifier } from "./configNotifiers/configNotifierCreator";
-import { addHealthEndpoint } from "./health";
+import { runHealthChecks } from "./health";
 import { info } from "./logger";
 import setupGraphQLServer from "./gql";
 
@@ -18,8 +18,16 @@ App.use(json());
 App.use(express.static(join(__dirname, "../public")));
 
 App.get("/", (req, res) => res.sendFile(join(__dirname, "../public/index.html")));
+App.get("/healthz", (req, res) => {
+    runHealthChecks().then(result => {
+        res.status(result.ok ? 200 : 503);
+        return res.json(result);
+    }).catch(err => {
+        error(err);
+        return res.sendStatus(500);
+    });
+});
 
-addHealthEndpoint(App);
 setupGraphQLServer(App);
 
 // Catch all other requests and return "Not found"
