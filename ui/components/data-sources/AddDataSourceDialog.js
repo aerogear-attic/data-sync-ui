@@ -16,7 +16,7 @@ import { InMemoryForms } from "./forms";
 const TITLE = "Add Data Source";
 const INITIAL_STATE = {
     name: "",
-    type: "",
+    type: "In memory",
     collection: "",
     username: "",
     password: "",
@@ -107,7 +107,7 @@ class AddDataSourceDialog extends Component {
                                             title=""
                                             onSelect={key => this.setState({ type: key })}
                                         >
-                                            <MenuItem eventKey="In memory" selected>In memory</MenuItem>
+                                            <MenuItem eventKey="In memory">In memory</MenuItem>
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
