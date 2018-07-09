@@ -1,20 +1,8 @@
 import { database as db } from "../models";
 
 export function runHealthChecks() {
-    // Checks database connectivity by auth attempt
     function databaseConnectivityCheck() {
         return db.authenticate();
-    }
-
-    function handleResolve({ label, promise }) {
-        return { label, promise: promise.then(() => ({ [label]: true })) };
-    }
-
-    function handleReject({ label, promise }) {
-        return promise.catch(err => {
-            console.error(err);
-            return { [label]: false };
-        });
     }
 
     /**
@@ -44,6 +32,17 @@ export function runHealthChecks() {
         }, true);
 
         return overallStatus;
+    }
+
+    function handleResolve({ label, promise }) {
+        return { label, promise: promise.then(() => ({ [label]: true })) };
+    }
+
+    function handleReject({ label, promise }) {
+        return promise.catch(err => {
+            console.error(err);
+            return { [label]: false };
+        });
     }
 
     /**
