@@ -30,21 +30,19 @@ const queries = {
         name
         type
         config
-  }
-}`,
+      }
+    }`,
     DELETE_DATA_SOURCE_QUERY: `
      mutation deleteDataSource($id: Int!) {
       deleteDataSource(id: $id) {
         name
       }
-    }
-  `,
+    }`,
     UPDATE_DATA_SOURCE_QUERY: `
       mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: String!) {
        updateDataSource(id: $id, name: $name, type: $type, config: $config) {
         name
       }
-    }
-    `
+    }`
 };
-export { queries };
+module.exports = { queries };

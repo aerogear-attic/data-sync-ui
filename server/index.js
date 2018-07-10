@@ -1,6 +1,6 @@
-import { port } from "./config";
-import { info } from "./logger";
-import { run } from "./server";
+const { port } = require("./config");
+const { info } = require("./logger");
+const { run } = require("./server");
 
 const Banner = "AeroGear Sync UI";
 

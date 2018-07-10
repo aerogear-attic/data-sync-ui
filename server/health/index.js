@@ -1,8 +1,8 @@
-import { database as db } from "../models";
+const { database } = require("../models");
 
-export function runHealthChecks() {
+exports.runHealthChecks = function () {
     function databaseConnectivityCheck() {
-        return db.authenticate();
+        return database.authenticate();
     }
 
     /**
@@ -64,4 +64,4 @@ export function runHealthChecks() {
     }
 
     return run().then(summarize);
-}
+};

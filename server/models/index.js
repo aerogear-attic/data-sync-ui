@@ -1,7 +1,7 @@
-import { Sequelize } from "sequelize";
-import { createDatabase } from "./database";
-import DataSourceModel from "./dataSource";
-import SchemaModel from "./schema";
+const { Sequelize } = require("sequelize");
+const { createDatabase } = require("./database");
+const DataSourceModel = require("./dataSource");
+const SchemaModel = require("./schema");
 
 const database = createDatabase();
 const dataSource = DataSourceModel(database, Sequelize);
@@ -9,7 +9,7 @@ const schema = SchemaModel(database, Sequelize);
 
 const sync = () => database.sync({ force: false });
 
-export {
+module.exports = {
     database,
     dataSource,
     sync,

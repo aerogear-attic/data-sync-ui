@@ -1,4 +1,4 @@
-export default (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
     const Schema = sequelize.define("GraphQLSchema", {
         name: DataTypes.STRING,
         schema: DataTypes.TEXT

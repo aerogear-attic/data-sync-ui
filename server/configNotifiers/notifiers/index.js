@@ -1,3 +1,3 @@
-import { PostgresNotifier as postgres } from "./postgres";
+const { PostgresNotifier } = require("./postgres");
 
-export const notifiers = { postgres };
+module.exports = { postgres: PostgresNotifier };

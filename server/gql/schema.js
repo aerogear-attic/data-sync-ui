@@ -1,6 +1,6 @@
-import { buildSchema } from "graphql";
-import { info } from "../logger";
-import { dataSource, database } from "../models";
+const { buildSchema } = require("graphql");
+const { info } = require("../logger");
+const { dataSource, database } = require("../models");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -74,4 +74,4 @@ const root = {
     updateDataSource
 };
 
-export { Schema, root };
+module.exports = { Schema, root };

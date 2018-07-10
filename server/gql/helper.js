@@ -1,7 +1,7 @@
-import { introspectionQuery } from "graphql/utilities";
-import { graphql, buildSchema } from "graphql";
+const { introspectionQuery } = require("graphql/utilities");
+const { graphql, buildSchema } = require("graphql");
 
-export function compileSchemaString(source) {
+exports.compileSchemaString = function (source) {
     return new Promise((resolve, reject) => {
         let Schema;
         try {
@@ -13,4 +13,4 @@ export function compileSchemaString(source) {
             return reject(err);
         }
     });
-}
+};

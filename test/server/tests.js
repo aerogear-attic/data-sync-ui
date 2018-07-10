@@ -1,8 +1,8 @@
-import { agent } from "supertest";
-import { graphql } from "graphql";
-import { run, stop } from "../../server/server";
-import { Schema, root } from "../../server/gql/schema";
-import { queries } from "./queries";
+const { agent } = require("supertest");
+const { graphql } = require("graphql");
+const { run, stop } = require("../../server/server");
+const { Schema, root } = require("../../server/gql/schema");
+const { queries } = require("./queries");
 
 const assert = (condition, message) => {
     if (!condition) {
@@ -77,6 +77,32 @@ describe("Basic", () => {
                 } else {
                     throw new Error("Data source still present after delete");
                 }
+            })
+            .catch(err => done(err));
+    });
+
+    it("should edit a new data source", done => {
+        const NEW_NAME = "NEW DATA SOURCE NAME";
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+            .then(data => {
+                const { createDataSource: { id, name, type, config } } = data.data;
+                const msg = "error creating editing datasource - problem with: ";
+                const err = assert(data !== undefined, msg + data)
+                    || assert(name === "TestDataSource", msg + name)
+                    || assert(type === "Postgres", msg + type)
+                    || assert(typeof config === typeof "", msg + config);
+                if (err) {
+                    throw err;
+                }
+                return { id, name: NEW_NAME, type, config };
+            })
+            .then(result => graphql(Schema, queries.UPDATE_DATA_SOURCE_QUERY, root, null, result))
+            .then(({ data: { updateDataSource } }) => {
+                // Check if the data source was actually updated
+                if (updateDataSource && updateDataSource.name === NEW_NAME) {
+                    return done();
+                }
+                throw new Error("Update data source not successful");
             })
             .catch(err => done(err));
     });

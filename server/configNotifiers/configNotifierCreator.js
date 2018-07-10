@@ -1,30 +1,30 @@
-import { notifiers } from "./notifiers";
-import { notfier as config } from "../config";
-import { warn } from "../logger";
+const notifiers = require("./notifiers");
+const { notfier } = require("../config");
+const { warn } = require("../logger");
 
 let instance = null;
 
-if (config.enabled && notifiers[config.type]) {
-    instance = new notifiers[config.type](config.config);
+if (notfier.enabled && notifiers[notfier.type]) {
+    instance = new notifiers[notfier.type](notfier.config);
 } else {
     // Notifications will not be available for testing because we don't have
     // a running postgres instance
-    warn(`notifier unknown or disabled: ${config.type}`);
+    warn(`notifier unknown or disabled: ${notfier.type}`);
 }
 
-export const publish = (channel, payload) => {
+exports.publish = (channel, payload) => {
     if (instance) {
         instance.publish(channel, payload);
     }
 };
 
-export const addChannel = (channel, onNotification) => {
+exports.addChannel = (channel, onNotification) => {
     if (instance) {
         instance.addChannel(channel, onNotification);
     }
 };
 
-export const close = () => {
+exports.stopNotifications = () => {
     if (instance) {
         instance.close();
     }
