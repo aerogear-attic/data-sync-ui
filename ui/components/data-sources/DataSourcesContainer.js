@@ -47,7 +47,7 @@ class DataSourcesContainer extends Component {
                 />
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
-                    update={name => {
+                    onFilter={name => {
                         this.setFilter(name);
                     }}
                 />

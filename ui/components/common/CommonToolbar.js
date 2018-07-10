@@ -2,7 +2,7 @@ import React from "react";
 import { Toolbar, Button } from "patternfly-react";
 import { DebounceInput } from "react-debounce-input";
 
-const CommonToolbar = ({ buttons, update }) => {
+const CommonToolbar = ({ buttons, onFilter }) => {
     const elements = buttons.map(button => (
         <Button
             style={{ float: "right" }}
@@ -23,7 +23,7 @@ const CommonToolbar = ({ buttons, update }) => {
                     type="text"
                     placeholder="Filter by Name"
                     style={{ height: "26px" }}
-                    onChange={e => update(e.target.value)}
+                    onChange={e => onFilter(e.target.value)}
                 />
                 {elements}
             </Toolbar>
