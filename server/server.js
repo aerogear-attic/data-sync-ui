@@ -2,7 +2,9 @@ import { urlencoded, json } from "body-parser";
 import express from "express";
 import { join } from "path";
 import { port } from "./config";
-import { sync, database, schema } from "./models";
+import {
+    sync, database, schema
+} from "./models";
 import { close as stopNotifier } from "./configNotifiers/configNotifierCreator";
 import { runHealthChecks } from "./health";
 import { info, error } from "./logger";
@@ -31,24 +33,24 @@ App.get("/healthz", (req, res) => {
 
 setupGraphQLServer(App);
 
-App.get('/schema/:schemaId', async (req, res) => {
+App.get("/schema/:schemaId", async (req, res) => {
     try {
-        const s = await schema.findById(req.params.schemaId)
+        const s = await schema.findById(req.params.schemaId);
         if (s) {
-            const compiled = await compileSchemaString(s.schema)
-            const filename=`schema_${s.name}.json`
+            const compiled = await compileSchemaString(s.schema);
+            const filename = `schema_${s.name}.json`;
             // tell the browser to handle this as a file download
-            res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-            res.setHeader('Content-type', 'text/json');
-            res.status(200).send(JSON.stringify(compiled, null, 2))
+            res.setHeader("Content-disposition", `attachment; filename=${filename}`);
+            res.setHeader("Content-type", "text/json");
+            res.status(200).send(JSON.stringify(compiled, null, 2));
         } else {
-            res.sendStatus(404)
+            res.sendStatus(404);
         }
-    } catch (error) {
-        error(error)
+    } catch (err) {
+        error(err);
         res.sendStatus(500);
     }
-})
+});
 
 // Catch all other requests and return "Not found"
 App.get("*", (_, res) => res.sendStatus(404));
