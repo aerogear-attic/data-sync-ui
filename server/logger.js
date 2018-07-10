@@ -1,7 +1,5 @@
-import {
-    createLogger, format, transports
-} from "winston";
-import { logging } from "./config";
+const { createLogger, format, transports } = require("winston");
+const { logging } = require("./config");
 
 const logger = createLogger({
     level: logging.level,
@@ -9,11 +7,9 @@ const logger = createLogger({
     transports: [new transports.Console()]
 });
 
-export default logger.info;
-
 const { info, warn, error, debug } = logger;
 
-export {
+module.exports = {
     info,
     warn,
     error,

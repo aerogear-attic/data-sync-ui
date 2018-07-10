@@ -1,12 +1,13 @@
-import { urlencoded, json } from "body-parser";
-import express from "express";
-import { join } from "path";
-import { port } from "./config";
-import { sync, database } from "./models";
-import { close as stopNotifier } from "./configNotifiers/configNotifierCreator";
-import { runHealthChecks } from "./health";
-import { info, error } from "./logger";
-import setupGraphQLServer from "./gql";
+const { urlencoded, json } = require("body-parser");
+const express = require("express");
+const { join } = require("path");
+const { port } = require("./config");
+const { sync, database, schema } = require("./models");
+const { stopNotifications } = require("./configNotifiers/configNotifierCreator");
+const { runHealthChecks } = require("./health");
+const { info, error } = require("./logger");
+const setupGraphQLServer = require("./gql");
+const { compileSchemaString } = require("./gql/helper");
 
 const App = express();
 let server = null;
@@ -30,23 +31,42 @@ App.get("/healthz", (req, res) => {
 
 setupGraphQLServer(App);
 
+App.get("/schema/:schemaId", async (req, res) => {
+    try {
+        const s = await schema.findById(req.params.schemaId);
+        if (s) {
+            const compiled = await compileSchemaString(s.schema);
+            const filename = `schema_${s.name}.json`;
+            // tell the browser to handle this as a file download
+            res.setHeader("Content-disposition", `attachment; filename=${filename}`);
+            res.setHeader("Content-type", "text/json");
+            res.status(200).send(JSON.stringify(compiled, null, 2));
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (err) {
+        error(err);
+        res.sendStatus(500);
+    }
+});
+
 // Catch all other requests and return "Not found"
 App.get("*", (_, res) => res.sendStatus(404));
 
-export const run = callback => {
+exports.run = callback => {
     sync().then(() => {
         server = App.listen(port, () => callback(App));
     });
 };
 
-export const stop = () => {
+exports.stop = () => {
     info("Shutting down UI server");
     server.close();
-    stopNotifier();
+    stopNotifications();
     database.close();
 };
 
-process.on("SIGTERM", stop);
-process.on("SIGABRT", stop);
-process.on("SIGQUIT", stop);
-process.on("SIGINT", stop);
+process.on("SIGTERM", exports.stop);
+process.on("SIGABRT", exports.stop);
+process.on("SIGQUIT", exports.stop);
+process.on("SIGINT", exports.stop);

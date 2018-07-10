@@ -1,11 +1,11 @@
-import PGPubSub from "pg-pubsub";
-import { info } from "../../logger";
+const PGPubSub = require("pg-pubsub");
+const { info } = require("../../logger");
 
 /**
  * A pubsub implementation that uses Postgres notify/listen feature and the
  * pg-pubsub lib (https://github.com/voxpelli/node-pg-pubsub)
  */
-export class PostgresNotifier {
+module.exports = class PostgresNotifier {
 
     constructor(config) {
         this.instance = new PGPubSub({
@@ -46,4 +46,4 @@ export class PostgresNotifier {
         this.instance.close();
     }
 
-}
+};

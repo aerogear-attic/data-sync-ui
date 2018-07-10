@@ -1,11 +1,11 @@
-import ExpressGraphQL from "express-graphql";
-import { info } from "../logger";
-import { graphql } from "../config";
-import { Schema, root } from "./schema";
+const ExpressGraphQL = require("express-graphql");
+const { info } = require("../logger");
+const { graphql } = require("../config");
+const { Schema, root } = require("./schema");
 
 const GQL_PATH = "graphql";
 
-export default App => {
+module.exports = App => {
     App.use(`/${GQL_PATH}`, ExpressGraphQL({
         schema: Schema,
         rootValue: root,

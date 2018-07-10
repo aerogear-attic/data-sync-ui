@@ -1,7 +1,7 @@
-export const port = 8080;
-export const logging = { level: "info" };
-export const graphql = { debug: true };
-export const postgresConfig = {
+exports.port = 8080;
+exports.logging = { level: "info" };
+exports.graphql = { debug: true };
+exports.postgresConfig = {
     database: process.env.POSTGRES_DATABASE || "aerogear_data_sync_db",
     username: process.env.POSTGRES_USERNAME || "postgresql",
     password: process.env.POSTGRES_PASSWORD || "postgres",
@@ -10,16 +10,15 @@ export const postgresConfig = {
     logSql: false
 };
 
-
-export const notfier = {
+exports.notfier = {
     enabled: process.env.NODE_ENV !== "test",
     type: "postgres",
     config: {
         channel: "aerogear-data-sync-config",
-        database: postgresConfig.database,
-        username: postgresConfig.username,
-        password: postgresConfig.password,
-        host: postgresConfig.host,
-        port: postgresConfig.port
+        database: exports.postgresConfig.database,
+        username: exports.postgresConfig.username,
+        password: exports.postgresConfig.password,
+        host: exports.postgresConfig.host,
+        port: exports.postgresConfig.port
     }
 };
