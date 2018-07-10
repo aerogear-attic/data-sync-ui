@@ -1,6 +1,6 @@
 import { buildSchema } from "graphql";
 import { info } from "../logger";
-import { dataSource } from "../models";
+import { dataSource, database } from "../models";
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -8,7 +8,7 @@ const Schema = buildSchema(`
         Postgres
     },
     type Query {
-        dataSources: [DataSource],
+        dataSources(name: String): [DataSource],
         getOneDataSource(id: Int!): DataSource
     },
     type Mutation {
@@ -33,8 +33,11 @@ const createDataSource = ({ name, type, config }) => {
     });
 };
 
-const listDataSources = () => {
+const listDataSources = ({ name }) => {
     info("listDataSources request");
+    if (name) {
+        return dataSource.findAll({ where: { name: { [database.Op.iLike]: `%${name}%` } } });
+    }
     return dataSource.findAll();
 };
 

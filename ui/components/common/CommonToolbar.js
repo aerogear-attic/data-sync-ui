@@ -1,7 +1,8 @@
 import React from "react";
 import { Toolbar, Button } from "patternfly-react";
+import { DebounceInput } from "react-debounce-input";
 
-const CommonToolbar = ({ buttons }) => {
+const CommonToolbar = ({ buttons, onFilter }) => {
     const elements = buttons.map(button => (
         <Button
             style={{ float: "right" }}
@@ -16,7 +17,14 @@ const CommonToolbar = ({ buttons }) => {
     return (
         <div className="toolbar-container">
             <Toolbar>
-                <input type="text" placeholder="Filter by Name" style={{ height: "26px" }} />
+                <DebounceInput
+                    minLength={3}
+                    debounceTimeout={300}
+                    type="text"
+                    placeholder="Filter by Name"
+                    style={{ height: "26px" }}
+                    onChange={e => onFilter(e.target.value)}
+                />
                 {elements}
             </Toolbar>
         </div>
