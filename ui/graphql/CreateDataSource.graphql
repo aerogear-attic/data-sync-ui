@@ -1,0 +1,12 @@
+mutation createDataSource {
+    createDataSource(
+        name: String!
+        type: Postgres
+        config: String!
+    ) {
+        id
+        name
+        type
+        config
+    }
+}
