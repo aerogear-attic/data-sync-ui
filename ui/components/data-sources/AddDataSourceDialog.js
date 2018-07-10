@@ -19,6 +19,7 @@ import gql from "graphql-tag";
 
 import { InMemoryForms } from "./forms";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
+import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 const INITIAL_STATE = {
     name: "",
@@ -55,7 +56,8 @@ class AddDataSourceDialog extends Component {
         const { name, type, config } = this.state;
 
         return this.props.mutate({
-            variables: { name, type, config }
+            variables: { name, type, config },
+            refetchQueries: [{ query: GetDataSources }]
         });
     }
 
