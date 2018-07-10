@@ -15,10 +15,10 @@ import {
 import some from "lodash.some";
 
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
 
 import { InMemoryForms } from "./forms";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
+import CreateDataSource from "../../graphql/CreateDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 const INITIAL_STATE = {
@@ -213,17 +213,6 @@ class AddDataSourceDialog extends Component {
 
 }
 
-const createDataSource = gql`
-    mutation createDataSource($name: String!, $type: DataSourceType!, $config: String!) {
-        createDataSource(name: $name, type: $type, config: $config) {
-            id
-            name
-            type
-            config
-        }
-    }
-`;
-
-const AddDataSourceDialogWithMutation = graphql(createDataSource)(AddDataSourceDialog);
+const AddDataSourceDialogWithMutation = graphql(CreateDataSource)(AddDataSourceDialog);
 
 export { AddDataSourceDialogWithMutation as AddDataSourceDialog };

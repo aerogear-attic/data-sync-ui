@@ -1,9 +1,5 @@
-mutation createDataSource {
-    createDataSource(
-        name: String!
-        type: Postgres
-        config: String!
-    ) {
+mutation createDataSource($name: String!, $type: DataSourceType!, $config: String!) {
+    createDataSource(name: $name, type: $type, config: $config) {
         id
         name
         type
