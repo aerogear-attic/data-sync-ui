@@ -32,6 +32,7 @@
     "pg-pubsub": "^0.4.0",
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
+    "react-debounce-input": "^3.2.0",
     "react-dom": "^16.4.1",
     "sequelize": "^4.38.0",
     "sqlite3": "^4.0.1",
