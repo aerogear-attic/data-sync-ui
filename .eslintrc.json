@@ -27,6 +27,7 @@
         "react/button-has-type": "off",
         "react/destructuring-assignment": "warn",
         "react/sort-comp": "off",
+        "react/no-did-update-set-state": "off",
         "jsx-a11y/label-has-for": "off"
     },
     "plugins": ["mocha"],
