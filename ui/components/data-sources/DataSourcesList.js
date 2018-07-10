@@ -5,8 +5,8 @@ import { ListView } from "patternfly-react";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 import { DataSourcesListItem } from "./DataSourcesListItem";
 
-const DataSourcesList = () => (
-    <Query query={GetDataSources}>
+const DataSourcesList = ({ filter }) => (
+    <Query query={GetDataSources} variables={filter}>
         {({ loading, error, data }) => {
             if (loading) {
                 return "Loading...";
@@ -14,7 +14,6 @@ const DataSourcesList = () => (
             if (error) {
                 return error.message;
             }
-
             const items = data.dataSources.map(item => (
                 <DataSourcesListItem item={item} key={item.id} />
             ));

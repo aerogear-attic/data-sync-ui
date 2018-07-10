@@ -1,5 +1,5 @@
-query GetDataSources {
-    dataSources {
+query GetDataSources ($name: String) {
+    dataSources(name: $name) {
         id
         name
         type

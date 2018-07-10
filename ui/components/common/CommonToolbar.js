@@ -1,7 +1,7 @@
 import React from "react";
 import { Toolbar, Button } from "patternfly-react";
 
-const CommonToolbar = ({ buttons }) => {
+const CommonToolbar = ({ buttons, update }) => {
     const elements = buttons.map(button => (
         <Button
             style={{ float: "right" }}
@@ -16,7 +16,12 @@ const CommonToolbar = ({ buttons }) => {
     return (
         <div className="toolbar-container">
             <Toolbar>
-                <input type="text" placeholder="Filter by Name" style={{ height: "26px" }} />
+                <input
+                    type="text"
+                    placeholder="Filter by Name"
+                    style={{ height: "26px" }}
+                    onChange={e => update(e.target.value)}
+                />
                 {elements}
             </Toolbar>
         </div>
