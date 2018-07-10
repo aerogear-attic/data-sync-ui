@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+    Alert,
     Modal,
     Icon,
     Button,
@@ -18,10 +19,11 @@ import gql from "graphql-tag";
 import { InMemoryForms } from "./forms";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
 
-const TITLE = "Add Data Source";
 const INITIAL_STATE = {
     name: "",
-    type: DataSourceType.InMemory
+    type: DataSourceType.InMemory,
+    config: "",
+    err: ""
 };
 
 class AddDataSourceDialog extends Component {
@@ -36,27 +38,19 @@ class AddDataSourceDialog extends Component {
         this.props.onClose();
     }
 
-    /**
-     * Calls mutation for creating a Data Source in GraphQL
-     */
-    add() {
-        const { mutate } = this.props;
+    onAdd() {
+        this.createDataSource()
+            .then(() => this.onClose())
+            // TODO: network/graphql error or custom message?
+            .catch(({ message }) => this.setState({ err: message }));
+    }
 
-        if (mutate) {
-            console.log("Create new Data source");
-            mutate({
-                variables: {
-                    name: "name",
-                    type: DataSourceType.InMemory,
-                    config: ""
-                }
-            })
-                .then(res => {
-                    this.onClose();
-                    console.log("Result", res);
-                })
-                .catch(err => console.error(err));
-        }
+    createDataSource() {
+        const { name, type, config } = this.state;
+
+        return this.props.mutate({
+            variables: { name, type, config }
+        });
     }
 
     renderDataSourceForms() {
@@ -77,7 +71,7 @@ class AddDataSourceDialog extends Component {
 
     render() {
         const { visible } = this.props;
-        const { name, type } = this.state;
+        const { name, type, err } = this.state;
 
         return (
             <Modal show={visible}>
@@ -91,10 +85,11 @@ class AddDataSourceDialog extends Component {
                     >
                         <Icon type="pf" name="close" />
                     </button>
-                    <Modal.Title>{TITLE}</Modal.Title>
+                    <Modal.Title>Add Data Source</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
+                    { err && <Alert onDismiss={() => this.setState({ err: "" })}>{err}</Alert> }
                     <Form horizontal>
                         {/* Data Source Name */}
                         <FormGroup controlId="name">
@@ -149,7 +144,7 @@ class AddDataSourceDialog extends Component {
                     >
                         Cancel
                     </Button>
-                    <Button bsStyle="primary" onClick={() => this.add()}>
+                    <Button bsStyle="primary" onClick={() => this.onAdd()}>
                         Add
                     </Button>
                 </Modal.Footer>
