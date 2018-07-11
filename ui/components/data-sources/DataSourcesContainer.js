@@ -30,7 +30,7 @@ class DataSourcesContainer extends Component {
     }
 
     render() {
-        const { showModal } = this.state;
+        const { showModal, filter } = this.state;
         return (
             <div>
                 <AddDataSourceDialog
@@ -44,7 +44,12 @@ class DataSourcesContainer extends Component {
                     }}
                 />
                 <div>
-                    <DataSourcesList filter={this.state.filter} /> {/*eslint-disable-line*/}
+                    <DataSourcesList
+                        filter={filter}
+                        onCreate={() => {
+                            this.addDataSource();
+                        }}
+                    />
                 </div>
             </div>
         );
