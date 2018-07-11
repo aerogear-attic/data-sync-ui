@@ -88,7 +88,7 @@ class SchemaContainer extends Component {
         const { getSchema: { valid } } = this.props.data;
         return [
             {
-                title: "Export as JSON",
+                title: "Download Schema",
                 cb: () => this.export(),
                 id: "export_schema",
                 enabled: valid
@@ -97,12 +97,6 @@ class SchemaContainer extends Component {
                 title: "Save Schema",
                 cb: () => this.save(),
                 id: "save_schema",
-                enabled: true
-            },
-            {
-                title: "Reload Schema",
-                cb: () => this.data.refetch(),
-                id: "reload_schema",
                 enabled: true
             }
         ];
