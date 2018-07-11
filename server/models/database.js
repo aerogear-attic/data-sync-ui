@@ -1,6 +1,10 @@
 const { Sequelize } = require("sequelize");
 const { postgresConfig } = require("../config");
 
+exports.supportsiLike = function () {
+    return process.env.NODE_ENV !== "test";
+};
+
 exports.createDatabase = function () {
     if (process.env.NODE_ENV === "test") {
         return new Sequelize("sqlite://:memory:", null, null, { dialect: "sqlite" });

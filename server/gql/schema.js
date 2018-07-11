@@ -1,6 +1,6 @@
 const { buildSchema } = require("graphql");
 const { info } = require("../logger");
-const { dataSource, database } = require("../models");
+const { dataSource, database, supportsiLike } = require("../models");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -36,7 +36,8 @@ const createDataSource = ({ name, type, config }) => {
 const listDataSources = ({ name }) => {
     info("listDataSources request");
     if (name) {
-        return dataSource.findAll({ where: { name: { [database.Op.iLike]: `%${name}%` } } });
+        const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
+        return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
     return dataSource.findAll();
 };
