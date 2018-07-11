@@ -5,13 +5,14 @@ import {
     Checkbox
 } from "patternfly-react";
 
-const InMemoryForms = ({ values, onValuesChange }) => (
+const InMemoryForms = ({ values, onValuesChange, isDisabled }) => (
     <React.Fragment>
         {/* TimeStamp Data Option */}
-        <FormGroup controlId="checkbox">
+        <FormGroup controlId="timestampData">
             <Col sm={3}>TimeStamp Data</Col>
             <Col sm={9}>
                 <Checkbox
+                    disabled={isDisabled("timestampData")}
                     checked={values.timestampData}
                     onChange={e => onValuesChange({ timestampData: e.target.checked })}
                 />

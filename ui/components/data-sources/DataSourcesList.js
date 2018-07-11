@@ -5,7 +5,7 @@ import { EmptyList } from "./EmptyList";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 import { DataSourcesListItem } from "./DataSourcesListItem";
 
-const DataSourcesList = ({ filter, onCreate, onDeleteDataSource }) => (
+const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSource }) => (
     <Query query={GetDataSources} variables={filter}>
         {({ loading, error, data }) => {
             if (loading) {
@@ -18,6 +18,7 @@ const DataSourcesList = ({ filter, onCreate, onDeleteDataSource }) => (
                 <DataSourcesListItem
                     item={item}
                     key={item.id}
+                    onEditDataSource={onEditDataSource}
                     onDeleteDataSource={onDeleteDataSource}
                 />
             ));
