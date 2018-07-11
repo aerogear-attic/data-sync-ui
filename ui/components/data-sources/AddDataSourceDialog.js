@@ -26,8 +26,8 @@ const INITIAL_STATE = {
     type: DataSourceType.InMemory,
     err: "",
     validations: {
-        name: "error",
-        type: "success"
+        name: null,
+        type: "success",
     }
 };
 
@@ -171,7 +171,7 @@ class AddDataSourceDialog extends Component {
                     <Button
                         bsStyle="primary"
                         onClick={() => this.onAdd()}
-                        disabled={some(validations, s => s === "error")}
+                        disabled={some(validations, s => !s || s === "error")}
                     >
                         Add
                     </Button>
