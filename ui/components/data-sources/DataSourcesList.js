@@ -1,11 +1,12 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { ListView } from "patternfly-react";
-
+import { EmptyList } from "./EmptyList";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 import { DataSourcesListItem } from "./DataSourcesListItem";
 
-const DataSourcesList = ({ filter }) => (
+
+const DataSourcesList = ({ filter, onCreate }) => (
     <Query query={GetDataSources} variables={filter}>
         {({ loading, error, data }) => {
             if (loading) {
@@ -18,11 +19,10 @@ const DataSourcesList = ({ filter }) => (
                 <DataSourcesListItem item={item} key={item.id} />
             ));
 
-            return (
-                <div>
-                    <ListView>{items}</ListView>
-                </div>
-            );
+            if (items.length > 0) {
+                return (<ListView>{items}</ListView>);
+            }
+            return <EmptyList createDataSource={onCreate} />;
         }}
     </Query>
 );
