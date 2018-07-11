@@ -7,12 +7,10 @@ const CodeEditor = class extends Component {
     constructor(props) {
         super(props);
 
-        const { value, initialHeight, lineHeight } = this.props;
+        const { lineHeight, value } = this.props;
 
         this.state = {
-            width: 0,
-            editorValue: value,
-            height: initialHeight || 0,
+            editorValue: value || "",
             lineHeight: lineHeight || 20
         };
 
@@ -21,13 +19,10 @@ const CodeEditor = class extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateEditorDimensions.bind(this));
-        this.updateEditorDimensions();
         this.drawLineNumbers();
     }
 
     onEditorChange() {
-        this.updateEditorDimensions();
         this.drawLineNumbers();
         this.setState({ editorValue: this.editor.current.value });
 
@@ -56,18 +51,18 @@ const CodeEditor = class extends Component {
         this.adjustGutterPosition();
     }
 
-    updateEditorDimensions() {
-        const { clientWidth, scrollHeight } = this.editor.current;
-        const { initialHeight } = this.props;
-
-        const width = clientWidth;
-        const height = scrollHeight || initialHeight;
-        this.setState({ width, height });
+    getLineCount() {
+        const { editorValue } = this.state;
+        return editorValue.split("\n").length;
     }
 
     drawLineNumbers() {
-        const { height, lineHeight } = this.state;
-        const lines = Math.floor(height / lineHeight);
+        const { lineHeight } = this.state;
+        let lines = Math.floor(this.getLineCount());
+        if (!lines) {
+            lines = 1;
+        }
+
         return [...Array(lines).keys()].map(index => (
             <div
                 key={index}
@@ -94,7 +89,12 @@ const CodeEditor = class extends Component {
                     <textarea
                         ref={this.editor}
                         value={editorValue}
-                        style={{ lineHeight: `${lineHeight}px` }}
+                        style={{
+                            lineHeight: `${lineHeight}px`,
+                            whiteSpace: "pre",
+                            overflowWrap: "normal",
+                            overflowY: "scroll"
+                        }}
                         className={style["editor-area"]}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
                         onChange={() => this.onEditorChange()}
