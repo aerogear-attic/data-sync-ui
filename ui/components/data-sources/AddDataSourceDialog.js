@@ -25,9 +25,13 @@ const INITIAL_STATE = {
     name: "",
     type: DataSourceType.InMemory,
     err: "",
+    inMemoryValues: {
+        timestampData: true
+    },
     validations: {
         name: null,
         type: "success",
+        inMemoryValues: "success"
     }
 };
 
@@ -60,30 +64,44 @@ class AddDataSourceDialog extends Component {
     }
 
     onNameChange(name) {
-        const { validations } = this.state;
-
         const nameValidation = name && name.length < 255 ? "success" : "error";
+
+        const { validations } = this.state;
         const newValidations = { ...validations, name: nameValidation };
 
         this.setState({ name, validations: newValidations });
     }
 
     onTypeChange(type) {
-        const { validations } = this.state;
-
         const typeValidation = type && type.length < 255 ? "success" : "error";
+
+        const { validations } = this.state;
         const newValidations = { ...validations, type: typeValidation };
 
         this.setState({ type, validations: newValidations });
     }
 
+    onInMemoryValuesChange(inMemoryValues) {
+        const { timestampData } = inMemoryValues;
+        const inMemoryValuesValidation = typeof timestampData === "boolean"
+            ? "success" : "error";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, inMemoryValues: inMemoryValuesValidation };
+
+        this.setState({ inMemoryValues, validations: newValidations });
+    }
+
     renderSpecificFormsForSelectedType() {
-        const { type } = this.state;
+        const { type, inMemoryValues } = this.state;
 
         switch (type) {
             case DataSourceType.InMemory:
                 return (
-                    <InMemoryForms />
+                    <InMemoryForms
+                        values={inMemoryValues}
+                        onValuesChange={values => this.onInMemoryValuesChange(values)}
+                    />
                 );
             default:
                 return null;
