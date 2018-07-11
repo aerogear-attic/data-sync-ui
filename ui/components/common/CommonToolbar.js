@@ -18,7 +18,7 @@ const CommonToolbar = ({ buttons, onFilter }) => {
         <div className="toolbar-container">
             <Toolbar>
                 <DebounceInput
-                    minLength={3}
+                    minLength={1}
                     debounceTimeout={300}
                     type="text"
                     placeholder="Filter by Name"
