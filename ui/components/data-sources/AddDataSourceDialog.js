@@ -128,7 +128,7 @@ class AddDataSourceDialog extends Component {
                         </FormGroup>
 
                         {/* Data Source Type */}
-                        <FormGroup controlId="type" validationState={validations.type}>
+                        <FormGroup controlId="type">
                             <Col sm={3}>Data Source Type</Col>
                             <Col sm={9}>
                                 <InputGroup>
