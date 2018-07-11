@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {graphql} from "react-apollo";
 import GetSchema from "../../graphql/GetSchema.graphql";
+import UpdateSchame from "../../graphql/UpdateSchema.graphql";
 import {CommonToolbar, CodeEditor} from "../common";
 
 import style from "./schemaContainer.css";
@@ -9,7 +10,10 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            height: "100%"
+            height: "100%",
+            schema: "",
+            error: null,
+            compiled: null
         }
     }
 
@@ -36,10 +40,71 @@ class SchemaContainer extends Component {
         return 206;
     }
 
+    onSchemaChange(schema) {
+        this.setState({ schema });
+    }
+
+    export() {
+        const { getSchema: { id } } = this.props.data;
+        const path = `/schema/${id}`;
+        const link = document.createElement("A");
+        link.href = path;
+        link.download = path.substr(path.lastIndexOf('/') + 1);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    save() {
+        const { schema } = this.state;
+        const { getSchema } = this.props.data;
+
+        this.props.mutate({
+            variables: {
+                id: getSchema.id,
+                schema
+            },
+            refetchQueries: [{
+                query: GetSchema,
+                variables: {
+                    name: "default"
+                }
+            }]
+        }).then(({ data }) => {
+            const { updateSchema: { compiled } } = data;
+            this.setState({
+                error: null,
+                compiled
+            });
+        }).catch(error => {
+            this.setState({
+                error,
+                compiled: null
+            });
+        });
+    }
+
     getToolbarButtons() {
         const { getSchema: { valid } } = this.props.data;
         return [
-            {title: "Export as JSON", cb: () => this.export(), id: "export_schema", enabled: valid}
+            {
+                title: "Export as JSON",
+                cb: () => this.export(),
+                id: "export_schema",
+                enabled: valid
+            },
+            {
+                title: "Save Schema",
+                cb: () => this.save(),
+                id: "save_schema",
+                enabled: true
+            },
+            {
+                title: "Reload Schema",
+                cb: () => this.data.refetch(),
+                id: "reload_schema",
+                enabled: true
+            }
         ];
     }
 
@@ -48,11 +113,12 @@ class SchemaContainer extends Component {
     }
 
     renderContent() {
+        const { getSchema: { schema } } = this.props.data;
         return (<div>
             <CommonToolbar buttons={this.getToolbarButtons()}/>
             <div className={style.flexWrapper} style={{height: this.state.height}}>
                 <div className={style.left}>
-                    <CodeEditor />
+                    <CodeEditor value={schema} onChange={schema => this.onSchemaChange(schema)} />
                 </div>
                 <div className={style.right}>
                 </div>
@@ -73,6 +139,6 @@ class SchemaContainer extends Component {
 // Automatically fetch the default schema
 const SchemaContainerWithQuery = graphql(GetSchema, {
     options: () => ({variables: {name: "default"}})
-})(SchemaContainer);
+})(graphql(UpdateSchame)(SchemaContainer));
 
 export {SchemaContainerWithQuery as SchemaContainer};

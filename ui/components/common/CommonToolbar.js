@@ -5,7 +5,7 @@ import { DebounceInput } from "react-debounce-input";
 const CommonToolbar = ({ buttons, onFilter }) => {
     const elements = buttons && buttons.map(button => (
         <Button
-            style={{ float: "right" }}
+            style={{ float: "right", marginRight: "5px" }}
             key={button.id}
             bsStyle="primary"
             onClick={button.cb}
