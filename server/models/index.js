@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const { createDatabase } = require("./database");
+const { createDatabase, supportsiLike } = require("./database");
 const DataSourceModel = require("./dataSource");
 const SchemaModel = require("./schema");
 
@@ -13,5 +13,6 @@ module.exports = {
     database,
     dataSource,
     sync,
-    schema
+    schema,
+    supportsiLike
 };
