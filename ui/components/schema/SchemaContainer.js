@@ -8,6 +8,32 @@ import style from "./schemaContainer.css";
 class SchemaContainer extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            height: "100%"
+        }
+    }
+
+    updateDimensions() {
+        this.setState({
+            height: window.innerHeight - this.calculateHeaderHeight()
+        });
+    }
+
+    componentWillMount() {
+        this.updateDimensions();
+    }
+
+    componentDidMount() {
+        window.addEventListener("resize", () => this.updateDimensions());
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", () => this.updateDimensions());
+    }
+
+    calculateHeaderHeight() {
+        // TODO: find SOME way to do this in pure CSS
+        return 206;
     }
 
     getToolbarButtons() {
@@ -24,7 +50,7 @@ class SchemaContainer extends Component {
     renderContent() {
         return (<div>
             <CommonToolbar buttons={this.getToolbarButtons()}/>
-            <div className={style.flexWrapper}>
+            <div className={style.flexWrapper} style={{height: this.state.height}}>
                 <div className={style.left}>
 
                 </div>
