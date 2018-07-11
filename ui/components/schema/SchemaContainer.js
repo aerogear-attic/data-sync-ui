@@ -13,7 +13,7 @@ class SchemaContainer extends Component {
     getToolbarButtons() {
         const { getSchema: { valid } } = this.props.data;
         return [
-            {title: "Export", cb: () => this.export(), id: "export_schema", enabled: valid}
+            {title: "Export as JSON", cb: () => this.export(), id: "export_schema", enabled: valid}
         ];
     }
 
@@ -24,6 +24,14 @@ class SchemaContainer extends Component {
     renderContent() {
         return (<div>
             <CommonToolbar buttons={this.getToolbarButtons()}/>
+            <div className={style.flexWrapper}>
+                <div className={style.left}>
+
+                </div>
+                <div className={style.right}>
+
+                </div>
+            </div>
         </div>);
     }
 
