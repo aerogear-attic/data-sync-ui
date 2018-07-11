@@ -4,7 +4,7 @@ EXPOSE 8000
 
 USER root
 
-COPY dist ./dist
+COPY server ./server
 COPY public ./public
 COPY package.json ./package.json
 
