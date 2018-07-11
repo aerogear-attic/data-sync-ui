@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const { postgresConfig } = require("../config");
 
-exports.supportsiLike = function() {
+exports.supportsiLike = function () {
     return process.env.NODE_ENV !== "test";
 };
 
