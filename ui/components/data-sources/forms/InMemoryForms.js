@@ -13,7 +13,7 @@ const InMemoryForms = ({ values, onValuesChange }) => (
             <Col sm={9}>
                 <Checkbox
                     checked={values.timestampData}
-                    onClick={e => onValuesChange({ timestampData: e.target.checked })}
+                    onChange={e => onValuesChange({ timestampData: e.target.checked })}
                 />
             </Col>
         </FormGroup>
