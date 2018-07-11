@@ -10,16 +10,25 @@
         "object-curly-newline": [
             "error",
             {
-                "ImportDeclaration": { "multiline": true, "minProperties": 3 }
+                "ImportDeclaration": { "multiline": true, "minProperties": 3 },
+                "ObjectExpression": { "consistent": true}
             }
         ],
-        "indent": ["error", 4],
+        "indent": ["error", 4, {
+            "SwitchCase": 1 
+        }],
+        "class-methods-use-this": "off",
         "import/prefer-default-export": "off",
         "react/jsx-filename-extension": "off",
         "react/jsx-one-expression-per-line": "off",
-        "react/prop-types": "warn",
+        "react/prop-types": "off",
         "react/jsx-indent": ["error", 4],
-        "react/jsx-indent-props": ["error", "first"]
+        "react/jsx-indent-props": ["error", "first"],
+        "react/button-has-type": "off",
+        "react/destructuring-assignment": "warn",
+        "react/sort-comp": "off",
+        "react/no-did-update-set-state": "off",
+        "jsx-a11y/label-has-for": "off"
     },
     "plugins": ["mocha"],
     "env": {

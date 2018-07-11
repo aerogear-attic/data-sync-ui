@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 
 import { CommonToolbar } from "../common";
-import { DataSourceDialog } from "./DataSourceDialog";
+import { AddDataSourceDialog } from "./AddDataSourceDialog";
 import { DataSourcesList } from "./DataSourcesList";
 
 class DataSourcesContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            showModal: false,
-            modalText: null,
-            filter: {}
-        };
+        this.state = { showModal: false };
     }
 
     getToolbarButtons() {
@@ -26,10 +22,7 @@ class DataSourcesContainer extends Component {
     }
 
     addDataSource() {
-        this.setState({
-            showModal: true,
-            modalText: "Create new Data Source"
-        });
+        this.setState({ showModal: true });
     }
 
     closeDialog() {
@@ -37,13 +30,12 @@ class DataSourcesContainer extends Component {
     }
 
     render() {
-        const { showModal, modalText } = this.state;
+        const { showModal } = this.state;
         return (
             <div>
-                <DataSourceDialog
+                <AddDataSourceDialog
                     onClose={() => this.closeDialog()}
                     visible={showModal}
-                    text={modalText}
                 />
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
