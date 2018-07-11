@@ -55,7 +55,9 @@ class AddDataSourceDialog extends Component {
     }
 
     createDataSource() {
-        const { name, type, config } = this.state;
+        const { name, type, inMemoryValues } = this.state;
+
+        const config = JSON.stringify({ options: inMemoryValues });
 
         return this.props.mutate({
             variables: { name, type, config },
