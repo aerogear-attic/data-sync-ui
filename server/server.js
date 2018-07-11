@@ -1,19 +1,19 @@
-const { urlencoded, json } = require("body-parser");
+const {urlencoded, json} = require("body-parser");
 const express = require("express");
-const { join } = require("path");
-const { port } = require("./config");
-const { sync, database, schema } = require("./models");
-const { stopNotifications } = require("./configNotifiers/configNotifierCreator");
-const { runHealthChecks } = require("./health");
-const { info, error } = require("./logger");
+const {join} = require("path");
+const {port} = require("./config");
+const {sync, database, schema} = require("./models");
+const {stopNotifications} = require("./configNotifiers/configNotifierCreator");
+const {runHealthChecks} = require("./health");
+const {info, error} = require("./logger");
 const setupGraphQLServer = require("./gql");
-const { compileSchemaString } = require("./gql/helper");
+const {compileSchemaString} = require("./gql/helper");
 
 const App = express();
 let server = null;
 
 // Set-up payload parsers. We accept url encoded and json values
-App.use(urlencoded({ extended: false }));
+App.use(urlencoded({extended: false}));
 App.use(json());
 
 App.use(express.static(join(__dirname, "../public")));
