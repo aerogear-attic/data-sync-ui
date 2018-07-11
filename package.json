@@ -10,7 +10,7 @@
     "lint:fix": "eslint server test ui webpack.config.js --fix",
     "server": "webpack --mode development && nodemon --watch ui --exec node server/index.js",
     "build": "webpack --mode production",
-    "clean": "rm -rf dist public/js/bundle.js node_modules",
+    "clean": "rm -rf public/js/bundle.js node_modules",
     "start": "node server/index.js",
     "test": "NODE_ENV=test mocha --recursive",
     "docker:build": "./scripts/docker_build.sh",
