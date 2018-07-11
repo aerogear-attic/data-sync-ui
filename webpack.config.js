@@ -11,7 +11,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: {loader: "babel-loader"}
+                use: { loader: "babel-loader" }
             },
             {
                 test: /\.(graphql|gql)$/,
@@ -26,9 +26,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: "style-loader"
-                    },
+                    { loader: "style-loader" },
                     {
                         loader: "css-loader",
                         options: {

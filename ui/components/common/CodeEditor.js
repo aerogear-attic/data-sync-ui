@@ -1,15 +1,19 @@
-import React, {Component, createRef} from "react";
+import React, { Component, createRef } from "react";
 
 import style from "./codeEditor.css";
 
 const CodeEditor = class extends Component {
+
     constructor(props) {
         super(props);
+
+        const { value, initialHeight, lineHeight } = this.props;
+
         this.state = {
             width: 0,
-            editorValue: this.props.value,
-            height: this.props["initialHeight"] || 0,
-            lineHeight: this.props.lineHeight || 20
+            editorValue: value,
+            height: initialHeight || 0,
+            lineHeight: lineHeight || 20
         };
 
         this.editor = createRef();
@@ -22,22 +26,17 @@ const CodeEditor = class extends Component {
         this.drawLineNumbers();
     }
 
-    updateEditorDimensions() {
-        const width = this.editor.current.clientWidth;
-        const height = this.editor.current.scrollHeight || this.state.height;
-        this.setState({width, height});
-    }
-
     onEditorChange() {
-        const value = this.editor.current.value;
         this.updateEditorDimensions();
         this.drawLineNumbers();
-        this.setState({
-            editorValue: value
-        });
+        this.setState({ editorValue: this.editor.current.value });
+
+        const { onChange } = this.props;
 
         // Propagate update
-        this.props.onChange && this.props.onChange(value);
+        if (onChange) {
+            onChange(this.editor.current.value);
+        }
     }
 
     // Deal with the tab key: we don't want to loose focus on the
@@ -46,11 +45,10 @@ const CodeEditor = class extends Component {
         const editor = this.editor.current;
         if (event.keyCode === 9) {
             event.preventDefault();
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            const value = editor.value;
-            editor.value = value.substring(0, start) + "\t" + value.substring(end);
-            editor.selectionStart = editor.selectionEnd = start + 1;
+            const { selectionStart, selectionEnd, value } = editor;
+            editor.value = `${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`;
+            editor.selectionStart = selectionStart + 1;
+            editor.selectionEnd = selectionStart + 1;
         }
     }
 
@@ -58,19 +56,27 @@ const CodeEditor = class extends Component {
         this.adjustGutterPosition();
     }
 
+    updateEditorDimensions() {
+        const { clientWidth, scrollHeight } = this.editor.current;
+        const { initialHeight } = this.props;
+
+        const width = clientWidth;
+        const height = scrollHeight || initialHeight;
+        this.setState({ width, height });
+    }
+
     drawLineNumbers() {
-        const {height, lineHeight} = this.state;
+        const { height, lineHeight } = this.state;
         const lines = Math.floor(height / lineHeight);
-        return [...Array(lines).keys()].map(index => {
-            return (
-                <div
-                    key={index}
-                    style={{height: this.state.lineHeight}}
-                    className={style.vcenter}>
-                    <span>{index + 1}</span>
-                </div>
-            );
-        });
+        return [...Array(lines).keys()].map(index => (
+            <div
+                key={index}
+                style={{ height: lineHeight }}
+                className={style.vcenter}
+            >
+                <span>{index + 1}</span>
+            </div>
+        ));
     }
 
     adjustGutterPosition() {
@@ -78,6 +84,7 @@ const CodeEditor = class extends Component {
     }
 
     render() {
+        const { editorValue, lineHeight } = this.state;
         return (
             <div className={style["editor-container"]}>
                 <div className={style.numbers} ref={this.gutter}>
@@ -85,19 +92,19 @@ const CodeEditor = class extends Component {
                 </div>
                 <div className={style.expand}>
                     <textarea
-                        autoFocus={true}
                         ref={this.editor}
-                        value={this.state.editorValue}
-                        style={{lineHeight: this.state.lineHeight + "px"}}
+                        value={editorValue}
+                        style={{ lineHeight: `${lineHeight}px` }}
                         className={style["editor-area"]}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
                         onChange={() => this.onEditorChange()}
-                        onScroll={() => this.onEditorScroll()}>
-                    </textarea>
+                        onScroll={() => this.onEditorScroll()}
+                    />
                 </div>
             </div>
         );
     }
+
 };
 
-export {CodeEditor};
+export { CodeEditor };
