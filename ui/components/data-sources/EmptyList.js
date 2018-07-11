@@ -9,7 +9,7 @@ import {
     EmptyStateAction
 } from "patternfly-react";
 
-const EmptyList = ({ action }) => (
+const EmptyList = ({ createDataSource }) => (
     <EmptyState style={{ margin: "15px" }}>
         <EmptyStateIcon />
         <EmptyStateTitle>
@@ -27,7 +27,7 @@ const EmptyList = ({ action }) => (
             <Button
                 bsStyle="primary"
                 bsSize="large"
-                onClick={action}
+                onClick={createDataSource}
             >
                     Add a Data Source
             </Button>

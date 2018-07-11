@@ -22,7 +22,7 @@ const DataSourcesList = ({ filter, onCreate }) => (
             if (items.length > 0) {
                 return (<ListView>{items}</ListView>);
             }
-            return <EmptyList action={onCreate} />;
+            return <EmptyList createDataSource={onCreate} />;
         }}
     </Query>
 );
