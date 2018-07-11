@@ -2,6 +2,7 @@ query GetSchema($name: String!) {
     getSchema(name: $name) {
         id
         schema
+        valid
         compiled
     }
 }

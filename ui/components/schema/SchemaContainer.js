@@ -11,8 +11,9 @@ class SchemaContainer extends Component {
     }
 
     getToolbarButtons() {
+        const { getSchema: { valid } } = this.props.data;
         return [
-            {title: "Export", cb: () => this.export(), id: "export_schema"}
+            {title: "Export", cb: () => this.export(), id: "export_schema", enabled: valid}
         ];
     }
 
