@@ -24,12 +24,10 @@ import GetDataSources from "../../graphql/GetDataSources.graphql";
 const INITIAL_STATE = {
     name: "",
     type: DataSourceType.InMemory,
-    config: "",
     err: "",
     validations: {
         name: "error",
-        type: "success",
-        config: "error"
+        type: "success"
     }
 };
 
@@ -79,21 +77,6 @@ class AddDataSourceDialog extends Component {
         this.setState({ type, validations: newValidations });
     }
 
-    onConfigChange(config) {
-        const { validations } = this.state;
-
-        let configValidation;
-        try {
-            JSON.parse(config);
-            configValidation = config.length < 255 ? "success" : "error";
-        } catch (e) {
-            configValidation = "error";
-        }
-        const newValidations = { ...validations, config: configValidation };
-
-        this.setState({ config, validations: newValidations });
-    }
-
     renderSpecificFormsForSelectedType() {
         const { type } = this.state;
 
@@ -109,7 +92,7 @@ class AddDataSourceDialog extends Component {
 
     render() {
         const { visible } = this.props;
-        const { name, type, config, err, validations } = this.state;
+        const { name, type, err, validations } = this.state;
 
         return (
             <Modal show={visible}>
@@ -168,18 +151,6 @@ class AddDataSourceDialog extends Component {
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
-                            </Col>
-                        </FormGroup>
-
-                        {/* Config */}
-                        <FormGroup controlId="config" validationState={validations.config}>
-                            <Col sm={3}>Config</Col>
-                            <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    value={config}
-                                    onChange={e => this.onConfigChange(e.target.value)}
-                                />
                             </Col>
                         </FormGroup>
 
