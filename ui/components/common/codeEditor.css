@@ -1,0 +1,40 @@
+.editor-container {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid lightgrey;
+}
+
+.editor-area {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    resize: none;
+    font-size: 16px;
+}
+
+.expand {
+    overflow: hidden;
+    width: auto;
+    height: 100%;
+}
+
+.numbers {
+    float: left;
+    width: 32px;
+    background-color: #f5f5f5;
+    color: lightgrey;
+    text-align: center;
+    height: 100%;
+    overflow: hidden;
+    font-size: 16px;
+    border-right: 1px solid lightgrey;
+}
+
+.vcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
