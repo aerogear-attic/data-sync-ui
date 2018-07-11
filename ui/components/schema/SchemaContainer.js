@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {graphql} from "react-apollo";
 import GetSchema from "../../graphql/GetSchema.graphql";
-import {CommonToolbar} from "../common";
+import {CommonToolbar, CodeEditor} from "../common";
 
 import style from "./schemaContainer.css";
 
@@ -52,10 +52,9 @@ class SchemaContainer extends Component {
             <CommonToolbar buttons={this.getToolbarButtons()}/>
             <div className={style.flexWrapper} style={{height: this.state.height}}>
                 <div className={style.left}>
-
+                    <CodeEditor />
                 </div>
                 <div className={style.right}>
-
                 </div>
             </div>
         </div>);
