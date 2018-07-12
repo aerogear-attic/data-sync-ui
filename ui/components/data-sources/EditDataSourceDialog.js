@@ -53,7 +53,7 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     }
 
     clearForms() {
-        // this.setState(INITIAL_STATE);
+        // Don't reset state
     }
 
     isDisabled(controlId) {

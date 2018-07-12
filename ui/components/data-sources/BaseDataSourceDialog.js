@@ -45,6 +45,7 @@ class BaseDataSourceDialog extends Component {
     onInMemoryOptionsChange(options) {
         const { timestampData } = options;
         const optionsValidation = typeof timestampData === "boolean"
+            // && further validations here
             ? "success" : "error";
 
         const { validations } = this.state;
@@ -71,20 +72,32 @@ class BaseDataSourceDialog extends Component {
     }
 
     /**
-     * Abstract methods
+     * Get the title of the Dialog.
+     * @return {string} - The title of the dialog.
      */
     getTitle() {
         throw new Error(`getTitle() not implemented in ${this.constructor.name}`);
     }
 
+    /**
+     * Callback attached to the Dialog's submit button.
+     */
     onSubmit() {
         throw new Error(`onSubmit() not implemented in ${this.constructor.name}`);
     }
 
+    /**
+     * Set initial state to clear al controls, otherwise implement empty.
+     */
     clearForms() {
         throw new Error(`clearForms() not implemented in ${this.constructor.name}`);
     }
 
+    /**
+     * For a given controlId, return if its control should be disabled.
+     * @param {boolean} controlId - The controlId of the control
+     * @returns {boolean}
+     */
     isDisabled() {
         throw new Error(`isDisabled(controlId: string) not implemented in ${this.constructor.name}`);
     }
