@@ -26,8 +26,15 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
 
     componentDidUpdate(prevProps) {
         if (this.props.dataSource !== prevProps.dataSource) {
-            const options = JSON.parse(this.props.dataSource.config);
-            this.setState({ ...INITIAL_STATE, ...this.props.dataSource, options });
+            const { id, name, type } = this.props.dataSource;
+            const config = JSON.parse(this.props.dataSource.config);
+            this.setState({
+                ...INITIAL_STATE,
+                id,
+                name,
+                type,
+                options: config.options
+            });
         }
     }
 
@@ -59,8 +66,6 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     isDisabled(controlId) {
         switch (controlId) {
             case "type":
-                return true;
-            case "timestampData":
                 return true;
             default:
                 return false;
