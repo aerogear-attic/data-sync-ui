@@ -54,7 +54,7 @@ const deleteDataSource = ({ id }) => {
             if (!foundDataSource) {
                 return null;
             }
-            return foundDataSource.destroy({ force: true }); // eslint-disable-line
+            return foundDataSource.destroy({ force: true }).then(() => foundDataSource); // eslint-disable-line
         });
 };
 
