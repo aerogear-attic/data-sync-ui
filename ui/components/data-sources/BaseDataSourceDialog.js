@@ -14,7 +14,7 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 
-import { InMemoryForms } from "./forms";
+import { InMemoryOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
 
 class BaseDataSourceDialog extends Component {
@@ -42,27 +42,27 @@ class BaseDataSourceDialog extends Component {
         this.setState({ type, validations: newValidations });
     }
 
-    onInMemoryValuesChange(inMemoryValues) {
-        const { timestampData } = inMemoryValues;
-        const inMemoryValuesValidation = typeof timestampData === "boolean"
+    onInMemoryOptionsChange(options) {
+        const { timestampData } = options;
+        const optionsValidation = typeof timestampData === "boolean"
             ? "success" : "error";
 
         const { validations } = this.state;
-        const newValidations = { ...validations, inMemoryValues: inMemoryValuesValidation };
+        const newValidations = { ...validations, optionsValidation };
 
-        this.setState({ inMemoryValues, validations: newValidations });
+        this.setState({ options, validations: newValidations });
     }
 
-    renderSpecificFormsForSelectedType() {
-        const { type, inMemoryValues } = this.state;
+    renderSpecificOptionsFormsForSelectedType() {
+        const { type, options } = this.state;
 
         switch (type) {
             case DataSourceType.InMemory:
                 return (
-                    <InMemoryForms
+                    <InMemoryOptions
                         isDisabled={this.isDisabled}
-                        values={inMemoryValues}
-                        onValuesChange={values => this.onInMemoryValuesChange(values)}
+                        options={options}
+                        onOptionsChange={newOps => this.onInMemoryOptionsChange(newOps)}
                     />
                 );
             default:
@@ -157,7 +157,7 @@ class BaseDataSourceDialog extends Component {
                         </FormGroup>
 
                         {/* Specific forms depending on Data Source Type */}
-                        {this.renderSpecificFormsForSelectedType()}
+                        {this.renderSpecificOptionsFormsForSelectedType()}
 
                     </Form>
                 </Modal.Body>

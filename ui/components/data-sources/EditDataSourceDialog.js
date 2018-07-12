@@ -9,14 +9,12 @@ const INITIAL_STATE = {
     id: "",
     name: "",
     type: DataSourceType.InMemory,
+    options: null,
     err: "",
-    inMemoryValues: {
-        timestampData: true
-    },
     validations: {
         name: null,
         type: "success",
-        inMemoryValues: "success"
+        options: "success"
     }
 };
 
@@ -44,9 +42,9 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     }
 
     updateDataSource() {
-        const { id, name, type, inMemoryValues } = this.state;
+        const { id, name, type, options } = this.state;
 
-        const config = JSON.stringify({ options: inMemoryValues });
+        const config = JSON.stringify({ options });
 
         return this.props.mutate({
             variables: { id, name, type, config },

@@ -3,7 +3,7 @@ import {
     FormControl, FormGroup, Col
 } from "patternfly-react";
 
-const AuthenticationForms = ({
+const AuthenticationOptions = ({
     username = "",
     password = "",
     onUsernameChange,
@@ -36,4 +36,4 @@ const AuthenticationForms = ({
     </React.Fragment>
 );
 
-export { AuthenticationForms };
+export { AuthenticationOptions };

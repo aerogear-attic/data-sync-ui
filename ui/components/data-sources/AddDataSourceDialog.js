@@ -8,14 +8,14 @@ import GetDataSources from "../../graphql/GetDataSources.graphql";
 const INITIAL_STATE = {
     name: "",
     type: DataSourceType.InMemory,
-    err: "",
-    inMemoryValues: {
+    options: {
         timestampData: true
     },
+    err: "",
     validations: {
         name: null,
         type: "success",
-        inMemoryValues: "success"
+        options: "success"
     }
 };
 
@@ -37,9 +37,9 @@ class AddDataSourceDialog extends BaseDataSourceDialog {
     }
 
     createDataSource() {
-        const { name, type, inMemoryValues } = this.state;
+        const { name, type, options } = this.state;
 
-        const config = JSON.stringify({ options: inMemoryValues });
+        const config = JSON.stringify({ options });
 
         return this.props.mutate({
             variables: { name, type, config },
