@@ -3,6 +3,7 @@ import {graphql} from "react-apollo";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchame from "../../graphql/UpdateSchema.graphql";
 import {CommonToolbar, CodeEditor} from "../common";
+import { StructureView } from "./StructureView";
 
 import style from "./schemaContainer.css";
 
@@ -12,8 +13,7 @@ class SchemaContainer extends Component {
         this.state = {
             height: "100%",
             schema: "",
-            error: null,
-            compiled: null
+            error: null
         }
     }
 
@@ -73,13 +73,11 @@ class SchemaContainer extends Component {
         }).then(({ data }) => {
             const { updateSchema: { compiled } } = data;
             this.setState({
-                error: null,
-                compiled
+                error: null
             });
         }).catch(error => {
             this.setState({
-                error,
-                compiled: null
+                error
             });
         });
     }
@@ -107,7 +105,7 @@ class SchemaContainer extends Component {
     }
 
     renderContent() {
-        const { getSchema: { schema } } = this.props.data;
+        const { getSchema: { schema, compiled } } = this.props.data;
         return (<div>
             <CommonToolbar buttons={this.getToolbarButtons()}/>
             <div className={style.flexWrapper} style={{height: this.state.height}}>
@@ -115,6 +113,7 @@ class SchemaContainer extends Component {
                     <CodeEditor value={schema} onChange={schema => this.onSchemaChange(schema)} />
                 </div>
                 <div className={style.right}>
+                    <StructureView compiled={JSON.parse(compiled)} error={this.state.error} />
                 </div>
             </div>
         </div>);

@@ -17,4 +17,5 @@
     width: 30%;
     border-left: 1px solid lightgrey;
     background-color: white;
+    overflow: auto;
 }

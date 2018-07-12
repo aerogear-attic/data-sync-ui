@@ -1,0 +1,52 @@
+.reducePadding {
+    padding: 10px;
+    border: none;
+    background-color: white;
+}
+
+.structure-header {
+    padding: 15px;
+    height: 64px;
+    font-size: 24px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.structure-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.ag-link {
+    font-size: 14px;
+    padding-left: 15px;
+}
+
+.alertBox {
+    margin: 10px;
+}
+
+.structure-list-item span.fa-angle-right {
+    border-right: 1px solid lightgrey;
+    font-weight: bold;
+    padding-right: 15px;
+}
+
+.structure-name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.structure-field-row {
+    font-weight: bold;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 5px;
+}
+
+.structure-list-item div.row {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.structure-item-row {
+    margin-top: 5px;
+}

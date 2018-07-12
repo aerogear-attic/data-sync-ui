@@ -101,7 +101,7 @@ const getSchema = async ({name}) => {
     }
 
     // ...and add the result to the response object
-    defaultSchema.compiled = compiled;
+    defaultSchema.compiled = JSON.stringify(compiled);
     defaultSchema.valid = valid;
     return defaultSchema;
 };
@@ -124,21 +124,12 @@ const updateSchema = async (args) => {
             id: updatedSchema.id,
             name: updatedSchema.name,
             schema: updatedSchema.schema,
-            compiled
+            compiled: JSON.stringify(compiled)
         };
     } catch (err) {
         error(`Error updating schema with id ${args.id}`, err);
         return err;
     }
-
-    // Compile the schema for validation purposes
-    /*
-    return compileSchemaString(args.schema).then(() => {
-        return schema.findById(args.id).then(schema => {
-            return schema.update({ schema: args.schema });
-        });
-    });
-    */
 };
 
 const root = {
