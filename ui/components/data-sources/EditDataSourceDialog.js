@@ -17,8 +17,7 @@ const INITIAL_STATE = {
         name: null,
         type: "success",
         inMemoryValues: "success"
-    },
-    dataSource: null
+    }
 };
 
 class EditDataSourceDialog extends BaseDataSourceDialog {
