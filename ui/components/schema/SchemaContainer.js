@@ -63,7 +63,7 @@ class SchemaContainer extends Component {
         this.props.mutate({
             variables: {
                 id: getSchema.id,
-                schema
+                schema: schema || getSchema.schema
             },
             refetchQueries: [{
                 query: GetSchema,
