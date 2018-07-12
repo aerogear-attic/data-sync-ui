@@ -27,7 +27,11 @@ class DataSourcesContainer extends Component {
         ];
     }
 
-    setFilter(name) {
+    setFilter(nameToFilter) {
+        let name = nameToFilter;
+        if (name === "") {
+            name = undefined;
+        }
         this.setState({ filter: { name } });
     }
 
@@ -70,13 +74,7 @@ class DataSourcesContainer extends Component {
                 />
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
-                    onFilter={name => {
-                        let nameToFilter = name;
-                        if (nameToFilter === "") {
-                            nameToFilter = undefined;
-                        }
-                        this.setFilter(nameToFilter);
-                    }}
+                    onFilter={name => this.setFilter(name)}
                 />
                 <div>
                     <DataSourcesList
