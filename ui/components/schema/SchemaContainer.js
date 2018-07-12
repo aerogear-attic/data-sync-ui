@@ -1,20 +1,21 @@
-import React, {Component} from "react";
-import {graphql} from "react-apollo";
+import React, { Component } from "react";
+import { graphql } from "react-apollo";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchame from "../../graphql/UpdateSchema.graphql";
-import {CommonToolbar, CodeEditor} from "../common";
+import { CommonToolbar, CodeEditor } from "../common";
 import { StructureView } from "./StructureView";
 
 import style from "./schemaContainer.css";
 
 class SchemaContainer extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             height: "100%",
             schema: "",
             error: null
-        }
+        };
     }
 
     updateDimensions() {
@@ -49,7 +50,7 @@ class SchemaContainer extends Component {
         const path = `/schema/${id}`;
         const link = document.createElement("A");
         link.href = path;
-        link.download = path.substr(path.lastIndexOf('/') + 1);
+        link.download = path.substr(path.lastIndexOf("/") + 1);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -70,8 +71,7 @@ class SchemaContainer extends Component {
                     name: "default"
                 }
             }]
-        }).then(({ data }) => {
-            const { updateSchema: { compiled } } = data;
+        }).then(() => {
             this.setState({
                 error: null
             });
@@ -106,32 +106,38 @@ class SchemaContainer extends Component {
 
     renderContent() {
         const { getSchema: { schema, compiled } } = this.props.data;
-        return (<div>
-            <CommonToolbar buttons={this.getToolbarButtons()}/>
-            <div className={style.flexWrapper} style={{height: this.state.height}}>
-                <div className={style.left}>
-                    <CodeEditor value={schema} onChange={schema => this.onSchemaChange(schema)} />
-                </div>
-                <div className={style.right}>
-                    <StructureView compiled={JSON.parse(compiled)} error={this.state.error} />
+        return (
+            <div>
+                <CommonToolbar buttons={this.getToolbarButtons()} />
+                <div className={style.flexWrapper} style={{ height: this.state.height }}>
+                    <div className={style.left}>
+                        <CodeEditor
+                            value={schema}
+                            onChange={updated => this.onSchemaChange(updated)}
+                        />
+                    </div>
+                    <div className={style.right}>
+                        <StructureView compiled={JSON.parse(compiled)} error={this.state.error} />
+                    </div>
                 </div>
             </div>
-        </div>);
+        );
     }
 
     render() {
-        const {data} = this.props;
+        const { data } = this.props;
         if (data.loading) {
             return this.renderLoading();
         }
 
         return this.renderContent();
     }
+
 }
 
 // Automatically fetch the default schema
 const SchemaContainerWithQuery = graphql(GetSchema, {
-    options: () => ({variables: {name: "default"}})
+    options: () => ({ variables: { name: "default" } })
 })(graphql(UpdateSchame)(SchemaContainer));
 
-export {SchemaContainerWithQuery as SchemaContainer};
+export { SchemaContainerWithQuery as SchemaContainer };

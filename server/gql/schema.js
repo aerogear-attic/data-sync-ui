@@ -1,6 +1,6 @@
-const {buildSchema} = require("graphql");
-const {info, warn, error} = require("../logger");
-const {dataSource, database, supportsiLike, schema} = require("../models");
+const { buildSchema } = require("graphql");
+const { info, warn, error } = require("../logger");
+const { dataSource, database, supportsiLike, schema } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 
 const Schema = buildSchema(`
@@ -34,7 +34,7 @@ const Schema = buildSchema(`
     }
 `);
 
-const createDataSource = ({name, type, config}) => {
+const createDataSource = ({ name, type, config }) => {
     info("createDataSource request");
     return dataSource.create({
         name,
@@ -43,21 +43,21 @@ const createDataSource = ({name, type, config}) => {
     });
 };
 
-const listDataSources = ({name}) => {
+const listDataSources = ({ name }) => {
     info("listDataSources request");
     if (name) {
         const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
-        return dataSource.findAll({where: {name: {[operator]: `%${name}%`}}});
+        return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
     return dataSource.findAll();
 };
 
-const getOneDataSource = ({id}) => {
+const getOneDataSource = ({ id }) => {
     info("getOneDataSource request");
     return dataSource.findById(id);
 };
 
-const deleteDataSource = ({id}) => {
+const deleteDataSource = ({ id }) => {
     info(`deleteDataSource request for id ${id}`);
     return dataSource.findById(id)
         .then(foundDataSource => {
@@ -68,7 +68,7 @@ const deleteDataSource = ({id}) => {
         });
 };
 
-const updateDataSource = ({id, name, type, config}) => {
+const updateDataSource = ({ id, name, type, config }) => {
     info("updateDataSource request");
     return dataSource.findById(id).then(foundDataSource => foundDataSource.update({
         name,
@@ -77,11 +77,11 @@ const updateDataSource = ({id, name, type, config}) => {
     }));
 };
 
-const getSchema = async ({name}) => {
+const getSchema = async ({ name }) => {
     info("getSchema request");
 
     const [defaultSchema, created] = await schema.findOrCreate({
-        where: {name},
+        where: { name },
         defaults: {
             schema: "# Add your schema here"
         }
@@ -92,7 +92,8 @@ const getSchema = async ({name}) => {
     }
 
     // Compile the schema on the fly...
-    let compiled = "", valid = false;
+    let compiled = "";
+    let valid = false;
     try {
         compiled = await compileSchemaString(defaultSchema.schema);
         valid = true;
@@ -106,7 +107,7 @@ const getSchema = async ({name}) => {
     return defaultSchema;
 };
 
-const updateSchema = async (args) => {
+const updateSchema = async args => {
     info("updateSchema request");
 
     try {
@@ -142,4 +143,4 @@ const root = {
     getSchema
 };
 
-module.exports = {Schema, root};
+module.exports = { Schema, root };

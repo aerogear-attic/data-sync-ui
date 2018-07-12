@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Button,
     EmptyState,
     EmptyStateIcon,
     EmptyStateTitle

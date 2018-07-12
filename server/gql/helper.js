@@ -16,7 +16,5 @@ exports.compileSchemaString = function (source) {
 };
 
 exports.formatGraphqlErrors = function (result) {
-    return result.errors.map(error => {
-        return error.message;
-    }).join("\n");
+    return result.errors.map(error => error.message).join("\n");
 };
