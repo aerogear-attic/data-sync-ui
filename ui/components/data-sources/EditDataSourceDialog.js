@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     options: null,
     err: "",
     validations: {
-        name: null,
+        name: "success",
         type: "success",
         options: "success"
     }
