@@ -1,14 +1,13 @@
 import { graphql } from "react-apollo";
 
 import BaseDataSourceDialog from "./BaseDataSourceDialog";
-import { DataSourceType } from "../../graphql/types/DataSourceType";
 import UpdateDataSource from "../../graphql/UpdateDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 const INITIAL_STATE = {
-    id: "",
-    name: "",
-    type: DataSourceType.InMemory,
+    id: null,
+    name: null,
+    type: null,
     options: null,
     err: "",
     validations: {
