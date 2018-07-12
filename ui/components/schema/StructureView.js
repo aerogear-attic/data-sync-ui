@@ -40,10 +40,10 @@ class StructureView extends Component {
             return <div />;
         }
 
-        return fields.map((field, index) => {
+        return fields.map(field => {
             const key = field.type.name || field.type.kind;
             return (
-                <Row key={key + index} className={style["structure-item-row"]}>
+                <Row key={key + field.name} className={style["structure-item-row"]}>
                     <Col xs={6} md={6}>
                         {field.name}
                     </Col>
