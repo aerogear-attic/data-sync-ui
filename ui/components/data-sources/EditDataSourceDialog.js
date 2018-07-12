@@ -26,7 +26,8 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
 
     componentDidUpdate(prevProps) {
         if (this.props.dataSource !== prevProps.dataSource) {
-            this.setState({ ...INITIAL_STATE, ...this.props.dataSource });
+            const options = JSON.parse(this.props.dataSource.config);
+            this.setState({ ...INITIAL_STATE, ...this.props.dataSource, options });
         }
     }
 
