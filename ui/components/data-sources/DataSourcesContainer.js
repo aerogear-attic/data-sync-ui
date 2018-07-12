@@ -44,7 +44,13 @@ class DataSourcesContainer extends Component {
     }
 
     render() {
-        const { showAddModal, showEditModal, showDeleteModal, filter, selectedDataSource } = this.state;
+        const {
+            showAddModal,
+            showEditModal,
+            showDeleteModal,
+            filter,
+            selectedDataSource
+        } = this.state;
 
         return (
             <div>
