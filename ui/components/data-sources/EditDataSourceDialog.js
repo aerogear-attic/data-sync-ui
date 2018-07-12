@@ -21,7 +21,7 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
 
     constructor(props) {
         super(props);
-        this.state = { ...INITIAL_STATE, ...props.dataSource };
+        this.state = INITIAL_STATE;
     }
 
     componentDidUpdate(prevProps) {
