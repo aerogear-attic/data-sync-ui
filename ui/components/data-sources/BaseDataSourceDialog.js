@@ -80,6 +80,14 @@ class BaseDataSourceDialog extends Component {
     }
 
     /**
+     * Get the title of the submit button.
+     * @return {string} - The title of the submit button.
+     */
+    getSubmitTitle() {
+        throw new Error(`getSubmitTitle() not implemented in ${this.constructor.name}`);
+    }
+
+    /**
      * Callback attached to the Dialog's submit button.
      */
     onSubmit() {
@@ -188,7 +196,7 @@ class BaseDataSourceDialog extends Component {
                         onClick={() => this.onSubmit()}
                         disabled={submitButtonDisabled}
                     >
-                        Edit
+                        {this.getSubmitTitle()}
                     </Button>
                 </Modal.Footer>
             </Modal>

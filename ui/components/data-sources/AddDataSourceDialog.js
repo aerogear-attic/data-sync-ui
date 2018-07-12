@@ -30,6 +30,10 @@ class AddDataSourceDialog extends BaseDataSourceDialog {
         return "Add Data Source";
     }
 
+    getSubmitTitle() {
+        return "Add";
+    }
+
     onSubmit() {
         this.createDataSource()
             .then(() => this.onClose())

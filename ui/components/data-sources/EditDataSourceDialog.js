@@ -42,6 +42,10 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
         return "Edit Data Source";
     }
 
+    getSubmitTitle() {
+        return "Edit";
+    }
+
     onSubmit() {
         this.updateDataSource()
             .then(() => this.onClose())
