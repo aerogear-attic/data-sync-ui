@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
     Alert, ListView, ListViewItem, Grid, Row, Col
 } from "patternfly-react";
@@ -20,7 +20,7 @@ const wellKnownTypes = [
     "__DirectiveLocation"
 ];
 
-const renderAdditionalInfo = (type) => {
+const renderAdditionalInfo = type => {
     const { fields } = type;
     if (!fields) {
         return "n.a.";
@@ -28,7 +28,7 @@ const renderAdditionalInfo = (type) => {
     return type.fields.length + (type.fields.length > 1 ? " fields" : " field");
 };
 
-const renderFields = (fields) => {
+const renderFields = fields => {
     if (!fields) {
         // Some types won't have fields
         return <div />;
@@ -77,7 +77,7 @@ const renderType = (type, index) => {
     );
 };
 
-const renderListView = (compiled) => {
+const renderListView = compiled => {
     const { types } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
 
@@ -90,33 +90,31 @@ const renderListView = (compiled) => {
     );
 };
 
-const renderContent = (compiled) => {
-    return (
-        <div className={style["structure-content"]}>
-            <div className={style["structure-header"]}>
-                <span>Data Types</span>
-                <a
-                    className={style["ag-link"]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://docs.aerogear.org"
-                >
-                    {"Learn more \u2139"}
-                </a>
-            </div>
-            <div>
-                { renderListView(compiled) }
-            </div>
+const renderContent = compiled => (
+    <div className={style["structure-content"]}>
+        <div className={style["structure-header"]}>
+            <span>Data Types</span>
+            <a
+                className={style["ag-link"]}
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://docs.aerogear.org"
+            >
+                {"Learn more \u2139"}
+            </a>
         </div>
-    );
-};
+        <div>
+            { renderListView(compiled) }
+        </div>
+    </div>
+);
 
-const renderError = (error) => {
+const renderError = error => {
     const { message } = error;
     return (<Alert className={style.alertBox}>{message}</Alert>);
 };
 
-const StructureView = (props) =>  {
+const StructureView = props => {
     const { error, compiled } = props;
 
     if (error) {
@@ -124,7 +122,7 @@ const StructureView = (props) =>  {
     } if (compiled) {
         return renderContent(compiled);
     }
-    return <EmptyStructureView />
+    return <EmptyStructureView />;
 };
 
 export { StructureView };

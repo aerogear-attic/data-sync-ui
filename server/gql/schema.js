@@ -64,10 +64,7 @@ const deleteDataSource = ({ id }) => {
             if (!foundDataSource) {
                 return null;
             }
-            return foundDataSource.destroy({force: true}).then(() => {
-                // We need to return a result even if it was deleted
-                return foundDataSource;
-            });
+            return foundDataSource.destroy({ force: true }).then(() => foundDataSource);
         });
 };
 
