@@ -10,6 +10,7 @@ const CommonToolbar = ({ buttons, onFilter }) => {
             bsStyle="primary"
             onClick={button.cb}
             disabled={button.enabled === false}
+            {...button.props}
         >
             {button.title}
         </Button>

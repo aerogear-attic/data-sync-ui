@@ -45,17 +45,6 @@ class SchemaContainer extends Component {
         this.setState({ schema });
     }
 
-    export() {
-        const { getSchema: { id } } = this.props.data;
-        const path = `/schema/${id}`;
-        const link = document.createElement("A");
-        link.href = path;
-        link.download = path.substr(path.lastIndexOf("/") + 1);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
     save() {
         const { schema } = this.state;
         const { getSchema } = this.props.data;
@@ -83,13 +72,13 @@ class SchemaContainer extends Component {
     }
 
     getToolbarButtons() {
-        const { getSchema: { valid } } = this.props.data;
+        const { getSchema: { id, valid } } = this.props.data;
         return [
             {
                 title: "Download Schema",
-                cb: () => this.export(),
                 id: "export_schema",
-                enabled: valid
+                enabled: valid,
+                props: { href: `/schema/${id}` }
             },
             {
                 title: "Save Schema",
