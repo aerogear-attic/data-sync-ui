@@ -9,6 +9,7 @@ import {
     FormGroup,
     Col,
     InputGroup,
+    HelpBlock,
     DropdownButton,
     MenuItem
 } from "patternfly-react";
@@ -25,7 +26,7 @@ class BaseDataSourceDialog extends Component {
     }
 
     onNameChange(name) {
-        const nameValidation = name && name.length < 255 ? "success" : "error";
+        const nameValidation = name && name.length < 255 ? "ok" : "error";
 
         const { validations } = this.state;
         const newValidations = { ...validations, name: nameValidation };
@@ -34,7 +35,8 @@ class BaseDataSourceDialog extends Component {
     }
 
     onTypeChange(type) {
-        const typeValidation = type && type.length < 255 ? "success" : "error";
+        let typeValidation = DataSourceType[type] ? "ok" : "error";
+        typeValidation = type === DataSourceType.InMemory ? "warning" : typeValidation;
 
         const { validations } = this.state;
         const newValidations = { ...validations, type: typeValidation };
@@ -46,7 +48,7 @@ class BaseDataSourceDialog extends Component {
         const { timestampData } = options;
         const optionsValidation = typeof timestampData === "boolean"
             // && further validations here
-            ? "success" : "error";
+            ? "ok" : "error";
 
         const { validations } = this.state;
         const newValidations = { ...validations, optionsValidation };
@@ -150,7 +152,7 @@ class BaseDataSourceDialog extends Component {
                         </FormGroup>
 
                         {/* Data Source Type */}
-                        <FormGroup controlId="type">
+                        <FormGroup controlId="type" validationState={validations.type}>
                             <Col sm={3}>Data Source Type</Col>
                             <Col sm={9}>
                                 <InputGroup>
@@ -174,7 +176,13 @@ class BaseDataSourceDialog extends Component {
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
+                                {type === DataSourceType.InMemory && (
+                                    <HelpBlock>
+                                        In memory data sources are not meant for production.
+                                    </HelpBlock>
+                                )}
                             </Col>
+                            {/* <HelpBlock>Validation is based on string length.</HelpBlock> */}
                         </FormGroup>
 
                         {/* Specific forms depending on Data Source Type */}
