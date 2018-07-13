@@ -2,6 +2,7 @@ const { buildSchema } = require("graphql");
 const { info, warn, error } = require("../logger");
 const { dataSource, database, supportsiLike, schema } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
+const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -34,13 +35,16 @@ const Schema = buildSchema(`
     }
 `);
 
-const createDataSource = ({ name, type, config }) => {
+const createDataSource = async ({ name, type, config }) => {
     info("createDataSource request");
-    return dataSource.create({
+    const created = await dataSource.create({
         name,
         type,
         config
     });
+
+    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    return created;
 };
 
 const listDataSources = ({ name }) => {
@@ -57,24 +61,32 @@ const getOneDataSource = ({ id }) => {
     return dataSource.findById(id);
 };
 
-const deleteDataSource = ({ id }) => {
+const deleteDataSource = async ({ id }) => {
     info(`deleteDataSource request for id ${id}`);
-    return dataSource.findById(id)
-        .then(foundDataSource => {
-            if (!foundDataSource) {
-                return null;
-            }
-            return foundDataSource.destroy({ force: true }).then(() => foundDataSource);
-        });
+
+    const foundDataSource = await dataSource.findById(id);
+    if (!foundDataSource) {
+        return null;
+    }
+
+    const destroyed = await foundDataSource.destroy({force: true});
+    info(`Data source with id ${destroyed.id} deleted`);
+
+    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    return foundDataSource;
 };
 
-const updateDataSource = ({ id, name, type, config }) => {
+const updateDataSource = async ({ id, name, type, config }) => {
     info("updateDataSource request");
-    return dataSource.findById(id).then(foundDataSource => foundDataSource.update({
+    const current = await dataSource.findById(id);
+    const updated = current.update({
         name,
         type,
         config
-    }));
+    });
+
+    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    return updated;
 };
 
 const getSchema = async ({ name }) => {
@@ -121,6 +133,7 @@ const updateSchema = async args => {
             schema: args.schema
         });
 
+        publish(DEFAULT_CHANNEL, {reload: "Schema"});
         return {
             id: updatedSchema.id,
             name: updatedSchema.name,

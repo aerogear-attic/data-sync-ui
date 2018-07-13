@@ -12,6 +12,8 @@ if (notfier.enabled && notifiers[notfier.type]) {
     warn(`notifier unknown or disabled: ${notfier.type}`);
 }
 
+exports.DEFAULT_CHANNEL = notfier.config.channel;
+
 exports.publish = (channel, payload) => {
     if (instance) {
         instance.publish(channel, payload);
