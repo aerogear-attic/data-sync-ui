@@ -37,7 +37,6 @@ class BaseDataSourceDialog extends Component {
     onTypeChange(type) {
         let typeValidation = DataSourceType[type] ? "ok" : "error";
         typeValidation = type === DataSourceType.InMemory ? "warning" : typeValidation;
-        console.log(typeValidation);
 
         const { validations } = this.state;
         const newValidations = { ...validations, type: typeValidation };
