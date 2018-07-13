@@ -1,7 +1,7 @@
 const { introspectionQuery } = require("graphql/utilities");
 const { graphql, buildSchema } = require("graphql");
 
-exports.compileSchemaString = function (source) {
+exports.compileSchemaString = (source)  => {
     return new Promise((resolve, reject) => {
         let Schema;
         try {
@@ -15,6 +15,6 @@ exports.compileSchemaString = function (source) {
     });
 };
 
-exports.formatGraphqlErrors = function (result) {
-    return result.errors.map(error => error.message).join("\n");
+exports.formatGraphqlErrors = ({ errors }) => {
+    return errors.map(error => error.message).join("\n");
 };

@@ -7,15 +7,17 @@ import { StructureView } from "./StructureView";
 
 import style from "./schemaContainer.css";
 
+const INITIAL_STATE = {
+    height: "100%",
+    schema: "",
+    error: null
+};
+
 class SchemaContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            height: "100%",
-            schema: "",
-            error: null
-        };
+        this.state = INITIAL_STATE;
     }
 
     updateDimensions() {
