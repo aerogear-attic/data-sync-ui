@@ -173,9 +173,6 @@ class BaseDataSourceDialog extends Component {
                                             <MenuItem eventKey={DataSourceType.InMemory}>
                                                 {DataSourceType.InMemory}
                                             </MenuItem>
-                                            <MenuItem eventKey={DataSourceType.Postgres}>
-                                                {DataSourceType.Postgres}
-                                            </MenuItem>
                                             {/* More Data Source Types to be added */}
                                         </DropdownButton>
                                     </InputGroup.Button>
