@@ -12,7 +12,6 @@ const DataSourcesListItem = ({ item, onEditDataSource, onDeleteDataSource }) => 
         <ListView.Item
             className="ds-list-item"
             heading={type}
-            description="---"
             leftContent={(
                 <span className="list-item-name">{name}</span>
             )}
