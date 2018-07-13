@@ -1,0 +1,5 @@
+mutation UpdateSchema($id: Int!, $schema: String!) {
+    updateSchema(id: $id, schema: $schema) {
+        compiled
+    }
+}

@@ -1,1 +1,1 @@
-export * from "./SchemaContainer";
+export { SchemaContainer } from "./SchemaContainer";

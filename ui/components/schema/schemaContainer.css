@@ -1,0 +1,21 @@
+.flexWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    background-color: #f5f5f5;
+}
+
+.left {
+    width: 70%;
+    background-color: white;
+}
+
+.right {
+    width: 30%;
+    border-left: 1px solid lightgrey;
+    background-color: white;
+    overflow: auto;
+}

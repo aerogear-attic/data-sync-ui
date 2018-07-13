@@ -1,6 +1,7 @@
 const { buildSchema } = require("graphql");
-const { info } = require("../logger");
-const { dataSource, database, supportsiLike } = require("../models");
+const { info, warn, error } = require("../logger");
+const { dataSource, database, supportsiLike, schema } = require("../models");
+const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -8,19 +9,28 @@ const Schema = buildSchema(`
         Postgres
     },
     type Query {
-        dataSources(name: String): [DataSource],
+        dataSources(name: String): [DataSource]
         getOneDataSource(id: Int!): DataSource
+        getSchema(name: String!): Schema
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: String!): DataSource
         deleteDataSource(id: Int!): DataSource
         updateDataSource(id: Int!, name: String!, type: DataSourceType!, config: String!): DataSource
+        updateSchema(id: Int!, schema: String!): Schema
     },  
     type DataSource {
         id: Int!
         name: String!
         type: DataSourceType! 
         config: String!
+    },
+    type Schema {
+        id: Int!
+        name: String!
+        schema: String!
+        valid: Boolean!
+        compiled: String!        
     }
 `);
 
@@ -54,7 +64,7 @@ const deleteDataSource = ({ id }) => {
             if (!foundDataSource) {
                 return null;
             }
-            return foundDataSource.destroy({ force: true }).then(() => foundDataSource); // eslint-disable-line
+            return foundDataSource.destroy({ force: true }).then(() => foundDataSource);
         });
 };
 
@@ -67,12 +77,70 @@ const updateDataSource = ({ id, name, type, config }) => {
     }));
 };
 
+const getSchema = async ({ name }) => {
+    info("getSchema request");
+
+    const [defaultSchema, created] = await schema.findOrCreate({
+        where: { name },
+        defaults: {
+            schema: "# Add your schema here"
+        }
+    });
+
+    if (created) {
+        info(`Created a new default with name ${name}`);
+    }
+
+    // Compile the schema on the fly...
+    let compiled = "";
+    let valid = false;
+    try {
+        compiled = await compileSchemaString(defaultSchema.schema);
+        valid = true;
+    } catch (err) {
+        warn("Schema not valid: ", err);
+    }
+
+    // ...and add the result to the response object
+    defaultSchema.compiled = JSON.stringify(compiled);
+    defaultSchema.valid = valid;
+    return defaultSchema;
+};
+
+const updateSchema = async args => {
+    info("updateSchema request");
+
+    try {
+        const compiled = await compileSchemaString(args.schema);
+        if (compiled.errors) {
+            return new Error(formatGraphqlErrors(compiled));
+        }
+
+        const currentSchema = await schema.findById(args.id);
+        const updatedSchema = await currentSchema.update({
+            schema: args.schema
+        });
+
+        return {
+            id: updatedSchema.id,
+            name: updatedSchema.name,
+            schema: updatedSchema.schema,
+            compiled: JSON.stringify(compiled)
+        };
+    } catch (err) {
+        error(`Error updating schema with id ${args.id}`, err);
+        return err;
+    }
+};
+
 const root = {
     dataSources: listDataSources,
     createDataSource,
     getOneDataSource,
     deleteDataSource,
-    updateDataSource
+    updateDataSource,
+    updateSchema,
+    getSchema
 };
 
 module.exports = { Schema, root };

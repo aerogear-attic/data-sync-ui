@@ -3,12 +3,14 @@ import { Toolbar, Button } from "patternfly-react";
 import { DebounceInput } from "react-debounce-input";
 
 const CommonToolbar = ({ buttons, onFilter }) => {
-    const elements = buttons.map(button => (
+    const elements = buttons && buttons.map(button => (
         <Button
-            style={{ float: "right" }}
+            style={{ float: "right", marginRight: "5px" }}
             key={button.id}
             bsStyle="primary"
             onClick={button.cb}
+            disabled={button.enabled === false}
+            {...button.props}
         >
             {button.title}
         </Button>
