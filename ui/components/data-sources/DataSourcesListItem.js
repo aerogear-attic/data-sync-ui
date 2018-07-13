@@ -5,7 +5,7 @@ import {
     MenuItem
 } from "patternfly-react";
 
-const DataSourcesListItem = ({ item, onDeleteDataSource }) => {
+const DataSourcesListItem = ({ item, onEditDataSource, onDeleteDataSource }) => {
     const { type, name } = item;
 
     return (
@@ -19,7 +19,7 @@ const DataSourcesListItem = ({ item, onDeleteDataSource }) => {
             actions={(
                 <div>
                     <DropdownKebab id="data-source-list-item-dropdown" pullRight>
-                        <MenuItem>
+                        <MenuItem onSelect={() => onEditDataSource(item)}>
                             Edit Data Source
                         </MenuItem>
                         <MenuItem onSelect={() => onDeleteDataSource(item)}>

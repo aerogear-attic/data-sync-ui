@@ -3,7 +3,7 @@ import {
     FormControl, FormGroup, Col
 } from "patternfly-react";
 
-const DBForms = ({
+const DBOptions = ({
     database = "",
     hostname = "",
     port = "",
@@ -50,4 +50,4 @@ const DBForms = ({
     </React.Fragment>
 );
 
-export { DBForms };
+export { DBOptions };

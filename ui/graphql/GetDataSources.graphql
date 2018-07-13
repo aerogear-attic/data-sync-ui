@@ -3,5 +3,6 @@ query GetDataSources ($name: String) {
         id
         name
         type
+        config
     }
 }
