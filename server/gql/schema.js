@@ -43,7 +43,7 @@ const createDataSource = async ({ name, type, config }) => {
         config
     });
 
-    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
     return created;
 };
 
@@ -69,23 +69,23 @@ const deleteDataSource = async ({ id }) => {
         return null;
     }
 
-    const destroyed = await foundDataSource.destroy({force: true});
+    const destroyed = await foundDataSource.destroy({ force: true });
     info(`Data source with id ${destroyed.id} deleted`);
 
-    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
     return foundDataSource;
 };
 
 const updateDataSource = async ({ id, name, type, config }) => {
     info("updateDataSource request");
     const current = await dataSource.findById(id);
-    const updated = current.update({
+    const updated = await current.update({
         name,
         type,
         config
     });
 
-    publish(DEFAULT_CHANNEL, {reload: "DataSource"});
+    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
     return updated;
 };
 
@@ -133,7 +133,7 @@ const updateSchema = async args => {
             schema: args.schema
         });
 
-        publish(DEFAULT_CHANNEL, {reload: "Schema"});
+        publish(DEFAULT_CHANNEL, { reload: "Schema" });
         return {
             id: updatedSchema.id,
             name: updatedSchema.name,
