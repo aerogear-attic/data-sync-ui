@@ -4,7 +4,7 @@ node_modules/
 # Built files
 dist/
 public/js/bundle.js
-public/js/bundle.js.map
+**/*.map
 
 # IDE files
 .idea
