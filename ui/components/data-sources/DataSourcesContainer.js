@@ -71,6 +71,7 @@ class DataSourcesContainer extends Component {
                 <DeleteDataSourceDialog
                     showModal={showDeleteModal}
                     dataSource={selectedDataSource}
+                    filter={filter}
                     onClose={() => this.setState({ showDeleteModal: false,
                         selectedDataSource: null })}
                 />

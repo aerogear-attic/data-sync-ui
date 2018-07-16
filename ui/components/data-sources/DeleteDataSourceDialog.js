@@ -6,11 +6,15 @@ import { graphql } from "react-apollo";
 import DeleteDataSource from "../../graphql/DeleteDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
-const DeleteDataSourceDialog = ({ showModal, dataSource, mutate, onClose }) => {
+const DeleteDataSourceDialog = ({ showModal, dataSource, filter, mutate, onClose }) => {
     const removeOneDatasource = dataSourceId => {
+        const { name } = filter;
         mutate({
             variables: { dataSourceId },
             refetchQueries: [{
+                query: GetDataSources,
+                variables: { name }
+            }, {
                 query: GetDataSources,
                 variables: { name: undefined }
             }]
