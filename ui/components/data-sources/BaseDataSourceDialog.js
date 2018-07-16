@@ -25,7 +25,7 @@ class BaseDataSourceDialog extends Component {
     }
 
     onNameChange(name) {
-        const nameValidation = name && name.length < 255 ? "ok" : "error";
+        const nameValidation = name && name.length < 255 ? "success" : "error";
 
         const { validations } = this.state;
         const newValidations = { ...validations, name: nameValidation };
@@ -34,7 +34,8 @@ class BaseDataSourceDialog extends Component {
     }
 
     onTypeChange(type) {
-        const typeValidation = DataSourceType[type] ? "ok" : "error";
+        let typeValidation = DataSourceType[type] ? "success" : "error";
+        typeValidation = type === DataSourceType.InMemory ? "warning" : typeValidation;
 
         const { validations } = this.state;
         const newValidations = { ...validations, type: typeValidation };
@@ -46,7 +47,7 @@ class BaseDataSourceDialog extends Component {
         const { timestampData } = options;
         const optionsValidation = typeof timestampData === "boolean"
             // && further validations here
-            ? "ok" : "error";
+            ? "success" : "error";
 
         const { validations } = this.state;
         const newValidations = { ...validations, optionsValidation };
