@@ -1,6 +1,6 @@
 const { buildSchema } = require("graphql");
 const { info, warn, error } = require("../logger");
-const { dataSource, database, supportsiLike, schema } = require("../models");
+const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
 
@@ -19,19 +19,38 @@ const Schema = buildSchema(`
         deleteDataSource(id: Int!): DataSource
         updateDataSource(id: Int!, name: String!, type: DataSourceType!, config: String!): DataSource
         updateSchema(id: Int!, schema: String!): Schema
+        upsertResolver(
+            id: Int
+            schemaId: Int!
+            dataSourceId: Int! 
+            type: String!,
+            field: String!
+            requestMapping: String!
+            responseMapping: String!
+        ): Resolver
     },  
     type DataSource {
         id: Int!
         name: String!
         type: DataSourceType! 
         config: String!
+        resolvers: [Resolver]
     },
     type Schema {
         id: Int!
         name: String!
         schema: String!
         valid: Boolean!
-        compiled: String!        
+        compiled: String!
+        resolvers: [Resolver]        
+    },
+    type Resolver {
+        id: Int! 
+        type: String!
+        field: String!
+        requestMapping: String!
+        responseMapping: String!
+        DataSource: DataSource!
     }
 `);
 
@@ -54,6 +73,37 @@ const listDataSources = ({ name }) => {
         return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
     return dataSource.findAll();
+};
+
+const listResolvers = ({ schemaId, type }) => resolver.findAll({
+    where: {
+        GraphQLSchemaId: schemaId,
+        type
+    },
+    include: {
+        model: dataSource,
+        as: "DataSource"
+    }
+});
+
+const upsertResolver = async ({
+    id, schemaId, dataSourceId, type, field,
+    requestMapping, responseMapping
+}) => {
+    const properties = {
+        GraphQLSchemaId: schemaId,
+        DataSourceId: dataSourceId,
+        requestMapping,
+        responseMapping,
+        type,
+        field
+    };
+
+    if (id) {
+        const updated = await resolver.findById(id);
+        return updated.update(properties);
+    }
+    return resolver.create(properties);
 };
 
 const getOneDataSource = ({ id }) => {
@@ -148,6 +198,8 @@ const updateSchema = async args => {
 
 const root = {
     dataSources: listDataSources,
+    resolvers: listResolvers,
+    upsertResolver,
     createDataSource,
     getOneDataSource,
     deleteDataSource,
