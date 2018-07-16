@@ -16,6 +16,12 @@ const CommonToolbar = ({ buttons, onFilter }) => {
         </Button>
     ));
 
+    const handleKeyPress = event => {
+        if (event.charCode === 13) {
+            event.preventDefault();
+        }
+    };
+
     return (
         <div className="toolbar-container">
             <Toolbar>
@@ -26,6 +32,7 @@ const CommonToolbar = ({ buttons, onFilter }) => {
                     placeholder="Filter by Name"
                     style={{ height: "26px" }}
                     onChange={e => onFilter(e.target.value)}
+                    onKeyPress={e => handleKeyPress(e)}
                 />
                 {elements}
             </Toolbar>
