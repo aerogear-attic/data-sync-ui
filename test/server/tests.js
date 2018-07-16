@@ -132,4 +132,56 @@ describe("Basic", () => {
             })
             .catch(err => done(err));
     });
+
+    it("should be able to create a schema and attach a resolver", done => {
+        const schema = `
+            type Note { 
+                id: Int, 
+                name: String
+            }
+            
+            type Query {
+                notes: [Note]
+            }           
+        `;
+
+        graphql(Schema, queries.GET_SCHEMA, root, null, { name: "default" })
+            .then(data => {
+                const { getSchema: { id } } = data.data;
+                if (!id) {
+                    throw new Error("Schema not created");
+                }
+                return id;
+            }).then(id => graphql(Schema, queries.UPDATE_SCHEMA, root, null, {
+                id,
+                schema
+            }).then(data => ({ data, id }))).then(({ data, id }) => {
+                const { updateSchema: { compiled } } = data.data;
+                if (!compiled) {
+                    throw new Error("Schema update failed");
+                }
+                return id;
+            })
+            .then(schemaId => graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+                .then(data => ({ schemaId, data })))
+            .then(({ schemaId, data }) => {
+                const { createDataSource: { id } } = data.data;
+                return graphql(Schema, queries.UPSERT_RESOLVER, root, null, {
+                    schemaId,
+                    dataSourceId: id,
+                    type: "Note",
+                    field: "name",
+                    requestMapping: "select * from notes",
+                    responseMapping: "{{ context.result }}"
+                });
+            })
+            .then(data => {
+                const { upsertResolver: { id } } = data.data;
+                if (!id) {
+                    throw new Error("Resolver not created");
+                }
+                return done();
+            })
+            .catch(err => done(err));
+    });
 });
