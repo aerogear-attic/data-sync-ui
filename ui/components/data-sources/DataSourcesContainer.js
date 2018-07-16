@@ -61,6 +61,7 @@ class DataSourcesContainer extends Component {
                 <AddDataSourceDialog
                     onClose={() => this.setState({ showAddModal: false })}
                     visible={showAddModal}
+                    filter={filter}
                 />
                 <EditDataSourceDialog
                     onClose={() => this.setState({ showEditModal: false,
