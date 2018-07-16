@@ -35,10 +35,6 @@ class DataSourcesContainer extends Component {
         this.setState({ filter: { name } });
     }
 
-    getFilter() {
-        return this.filter;
-    }
-
     addDataSource() {
         this.setState({ showAddModal: true });
     }
