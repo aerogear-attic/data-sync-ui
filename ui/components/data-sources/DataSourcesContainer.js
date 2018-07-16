@@ -35,6 +35,10 @@ class DataSourcesContainer extends Component {
         this.setState({ filter: { name } });
     }
 
+    getFilter() {
+        return this.filter;
+    }
+
     addDataSource() {
         this.setState({ showAddModal: true });
     }
@@ -61,6 +65,7 @@ class DataSourcesContainer extends Component {
                 <AddDataSourceDialog
                     onClose={() => this.setState({ showAddModal: false })}
                     visible={showAddModal}
+                    filter={filter}
                 />
                 <EditDataSourceDialog
                     onClose={() => this.setState({ showEditModal: false,
