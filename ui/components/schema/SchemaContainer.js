@@ -48,6 +48,17 @@ class SchemaContainer extends Component {
         this.setState({ schema });
     }
 
+    @keydown("ctrl + s")
+    saveShortcut(e) {
+        e.preventDefault();
+
+        const { saved } = this.state;
+
+        if (!saved) {
+            this.save();
+        }
+    }
+
     save() {
         const { schema } = this.state;
         const { getSchema } = this.props.data;
