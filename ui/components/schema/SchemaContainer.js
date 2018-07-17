@@ -99,7 +99,7 @@ class SchemaContainer extends Component {
     renderContent() {
         const { getSchema: { schema, compiled } } = this.props.data;
         return (
-            <div>
+            <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
                 <div className={style.flexWrapper} style={{ height: this.state.height }}>
                     <div className={style.left}>
@@ -112,7 +112,7 @@ class SchemaContainer extends Component {
                         <StructureView compiled={JSON.parse(compiled)} error={this.state.error} />
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 

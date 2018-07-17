@@ -57,7 +57,7 @@ class DataSourcesContainer extends Component {
         } = this.state;
 
         return (
-            <div>
+            <React.Fragment>
                 <AddDataSourceDialog
                     onClose={() => this.setState({ showAddModal: false })}
                     visible={showAddModal}
@@ -87,7 +87,7 @@ class DataSourcesContainer extends Component {
                         onDeleteDataSource={dataSource => this.deleteDataSource(dataSource)}
                     />
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 
