@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import { graphql } from "react-apollo";
+import keydown from "react-keydown";
 import { Spinner } from "patternfly-react";
-import GetSchema from "../../graphql/GetSchema.graphql";
-import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 import { CommonToolbar, CodeEditor } from "../common";
 import { StructureView } from "./StructureView";
+
+import GetSchema from "../../graphql/GetSchema.graphql";
+import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 
 import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
     height: "100%",
     schema: "",
-    error: null
+    error: null,
+    saved: true
 };
 
 class SchemaContainer extends Component {
@@ -45,7 +48,7 @@ class SchemaContainer extends Component {
     }
 
     onSchemaChange(schema) {
-        this.setState({ schema });
+        this.setState({ schema, saved: false });
     }
 
     @keydown("ctrl + s")
@@ -76,7 +79,8 @@ class SchemaContainer extends Component {
             }]
         }).then(() => {
             this.setState({
-                error: null
+                error: null,
+                saved: true
             });
         }).catch(error => {
             this.setState({
@@ -87,6 +91,8 @@ class SchemaContainer extends Component {
 
     getToolbarButtons() {
         const { getSchema: { id, valid } } = this.props.data;
+        const { saved } = this.state;
+
         return [
             {
                 title: "Download Schema",
@@ -101,7 +107,7 @@ class SchemaContainer extends Component {
                 props: {
                     onClick: () => this.save(),
                     key: "save_schema",
-                    disabled: false
+                    disabled: saved
                 }
             }
         ];
