@@ -56,3 +56,7 @@ span.list-item-name {
 .nav-tabs > li > a:hover{
     border: 1px solid lightgrey;
 }
+
+.spinner {
+    margin-top: 100px;
+}
