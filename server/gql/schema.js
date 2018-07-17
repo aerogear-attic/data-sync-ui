@@ -13,6 +13,7 @@ const Schema = buildSchema(`
         dataSources(name: String): [DataSource]
         getOneDataSource(id: Int!): DataSource
         getSchema(name: String!): Schema
+        resolvers(schemaId: Int!, type: String):[Resolver]
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: String!): DataSource
