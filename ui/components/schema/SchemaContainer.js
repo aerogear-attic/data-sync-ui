@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { graphql } from "react-apollo";
 import GetSchema from "../../graphql/GetSchema.graphql";
-import UpdateSchame from "../../graphql/UpdateSchema.graphql";
+import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 import { CommonToolbar, CodeEditor } from "../common";
 import { StructureView } from "./StructureView";
 
@@ -129,6 +129,6 @@ class SchemaContainer extends Component {
 // Automatically fetch the default schema
 const SchemaContainerWithQuery = graphql(GetSchema, {
     options: () => ({ variables: { name: "default" } })
-})(graphql(UpdateSchame)(SchemaContainer));
+})(graphql(UpdateSchema)(SchemaContainer));
 
 export { SchemaContainerWithQuery as SchemaContainer };
