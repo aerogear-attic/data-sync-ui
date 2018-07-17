@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { graphql } from "react-apollo";
+import { Spinner } from "patternfly-react";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 import { CommonToolbar, CodeEditor } from "../common";
@@ -92,7 +93,7 @@ class SchemaContainer extends Component {
     }
 
     renderLoading() {
-        return <div>Loading...</div>;
+        return <Spinner className="spinner" loading />;
     }
 
     renderContent() {

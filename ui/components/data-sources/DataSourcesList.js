@@ -19,7 +19,7 @@ const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSourc
         <Query query={GetDataSources} variables={filter}>
             {({ loading, error, data }) => {
                 if (loading) {
-                    return "Loading...";
+                    return <Spinner className="spinner" loading />;
                 }
 
                 if (error) {
