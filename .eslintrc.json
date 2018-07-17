@@ -41,5 +41,6 @@
     "env": {
         "mocha": true,
         "browser": true
-    }
+    },
+    "parser": "babel-eslint"
 }
