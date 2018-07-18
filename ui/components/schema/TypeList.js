@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
 import {
-    ListViewItem, Grid, Row, Col, Button, ButtonGroup, ButtonToolbar
+    ListViewItem, Grid, Row, Col, Button
 } from "patternfly-react";
 
 import style from "./structureView.css";
