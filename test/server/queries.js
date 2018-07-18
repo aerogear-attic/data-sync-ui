@@ -1,11 +1,7 @@
 const queries = {
     CREATE_DATA_SOURCE_QUERY: ` 
-        mutation createDataSource {
-          createDataSource(
-            name: "TestDataSource"
-            type: Postgres
-            config: "config: test"
-          ) {
+        mutation createDataSource($name: String!, $type: DataSourceType!, $config: JSON!) {
+          createDataSource(name: $name, type: $type, config: $config) {
             id
             name
             type
@@ -39,7 +35,7 @@ const queries = {
       }
     }`,
     UPDATE_DATA_SOURCE_QUERY: `
-    mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: String!) {
+    mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: JSON!) {
       updateDataSource(id: $id, name: $name, type: $type, config: $config) {
         name
       }
