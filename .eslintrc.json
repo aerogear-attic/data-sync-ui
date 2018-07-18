@@ -29,7 +29,13 @@
         "react/sort-comp": "off",
         "react/no-did-update-set-state": "off",
         "jsx-a11y/label-has-for": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ]
     },
     "plugins": ["mocha"],
     "env": {
