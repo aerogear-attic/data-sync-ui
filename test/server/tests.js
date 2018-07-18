@@ -49,14 +49,18 @@ describe("Basic", () => {
     });
 
     it("should delete a new data source", done => {
-        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
+            name: "test",
+            type: "Postgres",
+            config: {timestamps: true}
+        })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
                 const msg = "error creating datasource - problem with: ";
                 const err = assert(data !== undefined, `${msg}data is undefined`)
-                    || assert(name === "TestDataSource", msg + name)
+                    || assert(name === "test", msg + name)
                     || assert(type === "Postgres", msg + type)
-                    || assert(typeof config === typeof "", msg + config);
+                    || assert(typeof config === typeof {}, msg + config);
                 if (err) {
                     throw err;
                 }
@@ -83,14 +87,18 @@ describe("Basic", () => {
 
     it("should edit a new data source", done => {
         const NEW_NAME = "NEW DATA SOURCE NAME";
-        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
+            name: "test",
+            type: "Postgres",
+            config: {timestamps: true}
+        })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
                 const msg = "error creating editing datasource - problem with: ";
                 const err = assert(data !== undefined, msg + data)
-                    || assert(name === "TestDataSource", msg + name)
+                    || assert(name === "test", msg + name)
                     || assert(type === "Postgres", msg + type)
-                    || assert(typeof config === typeof "", msg + config);
+                    || assert(typeof config === typeof {}, msg + config);
                 if (err) {
                     throw err;
                 }
@@ -109,14 +117,18 @@ describe("Basic", () => {
 
     it("should edit a new data source", done => {
         const NEW_NAME = "NEW DATA SOURCE NAME";
-        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
+        graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
+            name: "test",
+            type: "Postgres",
+            config: {timestamps: true}
+        })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
-                const msg = "error creating editing datasource - problem with: ";
-                const err = assert(data !== undefined, msg + data)
-                    || assert(name === "TestDataSource", msg + name)
-                    || assert(type === "Postgres", msg + type)
-                    || assert(typeof config === typeof "", msg + config);
+                const msg = "unexpected value for: ";
+                const err = assert(data !== undefined, msg + "data")
+                    || assert(name === "test", msg + "name")
+                    || assert(type === "Postgres", msg + "type")
+                    || assert(typeof config === typeof {}, msg + "config");
                 if (err) {
                     throw err;
                 }
@@ -162,8 +174,12 @@ describe("Basic", () => {
                 }
                 return id;
             })
-            .then(schemaId => graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root)
-                .then(data => ({ schemaId, data })))
+            .then(schemaId => graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
+                name: "test",
+                type: "Postgres",
+                config: {timestamps: true}
+            })
+            .then(data => ({ schemaId, data })))
             .then(({ schemaId, data }) => {
                 const { createDataSource: { id } } = data.data;
                 return graphql(Schema, queries.UPSERT_RESOLVER, root, null, {
