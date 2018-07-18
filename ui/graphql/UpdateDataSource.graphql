@@ -1,4 +1,4 @@
-mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: String!) {
+mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: JSON!) {
     updateDataSource(id: $id, name: $name, type: $type, config: $config) {
         name
     }

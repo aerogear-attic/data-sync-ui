@@ -1,4 +1,4 @@
-mutation createDataSource($name: String!, $type: DataSourceType!, $config: String!) {
+mutation createDataSource($name: String!, $type: DataSourceType!, $config: JSON!) {
     createDataSource(name: $name, type: $type, config: $config) {
         id
         name

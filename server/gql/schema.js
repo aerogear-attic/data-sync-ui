@@ -15,9 +15,9 @@ const Schema = buildSchema(`
         getSchema(name: String!): Schema
     },
     type Mutation {
-        createDataSource(name: String!, type: DataSourceType!, config: String!): DataSource
+        createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
         deleteDataSource(id: Int!): DataSource
-        updateDataSource(id: Int!, name: String!, type: DataSourceType!, config: String!): DataSource
+        updateDataSource(id: Int!, name: String!, type: DataSourceType!, config: JSON!): DataSource
         updateSchema(id: Int!, schema: String!): Schema
         upsertResolver(
             id: Int
@@ -33,7 +33,7 @@ const Schema = buildSchema(`
         id: Int!
         name: String!
         type: DataSourceType! 
-        config: String!
+        config: JSON!
         resolvers: [Resolver]
     },
     type Schema {
@@ -52,6 +52,8 @@ const Schema = buildSchema(`
         responseMapping: String!
         DataSource: DataSource!
     }
+
+    scalar JSON
 `);
 
 const createDataSource = async ({ name, type, config }) => {

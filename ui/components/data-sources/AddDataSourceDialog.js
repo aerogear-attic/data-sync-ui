@@ -42,7 +42,7 @@ class AddDataSourceDialog extends BaseDataSourceDialog {
 
     createDataSource() {
         const { name, type, options } = this.state;
-        const config = JSON.stringify({ options });
+        const config = { options };
         const { filter } = this.props;
         return this.props.mutate({
             variables: { name, type, config },
