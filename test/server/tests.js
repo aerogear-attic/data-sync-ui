@@ -52,7 +52,7 @@ describe("Basic", () => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
             name: "test",
             type: "Postgres",
-            config: {timestamps: true}
+            config: { timestamps: true }
         })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
@@ -90,7 +90,7 @@ describe("Basic", () => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
             name: "test",
             type: "Postgres",
-            config: {timestamps: true}
+            config: { timestamps: true }
         })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
@@ -120,15 +120,15 @@ describe("Basic", () => {
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
             name: "test",
             type: "Postgres",
-            config: {timestamps: true}
+            config: { timestamps: true }
         })
             .then(data => {
                 const { createDataSource: { id, name, type, config } } = data.data;
                 const msg = "unexpected value for: ";
-                const err = assert(data !== undefined, msg + "data")
-                    || assert(name === "test", msg + "name")
-                    || assert(type === "Postgres", msg + "type")
-                    || assert(typeof config === typeof {}, msg + "config");
+                const err = assert(data !== undefined, `${msg}data`)
+                    || assert(name === "test", `${msg}name`)
+                    || assert(type === "Postgres", `${msg}type`)
+                    || assert(typeof config === typeof {}, `${msg}config`);
                 if (err) {
                     throw err;
                 }
@@ -177,9 +177,9 @@ describe("Basic", () => {
             .then(schemaId => graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
                 name: "test",
                 type: "Postgres",
-                config: {timestamps: true}
+                config: { timestamps: true }
             })
-            .then(data => ({ schemaId, data })))
+                .then(data => ({ schemaId, data })))
             .then(({ schemaId, data }) => {
                 const { createDataSource: { id } } = data.data;
                 return graphql(Schema, queries.UPSERT_RESOLVER, root, null, {
