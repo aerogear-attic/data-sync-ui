@@ -1,19 +1,13 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
 import {
-    ListViewItem, Grid, Row, Col, Button
+    ListViewItem, Grid, Row, Col, Button, ButtonGroup, ButtonToolbar
 } from "patternfly-react";
 
 import style from "./structureView.css";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
 class TypeList extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
 
     deleteResolver(resolver) {
         console.log(resolver);
@@ -38,7 +32,7 @@ class TypeList extends Component {
 
     renderAdditionalInfo(type) {
         const { fields } = type;
-        if (!fields) {
+        if (fields.length === 0) {
             return "n.a.";
         }
         return type.fields.length + (type.fields.length > 1 ? " fields" : " field");
@@ -47,26 +41,24 @@ class TypeList extends Component {
     renderResolverForField(name, data) {
         const { resolvers } = data;
         const resolver = resolvers.find(item => item.field === name);
-        // const resolver = { }; just here to test the buttons look ok
         if (resolver) {
             return (
-                <div style={{ textAlign: "center" }}>
-                    <div className="btn-group">
-                        <Button
-                            bsStyle="primary"
-                            bsSize="small"
-                            onClick={() => console.log("Clicked Edit resolver")}
-                        >
+                <div>
+                    <Button
+                        bsStyle="primary"
+                        bsSize="small"
+                        onClick={() => this.editResolver(resolver)}
+                    >
                         Edit
-                        </Button>
-                        <Button
-                            bsStyle="danger"
-                            bsSize="small"
-                            onClick={() => console.log("Clicked Delete resolver")}
-                        >
+                    </Button>
+                    &nbsp;
+                    <Button
+                        bsStyle="danger"
+                        bsSize="small"
+                        onClick={() => this.deleteResolver(resolver)}
+                    >
                         Delete
-                        </Button>
-                    </div>
+                    </Button>
                 </div>
             );
         }
@@ -89,14 +81,14 @@ class TypeList extends Component {
         }
 
         return fields.map(field => {
-            const key = field.type.name || field.type.kind;
+            const type = field.type.name || field.type.kind;
             return (
-                <Row key={key + field.name} className={style["structure-item-row"]}>
+                <Row key={type + field.name} className={style["structure-item-row"]}>
                     <Col xs={6} md={4}>
                         {field.name}
                     </Col>
                     <Col xs={6} md={4}>
-                        {key}
+                        {type}
                     </Col>
                     <Col xs={6} md={4}>
                         {this.renderResolverForField(field.name, data)}
@@ -115,6 +107,7 @@ class TypeList extends Component {
                 key={type.name}
                 leftContent={<p className={style["structure-name"]}>{type.name}</p>}
                 description={<span />}
+                hideCloseIcon
                 additionalInfo={[
                     <p key={type.name} className={style["structure-name"]}>
                         {this.renderAdditionalInfo(type)}

@@ -1,7 +1,5 @@
 import React from "react";
-import {
-    Alert, ListView, ListViewItem, Grid, Row, Col, Button
-} from "patternfly-react";
+import { Alert, ListView } from "patternfly-react";
 import { EmptyStructureView } from "./EmptyStructureView";
 import { TypeList } from "./TypeList";
 
@@ -25,13 +23,12 @@ const wellKnownTypes = [
 const renderListView = (compiled, schemaId) => {
     const { types } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
-
     return (
         <ListView>
             {
-                relevantTypes.map((type, index) => (
+                relevantTypes.map(type => (
                     <TypeList
-                        key={index}
+                        key={type.name}
                         schemaId={schemaId}
                         type={type}
                     />
