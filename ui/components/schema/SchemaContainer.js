@@ -19,22 +19,19 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
-        this.flexWrapper = null;
-
-        this.setflexWrapperRef = e => {
-            this.flexWrapper = e;
-        };
+        this.flexWrapper = React.createRef();
     }
 
     updateDimensions() {
         this.setState({
-            height: window.innerHeight - this.flexWrapper.getBoundingClientRect().top
+            height: window.innerHeight - this.flexWrapper.current.getBoundingClientRect().top
         });
     }
 
     componentDidUpdate() {
-        const currentHeight = this.flexWrapper.style.height;
-        const distanceFromTop = this.flexWrapper.getBoundingClientRect().top;
+        const flexWrapperElement = this.flexWrapper.current;
+        const currentHeight = flexWrapperElement.style.height;
+        const distanceFromTop = flexWrapperElement.getBoundingClientRect().top;
         if (currentHeight === "0px" && distanceFromTop !== 0) {
             this.updateDimensions();
         }
@@ -105,7 +102,11 @@ class SchemaContainer extends Component {
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
-                <div ref={this.setflexWrapperRef} className={style.flexWrapper} style={{ height: this.state.height }}>
+                <div
+                    ref={this.flexWrapper}
+                    className={style.flexWrapper}
+                    style={{ height: this.state.height }}
+                >
                     <div className={style.left}>
                         <CodeEditor
                             value={schema}
