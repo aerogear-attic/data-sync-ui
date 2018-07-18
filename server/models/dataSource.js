@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         config: DataTypes.JSON
     });
 
-    DataSource.addHook('beforeValidate', 'nameTrim', (dataSource, options) => {
+    DataSource.addHook("beforeValidate", "nameTrim", dataSource => {
         if (dataSource.name) {
             dataSource.name = dataSource.name.trim();
         }
