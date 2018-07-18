@@ -9,7 +9,6 @@ import {
     FormGroup,
     Col,
     InputGroup,
-    HelpBlock,
     DropdownButton,
     MenuItem
 } from "patternfly-react";
@@ -35,8 +34,7 @@ class BaseDataSourceDialog extends Component {
     }
 
     onTypeChange(type) {
-        let typeValidation = DataSourceType[type] ? "ok" : "error";
-        typeValidation = type === DataSourceType.InMemory ? "warning" : typeValidation;
+        const typeValidation = DataSourceType[type] ? "ok" : "error";
 
         const { validations } = this.state;
         const newValidations = { ...validations, type: typeValidation };
@@ -136,6 +134,12 @@ class BaseDataSourceDialog extends Component {
                     {/* Alert */}
                     {err && <Alert onDismiss={() => this.setState({ err: "" })}>{err}</Alert>}
 
+                    {type === DataSourceType.InMemory && (
+                        <Alert type="warning">
+                            In memory data sources are not meant for production.
+                        </Alert>
+                    )}
+
                     <Form horizontal>
 
                         {/* Data Source Name */}
@@ -176,11 +180,6 @@ class BaseDataSourceDialog extends Component {
                                         </DropdownButton>
                                     </InputGroup.Button>
                                 </InputGroup>
-                                {type === DataSourceType.InMemory && (
-                                    <HelpBlock>
-                                        In memory data sources are not meant for production.
-                                    </HelpBlock>
-                                )}
                             </Col>
                             {/* <HelpBlock>Validation is based on string length.</HelpBlock> */}
                         </FormGroup>
