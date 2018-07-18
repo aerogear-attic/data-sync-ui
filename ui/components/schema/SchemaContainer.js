@@ -9,7 +9,7 @@ import { StructureView } from "./StructureView";
 import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
-    height: "100%",
+    height: "0",
     schema: "",
     error: null
 };
@@ -19,16 +19,25 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
+        this.flexWrapper = null;
+
+        this.setflexWrapperRef = e => {
+            this.flexWrapper = e;
+        };
     }
 
     updateDimensions() {
         this.setState({
-            height: window.innerHeight - this.calculateHeaderHeight()
+            height: window.innerHeight - this.flexWrapper.getBoundingClientRect().top
         });
     }
 
-    componentWillMount() {
-        this.updateDimensions();
+    componentDidUpdate() {
+        const currentHeight = this.flexWrapper.style.height;
+        const distanceFromTop = this.flexWrapper.getBoundingClientRect().top;
+        if (currentHeight === "0px" && distanceFromTop !== 0) {
+            this.updateDimensions();
+        }
     }
 
     componentDidMount() {
@@ -37,11 +46,6 @@ class SchemaContainer extends Component {
 
     componentWillUnmount() {
         window.removeEventListener("resize", () => this.updateDimensions());
-    }
-
-    calculateHeaderHeight() {
-        // TODO: find SOME way to do this in pure CSS
-        return 206;
     }
 
     onSchemaChange(schema) {
@@ -101,7 +105,7 @@ class SchemaContainer extends Component {
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
-                <div className={style.flexWrapper} style={{ height: this.state.height }}>
+                <div ref={this.setflexWrapperRef} className={style.flexWrapper} style={{ height: this.state.height }}>
                     <div className={style.left}>
                         <CodeEditor
                             value={schema}
