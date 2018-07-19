@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
 import {
-    ListViewItem, Grid, Row, Col, Button
+    ListViewItem, Grid, Row, Col, Button, Spinner
 } from "patternfly-react";
 
 import style from "./structureView.css";
@@ -23,7 +23,7 @@ class TypeList extends Component {
     }
 
     renderLoading() {
-        return <div>Loading</div>;
+        return <Spinner className="spinner" loading />;
     }
 
     renderError(error) {
