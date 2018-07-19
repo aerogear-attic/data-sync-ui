@@ -23,7 +23,13 @@ class DataSourcesContainer extends Component {
 
     getToolbarButtons() {
         return [
-            { title: "Add Data Source", cb: () => this.addDataSource(), id: "add_new_data_source" }
+            {
+                title: "Add Data Source",
+                props: {
+                    onClick: () => this.addDataSource(),
+                    key: "add_new_data_source"
+                }
+            }
         ];
     }
 
