@@ -6,10 +6,7 @@ const CommonToolbar = ({ buttons, onFilter }) => {
     const elements = buttons && buttons.map(button => (
         <Button
             style={{ float: "right", marginRight: "5px" }}
-            key={button.id}
             bsStyle="primary"
-            onClick={button.cb}
-            disabled={button.enabled === false}
             {...button.props}
         >
             {button.title}

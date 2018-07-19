@@ -79,15 +79,19 @@ class SchemaContainer extends Component {
         return [
             {
                 title: "Download Schema",
-                id: "export_schema",
-                enabled: valid,
-                props: { href: `/schema/${id}` }
+                props: {
+                    key: "export_schema",
+                    disabled: !valid,
+                    href: `/schema/${id}`
+                }
             },
             {
                 title: "Save Schema",
-                cb: () => this.save(),
-                id: "save_schema",
-                enabled: true
+                props: {
+                    onClick: () => this.save(),
+                    key: "save_schema",
+                    disabled: false
+                }
             }
         ];
     }
