@@ -44,6 +44,10 @@ const CodeEditor = class extends Component {
             editor.value = `${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`;
             editor.selectionStart = selectionStart + 1;
             editor.selectionEnd = selectionStart + 1;
+
+            // When the user presses tab we prevent the default propagation, so we need to udpate
+            // the state manually here
+            this.onEditorChange();
         }
     }
 
