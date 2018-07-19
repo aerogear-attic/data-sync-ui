@@ -2,10 +2,12 @@ import React from "react";
 import { Toolbar, Button } from "patternfly-react";
 import { DebounceInput } from "react-debounce-input";
 
+import styles from "./commonToolbar.css";
+
 const CommonToolbar = ({ buttons, onFilter }) => {
     const elements = buttons && buttons.map(button => (
         <Button
-            style={{ float: "right", marginRight: "5px" }}
+            className={styles.toolbarButton}
             bsStyle="primary"
             {...button.props}
         >
