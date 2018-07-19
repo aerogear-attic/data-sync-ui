@@ -40,25 +40,29 @@ class TypeList extends Component {
 
     renderResolverForField(name, data) {
         const { resolvers } = data;
-        const resolver = resolvers.find(item => item.field === name);
+        const resolver = {};
+        // const resolver = resolvers.find(item => item.field === name);
         if (resolver) {
             return (
                 <div>
-                    <Button
-                        bsStyle="primary"
-                        bsSize="small"
-                        onClick={() => this.editResolver(resolver)}
-                    >
-                        Edit
-                    </Button>
-                    &nbsp;
-                    <Button
-                        bsStyle="danger"
-                        bsSize="small"
-                        onClick={() => this.deleteResolver(resolver)}
-                    >
-                        Delete
-                    </Button>
+                    <div className={style[".structure-item-edit-btn"]}>
+                        <Button
+                            bsStyle="primary"
+                            bsSize="small"
+                            onClick={() => this.editResolver(resolver)}
+                        >
+                            Edit
+                        </Button>
+                    </div>
+                    <div className={style[".structure-item-delete-btn"]}>
+                        <Button
+                            bsStyle="danger"
+                            bsSize="small"
+                            onClick={() => this.deleteResolver(resolver)}
+                        >
+                            Delete
+                        </Button>
+                    </div>
                 </div>
             );
         }

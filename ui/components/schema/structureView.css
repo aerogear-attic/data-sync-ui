@@ -50,3 +50,9 @@
 .structure-item-row {
     margin-top: 5px;
 }
+.structure-item-edit-btn{
+    margin-right:2px;
+}
+.structure-item-delete-btn{
+    margin-left:2px;
+}
