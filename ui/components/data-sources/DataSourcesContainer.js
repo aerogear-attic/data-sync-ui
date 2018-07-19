@@ -70,10 +70,8 @@ class DataSourcesContainer extends Component {
                     filter={filter}
                 />
                 <EditDataSourceDialog
-                    onClose={() => this.setState({
-                        showEditModal: false,
-                        selectedDataSource: null
-                    })}
+                    onClose={() => this.setState({ showEditModal: false,
+                        selectedDataSource: null })}
                     dataSource={selectedDataSource}
                     visible={showEditModal}
                 />
@@ -81,10 +79,8 @@ class DataSourcesContainer extends Component {
                     showModal={showDeleteModal}
                     dataSource={selectedDataSource}
                     filter={filter}
-                    onClose={() => this.setState({
-                        showDeleteModal: false,
-                        selectedDataSource: null
-                    })}
+                    onClose={() => this.setState({ showDeleteModal: false,
+                        selectedDataSource: null })}
                 />
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
