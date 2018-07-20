@@ -18,8 +18,8 @@ class TypeList extends Component {
         console.log(resolver.responseMapping);
     }
 
-    createResolver(fieldName) {
-        console.log(fieldName);
+    createResolver() {
+        console.log("called create resolver");
     }
 
     renderLoading() {

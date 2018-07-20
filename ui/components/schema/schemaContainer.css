@@ -19,3 +19,9 @@
     background-color: white;
     overflow: auto;
 }
+.resolver-input-area {
+    height: 100px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

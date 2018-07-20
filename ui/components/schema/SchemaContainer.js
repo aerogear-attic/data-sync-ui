@@ -125,7 +125,7 @@ class SchemaContainer extends Component {
     renderContent() {
         const { getSchema: { id, schema, compiled } } = this.props.data;
         const { showAddModal } = this.state;
-
+        console.log(this.state);
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -146,7 +146,7 @@ class SchemaContainer extends Component {
                 </div>
                 <AddResolverDialog
                     onClose={() => this.setState({ showAddModal: false })}
-                    visible
+                    visible={showAddModal}
                 />
             </React.Fragment>
         );
