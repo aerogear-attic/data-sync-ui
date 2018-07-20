@@ -1,8 +1,8 @@
 import React from "react";
-import {
-    Alert, ListView, ListViewItem, Grid, Row, Col
-} from "patternfly-react";
+import { Alert, ListView } from "patternfly-react";
 import { EmptyStructureView } from "./EmptyStructureView";
+import { TypeList } from "./TypeList";
+
 import style from "./structureView.css";
 
 // Graphql internal types that we don't want to render
@@ -20,77 +20,25 @@ const wellKnownTypes = [
     "__DirectiveLocation"
 ];
 
-const renderAdditionalInfo = type => {
-    const { fields } = type;
-    if (!fields) {
-        return "n.a.";
-    }
-    return type.fields.length + (type.fields.length > 1 ? " fields" : " field");
-};
-
-const renderFields = fields => {
-    if (!fields) {
-        // Some types won't have fields
-        return <div />;
-    }
-
-    return fields.map(field => {
-        const key = field.type.name || field.type.kind;
-        return (
-            <Row key={key + field.name} className={style["structure-item-row"]}>
-                <Col xs={6} md={6}>
-                    {field.name}
-                </Col>
-                <Col xs={6} md={6}>
-                    {key}
-                </Col>
-            </Row>
-        );
-    });
-};
-
-const renderType = (type, index) => {
-    const subItems = renderFields(type.fields);
-    return (
-        <ListViewItem
-            key={index}
-            className={style["structure-list-item"]}
-            leftContent={<p className={style["structure-name"]}>{type.name}</p>}
-            description={<span />}
-            additionalInfo={[
-                <p key={type.name} className={style["structure-name"]}>
-                    {renderAdditionalInfo(type)}
-                </p>]}
-        >
-            <Grid fluid>
-                <Row className={style["structure-field-row"]}>
-                    <Col xs={6} md={6}>
-                        Field Name
-                    </Col>
-                    <Col xs={6} md={6}>
-                        Field Type
-                    </Col>
-                </Row>
-                {subItems}
-            </Grid>
-        </ListViewItem>
-    );
-};
-
-const renderListView = compiled => {
+const renderListView = (compiled, schemaId) => {
     const { types } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
-
     return (
         <ListView>
             {
-                relevantTypes.map((type, index) => renderType(type, index))
+                relevantTypes.map(type => (
+                    <TypeList
+                        key={type.name}
+                        schemaId={schemaId}
+                        type={type}
+                    />
+                ))
             }
         </ListView>
     );
 };
 
-const renderContent = compiled => (
+const renderContent = (compiled, schemaId) => (
     <div className={style["structure-content"]}>
         <div className={style["structure-header"]}>
             <span>Data Types</span>
@@ -104,7 +52,7 @@ const renderContent = compiled => (
             </a>
         </div>
         <div>
-            { renderListView(compiled) }
+            { renderListView(compiled, schemaId) }
         </div>
     </div>
 );
@@ -115,12 +63,11 @@ const renderError = error => {
 };
 
 const StructureView = props => {
-    const { error, compiled } = props;
-
+    const { error, compiled, schemaId } = props;
     if (error) {
         return renderError(error);
     } if (compiled) {
-        return renderContent(compiled);
+        return renderContent(compiled, schemaId);
     }
     return <EmptyStructureView />;
 };
