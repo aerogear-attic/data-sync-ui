@@ -60,3 +60,7 @@ span.list-item-name {
 .spinner {
     margin-top: 100px;
 }
+
+div.list-group-item-container .pficon-close {
+    display: none;
+}
