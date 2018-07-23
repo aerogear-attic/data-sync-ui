@@ -30,12 +30,11 @@ class TypeList extends Component {
         return <div>{error.message}</div>;
     }
 
-    renderAdditionalInfo(type) {
-        const { fields } = type;
-        if (fields.length === 0) {
-            return "n.a.";
+    renderAdditionalInfo({ fields }) {
+        if (fields && fields.length) {
+            return fields.length + (fields.length > 1 ? " fields" : " field");
         }
-        return type.fields.length + (type.fields.length > 1 ? " fields" : " field");
+        return "n.a.";
     }
 
     renderResolverForField(name, data) {
