@@ -83,6 +83,7 @@ const CodeEditor = class extends Component {
     }
 
     render() {
+        const { disabled } = this.props;
         const { editorValue, lineHeight } = this.state;
         return (
             <div className={style["editor-container"]}>
@@ -94,6 +95,7 @@ const CodeEditor = class extends Component {
                         ref={this.editor}
                         value={editorValue}
                         style={{
+                            opacity: disabled ? 0.2 : 1,
                             lineHeight: `${lineHeight}px`,
                             whiteSpace: "pre",
                             overflowWrap: "normal",
@@ -103,6 +105,7 @@ const CodeEditor = class extends Component {
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
                         onChange={() => this.onEditorChange()}
                         onScroll={() => this.onEditorScroll()}
+                        disabled={disabled}
                     />
                 </div>
             </div>
