@@ -97,7 +97,7 @@ class SchemaContainer extends Component {
 
     getToolbarButtons() {
         const { getSchema: { id, valid } } = this.props.data;
-        const { saved } = this.state;
+        const { saved, saving } = this.state;
 
         return [
             {
@@ -109,11 +109,11 @@ class SchemaContainer extends Component {
                 }
             },
             {
-                title: "Save Schema",
+                title: (saving && "Saving Schema...") || (saved && "Schema saved") || "Save Schema",
                 props: {
                     onClick: () => this.save(),
                     key: "save_schema",
-                    disabled: saved
+                    disabled: saved || saving
                 }
             }
         ];
