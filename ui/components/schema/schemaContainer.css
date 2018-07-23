@@ -1,4 +1,5 @@
 .flexWrapper {
+    height: calc(100vh - 206px) !important;
     display: flex;
     flex-direction: row;
     align-items: stretch;

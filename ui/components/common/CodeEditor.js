@@ -97,7 +97,7 @@ const CodeEditor = class extends Component {
                             lineHeight: `${lineHeight}px`,
                             whiteSpace: "pre",
                             overflowWrap: "normal",
-                            overflowY: "scroll"
+                            overflowY: "auto"
                         }}
                         className={style["editor-area"]}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
