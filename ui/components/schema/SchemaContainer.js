@@ -14,6 +14,7 @@ const INITIAL_STATE = {
     height: "100%",
     schema: "",
     error: null,
+    saving: false,
     saved: true
 };
 
@@ -55,16 +56,19 @@ class SchemaContainer extends Component {
     saveShortcut(e) {
         e.preventDefault();
 
-        const { saved } = this.state;
+        const { saved, saving } = this.state;
 
-        if (!saved) {
-            this.save();
+        if (saved || saving) {
+            return;
         }
+        this.save();
     }
 
     save() {
         const { schema } = this.state;
         const { getSchema } = this.props.data;
+
+        this.setState({ saving: true });
 
         this.props.mutate({
             variables: {
@@ -80,11 +84,13 @@ class SchemaContainer extends Component {
         }).then(() => {
             this.setState({
                 error: null,
+                saving: false,
                 saved: true
             });
         }).catch(error => {
             this.setState({
-                error
+                error,
+                saving: false
             });
         });
     }
@@ -119,6 +125,7 @@ class SchemaContainer extends Component {
 
     renderContent() {
         const { getSchema: { id, schema, compiled } } = this.props.data;
+        const { error, saving } = this.state;
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -127,12 +134,13 @@ class SchemaContainer extends Component {
                         <CodeEditor
                             value={schema}
                             onChange={updated => this.onSchemaChange(updated)}
+                            disabled={saving}
                         />
                     </div>
                     <div className={style.right}>
                         <StructureView
                             compiled={JSON.parse(compiled)}
-                            error={this.state.error}
+                            error={error}
                             schemaId={id}
                         />
                     </div>
