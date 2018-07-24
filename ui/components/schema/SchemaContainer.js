@@ -82,7 +82,7 @@ class SchemaContainer extends Component {
 
         return [
             {
-                title: "Download Schema",
+                title: "Download Compiled Schema",
                 props: {
                     key: "export_schema",
                     disabled: !valid || saving,
