@@ -2,12 +2,12 @@ import BaseResolverDialog from "./BaseResolverDialog";
 
 const INITIAL_STATE = {
     dataSourceName: null,
-    requestmapping: null,
+    requestMapping: null,
     responseMapping: null,
     err: "",
     validations: {
         name: "success",
-        requestmapping: "success",
+        requestMapping: "success",
         responseMapping: "success"
     }
 };
@@ -17,19 +17,6 @@ class EditResolverDialog extends BaseResolverDialog {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.dataSource && this.props.dataSource !== prevProps.dataSource) {
-            const { id, name, type, config } = this.props.dataSource;
-            this.setState({
-                ...INITIAL_STATE,
-                id,
-                name,
-                type,
-                options: config.options
-            });
-        }
     }
 
     getTitle() {
