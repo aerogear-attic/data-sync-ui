@@ -7,7 +7,7 @@ import { StructureView } from "./StructureView";
 import { AddResolverDialog } from "./AddResolverDialog";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchema from "../../graphql/UpdateSchema.graphql";
-
+import { EditResolverDialog } from "./EditResolverDialog";
 
 import style from "./schemaContainer.css";
 
@@ -16,7 +16,9 @@ const INITIAL_STATE = {
     schema: "",
     error: null,
     saved: true,
-    showAddModal: false
+    showAddModal: false,
+    showEditModal: false,
+    selectedResolver: null
 };
 
 class SchemaContainer extends Component {
@@ -119,13 +121,19 @@ class SchemaContainer extends Component {
         this.setState({ showAddModal: true });
     }
 
+    editResolver(resolver) {
+        console.log("Called edit resolver", resolver);
+        this.setState({ showEditModal: true, selectedResolver: resolver });
+    }
+
     renderLoading() {
         return <Spinner className="spinner" loading />;
     }
 
     renderContent() {
         const { getSchema: { id, schema, compiled } } = this.props.data;
-        const { showAddModal } = this.state;
+        const { showAddModal, showEditModal, selectedResolver } = this.state;
+
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -148,6 +156,12 @@ class SchemaContainer extends Component {
                 <AddResolverDialog
                     onClose={() => this.setState({ showAddModal: false })}
                     visible={showAddModal}
+                />
+                <EditResolverDialog
+                    onClose={() => this.setState({ showEditModal: false,
+                        selectedResolver: null })}
+                    resolver={selectedResolver}
+                    visible={showEditModal}
                 />
             </React.Fragment>
         );

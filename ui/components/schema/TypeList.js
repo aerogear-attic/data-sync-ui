@@ -9,19 +9,6 @@ import GetResolvers from "../../graphql/GetResolvers.graphql";
 
 class TypeList extends Component {
 
-    deleteResolver(resolver) {
-        console.log(resolver);
-    }
-
-    editResolver(resolver) {
-        console.log("selected resolver");
-        console.log(resolver.responseMapping);
-    }
-
-    createResolver() {
-        console.log("called create resolver");
-    }
-
     renderLoading() {
         return <Spinner className="spinner" loading />;
     }
@@ -40,6 +27,7 @@ class TypeList extends Component {
 
     renderResolverForField(name, data) {
         const { resolvers } = data;
+        const { onAddResolver, onEditResolver } = this.props;
         const resolver = resolvers.find(item => item.field === name);
         if (resolver) {
             return (
@@ -48,7 +36,7 @@ class TypeList extends Component {
                         className={style["structure-item-edit-btn"]}
                         bsStyle="primary"
                         bsSize="small"
-                        onClick={() => this.editResolver(resolver)}
+                        onClick={() => onEditResolver(resolver)}
                     >
                         Edit
                     </Button>
@@ -68,7 +56,7 @@ class TypeList extends Component {
             <Button
                 bsStyle="primary"
                 bsSize="small"
-                onClick={() => this.props.onAddResolver()}
+                onClick={onAddResolver}
             >
                 Add Resolver
             </Button>
