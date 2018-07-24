@@ -1,4 +1,6 @@
 .flexWrapper {
+    /* 206 being the exact height of the components on top of SchemaContainer */
+    height: calc(100vh - 206px) !important;
     display: flex;
     flex-direction: row;
     align-items: stretch;

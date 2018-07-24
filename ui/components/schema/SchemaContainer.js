@@ -11,7 +11,6 @@ import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
-    height: "100%",
     schema: "",
     error: null,
     saving: false,
@@ -23,24 +22,6 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
-    }
-
-    updateDimensions() {
-        this.setState({
-            height: window.innerHeight - this.calculateHeaderHeight()
-        });
-    }
-
-    componentWillMount() {
-        this.updateDimensions();
-    }
-
-    componentDidMount() {
-        window.addEventListener("resize", () => this.updateDimensions());
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", () => this.updateDimensions());
     }
 
     calculateHeaderHeight() {
@@ -129,7 +110,7 @@ class SchemaContainer extends Component {
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
-                <div className={style.flexWrapper} style={{ height: this.state.height }}>
+                <div className={style.flexWrapper}>
                     <div className={style.left}>
                         <CodeEditor
                             value={schema}
