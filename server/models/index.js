@@ -23,7 +23,7 @@ resolver.belongsTo(schema, {
     }
 });
 
-dataSource.hasMany(resolver, { as: "resolvers"});
+dataSource.hasMany(resolver, { as: "resolvers" });
 schema.hasMany(resolver, { as: "resolvers" });
 
 const sync = () => database.sync({ force: false });
