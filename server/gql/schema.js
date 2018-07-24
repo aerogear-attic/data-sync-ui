@@ -35,7 +35,7 @@ const Schema = buildSchema(`
         name: String!
         type: DataSourceType! 
         config: JSON!
-        resolvers: [Resolver]
+        Resolvers: [Resolver]
     },
     type Schema {
         id: Int!
@@ -43,7 +43,7 @@ const Schema = buildSchema(`
         schema: String!
         valid: Boolean!
         compiled: String!
-        resolvers: [Resolver]        
+        Resolvers: [Resolver]        
     },
     type Resolver {
         id: Int! 
@@ -75,7 +75,10 @@ const listDataSources = ({ name }) => {
         const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
         return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
-    return dataSource.findAll();
+
+    return dataSource.findAll({
+        include: [{ all: true }]
+    });
 };
 
 const listResolvers = ({ schemaId, type }) => resolver.findAll({
