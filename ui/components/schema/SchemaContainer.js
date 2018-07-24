@@ -94,7 +94,7 @@ class SchemaContainer extends Component {
     }
 
     getToolbarButtons() {
-        const { getSchema: { id, valid } } = this.props.data;
+        const { data: { getSchema: { id, valid } } } = this.props;
         const { saved } = this.state;
 
         return [
@@ -122,7 +122,6 @@ class SchemaContainer extends Component {
     }
 
     editResolver(resolver) {
-        console.log("Called edit resolver", resolver);
         this.setState({ showEditModal: true, selectedResolver: resolver });
     }
 
@@ -131,7 +130,7 @@ class SchemaContainer extends Component {
     }
 
     renderContent() {
-        const { getSchema: { id, schema, compiled } } = this.props.data;
+        const { data: { getSchema: { id, schema, compiled } } } = this.props;
         const { showAddModal, showEditModal, selectedResolver } = this.state;
 
         return (
@@ -150,6 +149,7 @@ class SchemaContainer extends Component {
                             error={this.state.error}
                             schemaId={id}
                             onAddResolver={() => this.addResolver()}
+                            onEditResolver={() => this.editResolver()}
                         />
                     </div>
                 </div>
