@@ -75,7 +75,10 @@ const listDataSources = ({ name }) => {
         const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
         return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
-    return dataSource.findAll();
+
+    return dataSource.findAll({
+        include: [{ all: true }]
+    });
 };
 
 const listResolvers = ({ schemaId, type }) => resolver.findAll({

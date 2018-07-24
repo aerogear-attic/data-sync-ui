@@ -1,14 +1,27 @@
 import React from "react";
 
-import { MessageDialog } from "patternfly-react";
+import {
+    MessageDialog,
+    Icon
+} from "patternfly-react";
 
 import { graphql } from "react-apollo";
 import DeleteDataSource from "../../graphql/DeleteDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
-const DeleteDataSourceDialog = ({ showModal, dataSource, filter, mutate, onClose }) => {
-    const removeOneDatasource = dataSourceId => {
+const DeleteDataSourceDialog = ({
+    showModal,
+    dataSource,
+    filter,
+    mutate,
+    onClose
+}) => {
+    const hasResolvers = dataSource && dataSource.resolvers && dataSource.resolvers.length;
+
+    const removeDatasource = () => {
         const { name } = filter;
+        const dataSourceId = dataSource.id;
+
         mutate({
             variables: { dataSourceId },
             refetchQueries: [{
@@ -25,18 +38,32 @@ const DeleteDataSourceDialog = ({ showModal, dataSource, filter, mutate, onClose
         });
     };
 
-    const primaryContent = (<p>Are you sure you want to delete this data source?</p>);
     const title = `Delete Data Source ${dataSource && dataSource.name}`;
+    const icon = hasResolvers ? <Icon type="pf" name="warning-triangle-o" /> : null;
+    const primaryContent = (
+        <p style={{ fontSize: 18 }}>
+            Are you sure you want to delete this data source?
+        </p>
+    );
+    const secondaryContent = hasResolvers
+        ? <p>All associated resolvers ({dataSource.resolvers.length}) will be deleted</p>
+        : <p>No resolvers will be deleted</p>;
+
     return (
         <MessageDialog
-            show={showModal}
-            onHide={() => {}}
-            primaryAction={() => removeOneDatasource(dataSource.id)}
-            secondaryAction={() => onClose()}
-            primaryActionButtonContent="Delete"
-            secondaryActionButtonContent="Cancel"
             title={title}
+            icon={icon}
             primaryContent={primaryContent}
+            secondaryContent={secondaryContent}
+            show={showModal}
+            onHide={onClose}
+
+            primaryActionButtonContent="Delete"
+            primaryActionButtonBsStyle="danger"
+            primaryAction={removeDatasource}
+
+            secondaryActionButtonContent="Cancel"
+            secondaryAction={onClose}
         />
     );
 };

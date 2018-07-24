@@ -4,5 +4,8 @@ query GetDataSources ($name: String) {
         name
         type
         config
+        resolvers {
+            id
+        }
     }
 }
