@@ -28,7 +28,7 @@ class TypeList extends Component {
     renderResolverForField(name, data) {
         const { resolvers } = data;
         const { onAddResolver, onEditResolver } = this.props;
-        const resolver = {};
+        const resolver = resolvers.find(item => item.field === name);
         if (resolver) {
             return (
                 <React.Fragment>
