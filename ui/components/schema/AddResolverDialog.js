@@ -2,12 +2,12 @@ import BaseResolverDialog from "./BaseResolverDialog";
 
 const INITIAL_STATE = {
     dataSourceName: "",
-    requestmapping: "",
+    requestMapping: "",
     responseMapping: "",
     err: "",
     validations: {
         name: null,
-        requestmapping: "warning",
+        requestMapping: "warning",
         responseMapping: "success"
     }
 };

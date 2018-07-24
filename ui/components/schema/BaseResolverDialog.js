@@ -14,6 +14,7 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 import { CodeEditor } from "../common/CodeEditor";
+import style from "./baseResolverDialog.css";
 
 class BaseResolverDialog extends Component {
 
@@ -135,11 +136,7 @@ class BaseResolverDialog extends Component {
                         <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
                             <Col sm={3}>Request Mapping</Col>
                             <Col sm={9}>
-                                <div style={{
-                                    height: "120px",
-                                    border: "1px solid lightgrey"
-                                }}
-                                >
+                                <div className={style["resolver-input-area"]}>
                                     <CodeEditor
                                         value={requestMapping}
                                         onChange={e => this.onRequestMappingChange(e.target.value)}
@@ -152,11 +149,7 @@ class BaseResolverDialog extends Component {
                         <FormGroup controlId="responseMapping" validationState={validations.responseMapping}>
                             <Col sm={3}>Response Mapping</Col>
                             <Col sm={9}>
-                                <div style={{
-                                    height: "120px",
-                                    border: "1px solid lightgrey"
-                                }}
-                                >
+                                <div className={style["resolver-input-area"]}>
                                     <CodeEditor
                                         value={responseMapping}
                                         onChange={e => this.onResponseChanged(e.target.value)}
