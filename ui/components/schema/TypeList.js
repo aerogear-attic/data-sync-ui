@@ -18,8 +18,8 @@ class TypeList extends Component {
         console.log(resolver.responseMapping);
     }
 
-    createResolver(fieldName) {
-        console.log(fieldName);
+    createResolver() {
+        console.log("called create resolver");
     }
 
     renderLoading() {
@@ -67,7 +67,7 @@ class TypeList extends Component {
             <Button
                 bsStyle="primary"
                 bsSize="small"
-                onClick={() => console.log("Clicked create resolver")}
+                onClick={() => this.createResolver()}
             >
                 Add Resolver
             </Button>

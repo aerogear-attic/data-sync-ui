@@ -4,7 +4,7 @@ import keydown from "react-keydown";
 import { Spinner } from "patternfly-react";
 import { CommonToolbar, CodeEditor } from "../common";
 import { StructureView } from "./StructureView";
-
+import { AddResolverDialog } from "./AddResolverDialog";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 
@@ -14,7 +14,8 @@ const INITIAL_STATE = {
     height: "100%",
     schema: "",
     error: null,
-    saved: true
+    saved: true,
+    showAddModal: false
 };
 
 class SchemaContainer extends Component {
@@ -113,12 +114,18 @@ class SchemaContainer extends Component {
         ];
     }
 
+    addResolver() {
+        this.setState({ showAddModal: true });
+    }
+
     renderLoading() {
         return <Spinner className="spinner" loading />;
     }
 
     renderContent() {
         const { getSchema: { id, schema, compiled } } = this.props.data;
+        const { showAddModal } = this.state;
+        console.log(this.state);
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -137,6 +144,10 @@ class SchemaContainer extends Component {
                         />
                     </div>
                 </div>
+                <AddResolverDialog
+                    onClose={() => this.setState({ showAddModal: false })}
+                    visible={showAddModal}
+                />
             </React.Fragment>
         );
     }
