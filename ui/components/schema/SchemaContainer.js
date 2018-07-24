@@ -11,7 +11,7 @@ import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
-    height: "100%",
+    height: "0",
     schema: "",
     error: null,
     saved: true
@@ -22,16 +22,22 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
+        this.flexWrapper = React.createRef();
     }
 
     updateDimensions() {
         this.setState({
-            height: window.innerHeight - this.calculateHeaderHeight()
+            height: window.innerHeight - this.flexWrapper.current.getBoundingClientRect().top
         });
     }
 
-    componentWillMount() {
-        this.updateDimensions();
+    componentDidUpdate() {
+        const flexWrapperElement = this.flexWrapper.current;
+        const currentHeight = flexWrapperElement.style.height;
+        const distanceFromTop = flexWrapperElement.getBoundingClientRect().top;
+        if (currentHeight === "0px" && distanceFromTop !== 0) {
+            this.updateDimensions();
+        }
     }
 
     componentDidMount() {
@@ -40,11 +46,6 @@ class SchemaContainer extends Component {
 
     componentWillUnmount() {
         window.removeEventListener("resize", () => this.updateDimensions());
-    }
-
-    calculateHeaderHeight() {
-        // TODO: find SOME way to do this in pure CSS
-        return 206;
     }
 
     onSchemaChange(schema) {
@@ -122,7 +123,11 @@ class SchemaContainer extends Component {
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
-                <div className={style.flexWrapper} style={{ height: this.state.height }}>
+                <div
+                    ref={this.flexWrapper}
+                    className={style.flexWrapper}
+                    style={{ height: this.state.height }}
+                >
                     <div className={style.left}>
                         <CodeEditor
                             value={schema}
