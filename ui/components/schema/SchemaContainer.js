@@ -104,7 +104,7 @@ class SchemaContainer extends Component {
                 title: "Download Schema",
                 props: {
                     key: "export_schema",
-                    disabled: !valid,
+                    disabled: !valid || saving,
                     href: `/schema/${id}`
                 }
             },
