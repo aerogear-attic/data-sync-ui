@@ -35,7 +35,7 @@ const Schema = buildSchema(`
         name: String!
         type: DataSourceType! 
         config: JSON!
-        Resolvers: [Resolver]
+        resolvers: [Resolver]
     },
     type Schema {
         id: Int!
@@ -43,7 +43,7 @@ const Schema = buildSchema(`
         schema: String!
         valid: Boolean!
         compiled: String!
-        Resolvers: [Resolver]        
+        resolvers: [Resolver]        
     },
     type Resolver {
         id: Int! 

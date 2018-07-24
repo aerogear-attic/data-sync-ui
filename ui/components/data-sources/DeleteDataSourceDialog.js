@@ -16,7 +16,7 @@ const DeleteDataSourceDialog = ({
     mutate,
     onClose
 }) => {
-    const hasResolvers = dataSource && dataSource.Resolvers && dataSource.Resolvers.length;
+    const hasResolvers = dataSource && dataSource.resolvers && dataSource.resolvers.length;
 
     const removeDatasource = () => {
         const { name } = filter;
@@ -46,7 +46,7 @@ const DeleteDataSourceDialog = ({
         </p>
     );
     const secondaryContent = hasResolvers
-        ? <p>All associated resolvers ({dataSource.Resolvers.length}) will be deleted</p>
+        ? <p>All associated resolvers ({dataSource.resolvers.length}) will be deleted</p>
         : <p>No resolvers will be deleted</p>;
 
     return (
