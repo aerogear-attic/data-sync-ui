@@ -68,7 +68,7 @@ class TypeList extends Component {
             <Button
                 bsStyle="primary"
                 bsSize="small"
-                onClick={() => this.createResolver()}
+                onClick={() => this.props.onAddResolver()}
             >
                 Add Resolver
             </Button>

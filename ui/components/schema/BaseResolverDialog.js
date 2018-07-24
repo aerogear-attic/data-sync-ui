@@ -133,7 +133,7 @@ class BaseResolverDialog extends Component {
 
                         {/* Resolver request mapping */}
                         <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
-                            <Col sm={3}>Resolver</Col>
+                            <Col sm={3}>Request Mapping</Col>
                             <Col sm={9}>
                                 <div style={{
                                     height: "120px",

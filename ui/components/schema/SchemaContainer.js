@@ -8,6 +8,7 @@ import { AddResolverDialog } from "./AddResolverDialog";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 
+
 import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
@@ -125,7 +126,6 @@ class SchemaContainer extends Component {
     renderContent() {
         const { getSchema: { id, schema, compiled } } = this.props.data;
         const { showAddModal } = this.state;
-        console.log(this.state);
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -141,6 +141,7 @@ class SchemaContainer extends Component {
                             compiled={JSON.parse(compiled)}
                             error={this.state.error}
                             schemaId={id}
+                            onAddResolver={() => this.addResolver()}
                         />
                     </div>
                 </div>

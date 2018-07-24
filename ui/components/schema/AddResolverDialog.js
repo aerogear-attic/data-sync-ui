@@ -34,7 +34,7 @@ class AddResolverDialog extends BaseResolverDialog {
     }
 
     createResolver() {
-        console.log("called create resolver");
+        console.log("called create resolver function");
     }
 
     clearForms() {
