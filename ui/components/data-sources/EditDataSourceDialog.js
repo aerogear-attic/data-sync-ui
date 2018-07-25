@@ -38,7 +38,7 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
                 id,
                 name,
                 type,
-                options: config
+                options: config.options
             });
         }
     }
@@ -59,8 +59,9 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
 
     updateDataSource() {
         const { id, name, type, options } = this.state;
+        const config = { options };
         return this.props.mutate({
-            variables: { id, name, type, config: options },
+            variables: { id, name, type, config },
             refetchQueries: [{ query: GetDataSources }]
         });
     }
