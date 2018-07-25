@@ -67,7 +67,7 @@ class BaseDataSourceDialog extends Component {
             Validators.String.nonBlank, url,
             Validators.String.nonBlank, database,
             Validators.String.nonBlank, username,
-            Validators.Number.natural, port
+            Validators.Port.valid, port
         ]);
 
         const { validations } = this.state;

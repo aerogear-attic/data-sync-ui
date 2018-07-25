@@ -3,12 +3,14 @@ const Validators = {
         nonBlank: s => s
                 && typeof s === typeof ""
                 && s.length > 0,
-        defined: s => s && typeof s === typeof "",
         minLength: l => s => Validators.String.nonBlank(s) && s.length >= l,
         maxLength: l => s => Validators.String.nonBlank(s) && s.length < l
     },
     Number: {
         natural: n => !Number.isNaN(n) && parseInt(n, 10) > 0
+    },
+    Port: {
+        valid: p => Validators.Number.natural(p) && p < 65536
     },
     Boolean: {
         valid: b => typeof b === typeof true
@@ -18,7 +20,7 @@ const Validators = {
 /**
  * Run a number of validations that have to be passed in an array of the form:
  * [
- *  <Validation Function 1>, <Validation Subject 1>
+ *  <Validators.String.nonBlank>, "name"
  *  ...
  *  <Validation Function N>, <Validation Subject N>
  * ]
