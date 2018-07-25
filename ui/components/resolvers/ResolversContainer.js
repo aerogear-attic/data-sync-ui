@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import { CommonToolbar } from "../common";
+import { ResolversList } from "./ResolversList";
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+    filter: {}
+};
 
 class ResolversContainer extends Component {
 
@@ -9,8 +13,24 @@ class ResolversContainer extends Component {
         this.state = INITIAL_STATE;
     }
 
+    getToolbarButtons() {
+        return [];
+    }
+
+    setFilter() {
+        // TODO
+    }
+
     render() {
-        return <div>TODO</div>;
+        return (
+            <React.Fragment>
+                <CommonToolbar
+                    buttons={this.getToolbarButtons()}
+                    onFilter={name => this.setFilter(name)}
+                />
+                <ResolversList />
+            </React.Fragment>
+        );
     }
 
 }
