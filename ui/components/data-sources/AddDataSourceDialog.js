@@ -8,17 +8,15 @@ import GetDataSources from "../../graphql/GetDataSources.graphql";
 const INITIAL_STATE = {
     name: "",
     type: DataSourceType.InMemory,
-    options: {
-        // InMemory Options
-        timestampData: true,
-
-        // Postgres Options
+    inMemoryOptions: {
+        timestampData: true
+    },
+    postgresOptions: {
         url: "",
         port: 5432,
         database: "",
         username: "",
         password: ""
-
     },
     err: "",
     validations: {
@@ -50,8 +48,9 @@ class AddDataSourceDialog extends BaseDataSourceDialog {
     }
 
     createDataSource() {
-        const { name, type, options } = this.state;
-        const config = { options };
+        const { name, type } = this.state;
+
+        const config = { options: this.getConfigByType(type) };
         const { filter } = this.props;
 
         return this.props.mutate({

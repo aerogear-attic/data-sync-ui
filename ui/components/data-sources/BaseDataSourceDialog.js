@@ -26,7 +26,10 @@ class BaseDataSourceDialog extends Component {
     }
 
     onNameChange(name) {
-        const nameValidation = name && name.length < 255 ? "success" : "error";
+        const nameValidation = Validate([
+            Validators.String.minLength(1), name,
+            Validators.String.maxLength(255), name
+        ]);
 
         const { validations } = this.state;
         const newValidations = { ...validations, name: nameValidation };
@@ -44,44 +47,44 @@ class BaseDataSourceDialog extends Component {
         this.setState({ type, validations: newValidations });
     }
 
-    onInMemoryOptionsChange(options) {
-        const { timestampData } = options;
-        const optionsValidation = typeof timestampData === "boolean"
-            // && further validations here
-            ? "success" : "error";
+    onInMemoryOptionsChange(inMemoryOptions) {
+        const { timestampData } = inMemoryOptions;
+
+        const optionsValidation = Validate([
+            Validators.Boolean.valid, timestampData
+        ]);
 
         const { validations } = this.state;
         const newValidations = { ...validations, optionsValidation };
 
-        this.setState({ options, validations: newValidations });
+        this.setState({ inMemoryOptions, validations: newValidations });
     }
 
-    onPostgresOptionsChange(options) {
-        const { url, port, database, username, password } = options;
+    onPostgresOptionsChange(postgresOptions) {
+        const { url, port, database, username } = postgresOptions;
 
         const optionsValidation = Validate([
-            Validators.String.defined, url,
-            Validators.String.defined, database,
-            Validators.String.defined, username,
-            Validators.String.defined, password,
+            Validators.String.nonBlank, url,
+            Validators.String.nonBlank, database,
+            Validators.String.nonBlank, username,
             Validators.Number.natural, port
         ]);
 
         const { validations } = this.state;
         const newValidations = { ...validations, optionsValidation };
 
-        this.setState({ options, validations: newValidations });
+        this.setState({ postgresOptions, validations: newValidations });
     }
 
     renderSpecificOptionsFormsForSelectedType() {
-        const { type, options } = this.state;
+        const { type, inMemoryOptions, postgresOptions } = this.state;
 
         switch (type) {
             case DataSourceType.InMemory:
                 return (
                     <InMemoryOptions
                         isDisabled={this.isDisabled}
-                        options={options}
+                        options={inMemoryOptions}
                         onOptionsChange={newOps => this.onInMemoryOptionsChange(newOps)}
                     />
                 );
@@ -89,12 +92,23 @@ class BaseDataSourceDialog extends Component {
                 return (
                     <PostgresOptions
                         isDisabled={this.isDisabled}
-                        options={options}
+                        options={postgresOptions}
                         onOptionsChange={newOps => this.onPostgresOptionsChange(newOps)}
                     />
                 );
             default:
                 return null;
+        }
+    }
+
+    getConfigByType(type) {
+        switch (type) {
+            case DataSourceType.InMemory:
+                return this.state.inMemoryOptions;
+            case DataSourceType.Postgres:
+                return this.state.postgresOptions;
+            default:
+                throw new Error(`Unknown data source type: ${type}`);
         }
     }
 

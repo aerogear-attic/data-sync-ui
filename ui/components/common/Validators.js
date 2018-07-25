@@ -1,11 +1,17 @@
 const Validators = {
     String: {
-        defined: s => s
+        nonBlank: s => s
                 && typeof s === typeof ""
-                && s.length > 0
+                && s.length > 0,
+        defined: s => s && typeof s === typeof "",
+        minLength: l => s => Validators.String.nonBlank(s) && s.length >= l,
+        maxLength: l => s => Validators.String.nonBlank(s) && s.length < l
     },
     Number: {
         natural: n => !Number.isNaN(n) && parseInt(n, 10) > 0
+    },
+    Boolean: {
+        valid: b => typeof b === typeof true
     }
 };
 
