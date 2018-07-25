@@ -27,12 +27,18 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     componentDidUpdate(prevProps) {
         if (this.props.dataSource && this.props.dataSource !== prevProps.dataSource) {
             const { id, name, type, config } = this.props.dataSource;
+
+
+            console.log("data source");
+            console.log(this.props.dataSource);
+
+
             this.setState({
                 ...INITIAL_STATE,
                 id,
                 name,
                 type,
-                options: config.options
+                options: config
             });
         }
     }
@@ -53,11 +59,8 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
 
     updateDataSource() {
         const { id, name, type, options } = this.state;
-
-        const config = JSON.stringify({ options });
-
         return this.props.mutate({
-            variables: { id, name, type, config },
+            variables: { id, name, type, config: options },
             refetchQueries: [{ query: GetDataSources }]
         });
     }

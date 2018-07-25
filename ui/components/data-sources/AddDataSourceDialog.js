@@ -51,10 +51,10 @@ class AddDataSourceDialog extends BaseDataSourceDialog {
 
     createDataSource() {
         const { name, type, options } = this.state;
-        const config = { options };
         const { filter } = this.props;
+
         return this.props.mutate({
-            variables: { name, type, config },
+            variables: { name, type, config: options },
             refetchQueries: [
                 { query: GetDataSources,
                     variables: { name: filter.name } },
