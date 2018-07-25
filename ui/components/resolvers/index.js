@@ -1,1 +1,2 @@
-export { ResolversContainer } from "./ResolversContainer";
+export * from "./ResolversContainer";
+export * from "./ResolversList";
