@@ -9,7 +9,16 @@ const INITIAL_STATE = {
     name: "",
     type: DataSourceType.InMemory,
     options: {
-        timestampData: true
+        // InMemory Options
+        timestampData: true,
+
+        // Postgres Options
+        url: "",
+        port: 5432,
+        database: "",
+        username: "",
+        password: ""
+
     },
     err: "",
     validations: {

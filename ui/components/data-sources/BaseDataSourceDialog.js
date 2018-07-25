@@ -14,8 +14,9 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 
-import { InMemoryOptions } from "./options";
+import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
+import { Validators, Validate } from "../common/Validators";
 
 class BaseDataSourceDialog extends Component {
 
@@ -55,6 +56,23 @@ class BaseDataSourceDialog extends Component {
         this.setState({ options, validations: newValidations });
     }
 
+    onPostgresOptionsChange(options) {
+        const { url, port, database, username, password } = options;
+
+        const optionsValidation = Validate([
+            Validators.String.defined, url,
+            Validators.String.defined, database,
+            Validators.String.defined, username,
+            Validators.String.defined, password,
+            Validators.Number.natural, port
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, optionsValidation };
+
+        this.setState({ options, validations: newValidations });
+    }
+
     renderSpecificOptionsFormsForSelectedType() {
         const { type, options } = this.state;
 
@@ -65,6 +83,14 @@ class BaseDataSourceDialog extends Component {
                         isDisabled={this.isDisabled}
                         options={options}
                         onOptionsChange={newOps => this.onInMemoryOptionsChange(newOps)}
+                    />
+                );
+            case DataSourceType.Postgres:
+                return (
+                    <PostgresOptions
+                        isDisabled={this.isDisabled}
+                        options={options}
+                        onOptionsChange={newOps => this.onPostgresOptionsChange(newOps)}
                     />
                 );
             default:
@@ -176,6 +202,9 @@ class BaseDataSourceDialog extends Component {
                                         >
                                             <MenuItem eventKey={DataSourceType.InMemory}>
                                                 {DataSourceType.InMemory}
+                                            </MenuItem>
+                                            <MenuItem eventKey={DataSourceType.Postgres}>
+                                                {DataSourceType.Postgres}
                                             </MenuItem>
                                             {/* More Data Source Types to be added */}
                                         </DropdownButton>
