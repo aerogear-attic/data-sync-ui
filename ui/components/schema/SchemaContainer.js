@@ -24,11 +24,6 @@ class SchemaContainer extends Component {
         this.state = INITIAL_STATE;
     }
 
-    calculateHeaderHeight() {
-        // TODO: find SOME way to do this in pure CSS
-        return 206;
-    }
-
     onSchemaChange(schema) {
         this.setState({ schema, saved: false });
     }
