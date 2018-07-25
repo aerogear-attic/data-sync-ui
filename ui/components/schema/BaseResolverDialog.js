@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Query } from "react-apollo";
+
 import {
     Alert,
     Modal,
@@ -10,11 +12,13 @@ import {
     Col,
     InputGroup,
     DropdownButton,
-    MenuItem
+    MenuItem,
+    Spinner
 } from "patternfly-react";
 import some from "lodash.some";
 import { CodeEditor } from "../common/CodeEditor";
 import style from "./baseResolverDialog.css";
+import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 class BaseResolverDialog extends Component {
 
@@ -23,8 +27,13 @@ class BaseResolverDialog extends Component {
         this.props.onClose();
     }
 
-    onDataSourceChange(dataSourceName) {
-        console.log("called onDataSourceChange, ", dataSourceName);
+    onDataSourceChange(dataSource) {
+        const dsValidation = (dataSource) ? "success" : "error";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, dataSource: dsValidation };
+
+        this.setState({ dataSource, validations: newValidations });
     }
 
     onRequestMappingChange(requestMapping) {
@@ -36,10 +45,30 @@ class BaseResolverDialog extends Component {
     }
 
     renderDataSources() {
+        const filter = undefined;
         return (
-            <MenuItem eventKey={() => {}}>
-                TestMenu Item
-            </MenuItem>);
+            <Query query={GetDataSources} variables={filter}>
+                {({ loading, error, data }) => {
+                    if (loading) {
+                        return <Spinner className="spinner" loading />;
+                    }
+
+                    if (error) {
+                        return error.message;
+                    }
+
+                    if (data.dataSources.length) {
+                        const { dataSources } = data;
+                        return dataSources.map(dataSource => (
+                            <MenuItem key={dataSource.name} eventKey={dataSource}>
+                                {`${dataSource.name} (${dataSource.type})`}
+                            </MenuItem>
+                        ));
+                    }
+                    return null;
+                }}
+            </Query>
+        );
     }
 
 
