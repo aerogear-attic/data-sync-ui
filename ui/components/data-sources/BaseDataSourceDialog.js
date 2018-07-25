@@ -14,8 +14,9 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 
-import { InMemoryOptions } from "./options";
+import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
+import { Validators, Validate } from "../common/Validators";
 
 class BaseDataSourceDialog extends Component {
 
@@ -25,7 +26,10 @@ class BaseDataSourceDialog extends Component {
     }
 
     onNameChange(name) {
-        const nameValidation = name && name.length < 255 ? "success" : "error";
+        const nameValidation = Validate([
+            Validators.String.minLength(1), name,
+            Validators.String.maxLength(255), name
+        ]);
 
         const { validations } = this.state;
         const newValidations = { ...validations, name: nameValidation };
@@ -43,32 +47,68 @@ class BaseDataSourceDialog extends Component {
         this.setState({ type, validations: newValidations });
     }
 
-    onInMemoryOptionsChange(options) {
-        const { timestampData } = options;
-        const optionsValidation = typeof timestampData === "boolean"
-            // && further validations here
-            ? "success" : "error";
+    onInMemoryOptionsChange(inMemoryOptions) {
+        const { timestampData } = inMemoryOptions;
+
+        const optionsValidation = Validate([
+            Validators.Boolean.valid, timestampData
+        ]);
 
         const { validations } = this.state;
         const newValidations = { ...validations, optionsValidation };
 
-        this.setState({ options, validations: newValidations });
+        this.setState({ inMemoryOptions, validations: newValidations });
+    }
+
+    onPostgresOptionsChange(postgresOptions) {
+        const { url, port, database, username } = postgresOptions;
+
+        const optionsValidation = Validate([
+            Validators.String.nonBlank, url,
+            Validators.String.nonBlank, database,
+            Validators.String.nonBlank, username,
+            Validators.Port.valid, port
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, optionsValidation };
+
+        this.setState({ postgresOptions, validations: newValidations });
     }
 
     renderSpecificOptionsFormsForSelectedType() {
-        const { type, options } = this.state;
+        const { type, inMemoryOptions, postgresOptions } = this.state;
 
         switch (type) {
             case DataSourceType.InMemory:
                 return (
                     <InMemoryOptions
                         isDisabled={this.isDisabled}
-                        options={options}
+                        options={inMemoryOptions}
                         onOptionsChange={newOps => this.onInMemoryOptionsChange(newOps)}
+                    />
+                );
+            case DataSourceType.Postgres:
+                return (
+                    <PostgresOptions
+                        isDisabled={this.isDisabled}
+                        options={postgresOptions}
+                        onOptionsChange={newOps => this.onPostgresOptionsChange(newOps)}
                     />
                 );
             default:
                 return null;
+        }
+    }
+
+    getConfigByType(type) {
+        switch (type) {
+            case DataSourceType.InMemory:
+                return this.state.inMemoryOptions;
+            case DataSourceType.Postgres:
+                return this.state.postgresOptions;
+            default:
+                throw new Error(`Unknown data source type: ${type}`);
         }
     }
 
@@ -176,6 +216,9 @@ class BaseDataSourceDialog extends Component {
                                         >
                                             <MenuItem eventKey={DataSourceType.InMemory}>
                                                 {DataSourceType.InMemory}
+                                            </MenuItem>
+                                            <MenuItem eventKey={DataSourceType.Postgres}>
+                                                {DataSourceType.Postgres}
                                             </MenuItem>
                                             {/* More Data Source Types to be added */}
                                         </DropdownButton>

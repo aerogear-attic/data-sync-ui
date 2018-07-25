@@ -3,12 +3,14 @@ import { graphql } from "react-apollo";
 import BaseDataSourceDialog from "./BaseDataSourceDialog";
 import UpdateDataSource from "../../graphql/UpdateDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
+import { DataSourceType } from "../../graphql/types/DataSourceType";
 
 const INITIAL_STATE = {
     id: null,
     name: null,
     type: null,
-    options: null,
+    inMemoryOptions: null,
+    postgresOptions: null,
     err: "",
     validations: {
         name: "success",
@@ -27,13 +29,21 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     componentDidUpdate(prevProps) {
         if (this.props.dataSource && this.props.dataSource !== prevProps.dataSource) {
             const { id, name, type, config } = this.props.dataSource;
-            this.setState({
+
+            const newState = {
                 ...INITIAL_STATE,
                 id,
                 name,
-                type,
-                options: config.options
-            });
+                type
+            };
+
+            if (type === DataSourceType.InMemory) {
+                newState.inMemoryOptions = config.options;
+            } else {
+                newState.postgresOptions = config.options;
+            }
+
+            this.setState(newState);
         }
     }
 
@@ -52,10 +62,8 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     }
 
     updateDataSource() {
-        const { id, name, type, options } = this.state;
-
-        const config = JSON.stringify({ options });
-
+        const { id, name, type } = this.state;
+        const config = { options: this.getConfigByType(type) };
         return this.props.mutate({
             variables: { id, name, type, config },
             refetchQueries: [{ query: GetDataSources }]
