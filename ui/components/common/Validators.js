@@ -24,6 +24,10 @@ const Validators = {
  *  ...
  *  <Validation Function N>, <Validation Subject N>
  * ]
+ *
+ * This can be used to perform a number of validations against the available
+ * validators. Used to check dialog input values for correctness.
+ *
  * @param validations The validations array
  * @returns {string} "success" on success, otherwise "error"
  */
