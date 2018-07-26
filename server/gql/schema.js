@@ -31,6 +31,7 @@ const Schema = buildSchema(`
             requestMapping: String!
             responseMapping: String!
         ): Resolver
+        deleteResolver(id: Int!): Resolver
     },  
     type DataSource {
         id: Int!
@@ -117,6 +118,22 @@ const upsertResolver = async ({
     }
     return resolver.create(properties);
 };
+
+const deleteResolver = async ({ id }) => {
+    info(`deleteResolver request for id ${id}`);
+
+    const foundResolver = await resolver.findById(id);
+    if (!resolver) {
+        return null;
+    }
+
+    const destroyedResolver = await foundResolver.destroy({ force: true });
+    info(`Resolver with id ${destroyedResolver.id} deleted`);
+
+    publish(DEFAULT_CHANNEL, { reload: "Resolver" });
+    return foundResolver;
+};
+
 
 const getOneDataSource = ({ id }) => {
     info("getOneDataSource request");
@@ -212,6 +229,7 @@ const root = {
     dataSources: listDataSources,
     resolvers: listResolvers,
     upsertResolver,
+    deleteResolver,
     createDataSource,
     getOneDataSource,
     deleteDataSource,
