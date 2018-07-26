@@ -12,7 +12,7 @@
     "build": "webpack --mode production",
     "clean": "rm -rf public/js/bundle.js node_modules",
     "start": "node server/index.js",
-    "test:server": "NODE_ENV=test mocha --recursive",
+    "test:server": "NODE_ENV=test mocha test/server",
     "test": "jest",
     "docker:build": "./scripts/docker_build.sh",
     "docker:build:release": "./scripts/docker_build_release.sh",

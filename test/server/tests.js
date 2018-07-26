@@ -115,7 +115,7 @@ describe("Basic", () => {
             .catch(err => done(err));
     });
 
-    it("should edit a new data source", done => {
+    it("should edit a new data source 2", done => {
         const NEW_NAME = "NEW DATA SOURCE NAME";
         graphql(Schema, queries.CREATE_DATA_SOURCE_QUERY, root, null, {
             name: "test",
