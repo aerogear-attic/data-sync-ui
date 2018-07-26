@@ -1,21 +1,12 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
 import {
-    ListViewItem, Grid, Row, Col, Button, Spinner
+    ListViewItem, Grid, Row, Col
 } from "patternfly-react";
 
 import style from "./structureView.css";
-import GetResolvers from "../../graphql/GetResolvers.graphql";
+import { formatType } from "../common/GraphQLFormatters";
 
 class TypeList extends Component {
-
-    renderLoading() {
-        return <Spinner className="spinner" loading />;
-    }
-
-    renderError(error) {
-        return <div>{error.message}</div>;
-    }
 
     renderAdditionalInfo({ fields }) {
         if (fields && fields.length) {
@@ -24,7 +15,7 @@ class TypeList extends Component {
         return "n.a.";
     }
 
-    renderFields(fields, data) {
+    renderFields(fields) {
         if (!fields) {
             // Some types won't have fields
             return <span>No fields</span>;
@@ -38,16 +29,16 @@ class TypeList extends Component {
                         {field.name}
                     </Col>
                     <Col xs={6} md={6}>
-                        {type}
+                        {formatType(field.type)}
                     </Col>
                 </Row>
             );
         });
     }
 
-    renderList(data) {
+    renderList() {
         const { type } = this.props;
-        const subItems = this.renderFields(type.fields, data);
+        const subItems = this.renderFields(type.fields);
 
         return (
             <ListViewItem
@@ -64,10 +55,10 @@ class TypeList extends Component {
                 <Grid fluid>
                     <Row className={style["structure-field-row"]}>
                         <Col xs={6} md={6}>
-                            Field Name
+                            Field
                         </Col>
                         <Col xs={6} md={6}>
-                            Field Type
+                            Type
                         </Col>
                     </Row>
                     {subItems}
@@ -78,26 +69,7 @@ class TypeList extends Component {
     }
 
     render() {
-        const { schemaId, type } = this.props;
-        return (
-            <Query
-                query={GetResolvers}
-                variables={{
-                    schemaId,
-                    type
-                }}
-            >
-                {({ loading, error, data }) => {
-                    if (loading) {
-                        return this.renderLoading();
-                    }
-                    if (error) {
-                        return this.renderError(error);
-                    }
-                    return this.renderList(data);
-                }}
-            </Query>
-        );
+        return this.renderList();
     }
 
 }
