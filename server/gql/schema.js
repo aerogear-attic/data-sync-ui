@@ -1,5 +1,5 @@
 const { buildSchema } = require("graphql");
-const { info, warn, error } = require("../logger");
+const { log, warn, error } = require("../logger");
 const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
@@ -63,7 +63,7 @@ const Schema = buildSchema(`
 `);
 
 const createDataSource = async ({ name, type, config }) => {
-    info("createDataSource request");
+    log.info("createDataSource request");
     const created = await dataSource.create({
         name,
         type,
@@ -75,7 +75,7 @@ const createDataSource = async ({ name, type, config }) => {
 };
 
 const listDataSources = ({ name }) => {
-    info("listDataSources request");
+    log.info("listDataSources request");
     if (name) {
         const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
         return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
@@ -136,12 +136,12 @@ const deleteResolver = async ({ id }) => {
 
 
 const getOneDataSource = ({ id }) => {
-    info("getOneDataSource request");
+    log.info("getOneDataSource request");
     return dataSource.findById(id);
 };
 
 const deleteDataSource = async ({ id }) => {
-    info(`deleteDataSource request for id ${id}`);
+    log.info(`deleteDataSource request for id ${id}`);
 
     const foundDataSource = await dataSource.findById(id);
     if (!foundDataSource) {
@@ -149,14 +149,14 @@ const deleteDataSource = async ({ id }) => {
     }
 
     const destroyed = await foundDataSource.destroy({ force: true });
-    info(`Data source with id ${destroyed.id} deleted`);
+    log.info(`Data source with id ${destroyed.id} deleted`);
 
     publish(DEFAULT_CHANNEL, { reload: "DataSource" });
     return foundDataSource;
 };
 
 const updateDataSource = async ({ id, name, type, config }) => {
-    info("updateDataSource request");
+    log.info("updateDataSource request");
     const current = await dataSource.findById(id);
     const updated = await current.update({
         name,
@@ -169,7 +169,7 @@ const updateDataSource = async ({ id, name, type, config }) => {
 };
 
 const getSchema = async ({ name }) => {
-    info("getSchema request");
+    log.info("getSchema request");
 
     const [defaultSchema, created] = await schema.findOrCreate({
         where: { name },
@@ -179,7 +179,7 @@ const getSchema = async ({ name }) => {
     });
 
     if (created) {
-        info(`Created a new default with name ${name}`);
+        log.info(`Created a new default with name ${name}`);
     }
 
     // Compile the schema on the fly...
@@ -199,7 +199,7 @@ const getSchema = async ({ name }) => {
 };
 
 const updateSchema = async args => {
-    info("updateSchema request");
+    log.info("updateSchema request");
 
     try {
         const compiled = await compileSchemaString(args.schema);

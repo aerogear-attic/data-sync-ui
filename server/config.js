@@ -1,5 +1,4 @@
 exports.port = 8080;
-exports.logging = { level: "info" };
 exports.graphql = { debug: true };
 exports.postgresConfig = {
     database: process.env.POSTGRES_DATABASE || "aerogear_data_sync_db",
