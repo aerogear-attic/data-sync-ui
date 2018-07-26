@@ -1,3 +1,4 @@
+const MAX_PORT_NUM = 65535;
 const Validators = {
     String: {
         nonBlank: s => s
@@ -10,7 +11,7 @@ const Validators = {
         natural: n => !Number.isNaN(n) && parseInt(n, 10) > 0
     },
     Port: {
-        valid: p => Validators.Number.natural(p) && p < 65536
+        valid: p => Validators.Number.natural(p) && p < MAX_PORT_NUM
     },
     Boolean: {
         valid: b => typeof b === typeof true
@@ -20,20 +21,26 @@ const Validators = {
 /**
  * Run a number of validations that have to be passed in an array of the form:
  * [
- *  <Validators.String.nonBlank>, "name"
+ *  <Validator 1>, <Input Value 1>
  *  ...
- *  <Validation Function N>, <Validation Subject N>
+ *  <Validator N>, <Input Value N>
  * ]
+ *
+ * It always has to be exactly one validator per input value, so the total length
+ * of the array mod 2 must be zero.
+ *
  * @param validations The validations array
  * @returns {string} "success" on success, otherwise "error"
  */
 const Validate = validations => {
     let result = false;
+    let index = 0;
 
     if (validations && validations.length % 2 === 0) {
         result = true; // Init value
-        for (let i = 0; i < validations.length; i += 2) {
-            result = result && validations[i](validations[i + 1]);
+        while (result && index < validations.length) {
+            result = result && validations[index](validations[index + 1]);
+            index += 2;
         }
     }
 
