@@ -9,6 +9,7 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm test
+      - run: npm test:server
       - run: npm run build
 
   docker_push_master:

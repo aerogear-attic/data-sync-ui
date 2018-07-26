@@ -1,5 +1,5 @@
 {
-    "extends": "airbnb",
+    "extends": ["airbnb", "plugin:jest/recommended"],
     "rules": {
         "quotes": ["error", "double"],
         "comma-dangle": ["error", "never"],
@@ -37,7 +37,7 @@
             }
         ]
     },
-    "plugins": ["mocha"],
+    "plugins": ["mocha", "jest"],
     "env": {
         "mocha": true,
         "browser": true
