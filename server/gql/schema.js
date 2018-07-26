@@ -26,6 +26,8 @@ const Schema = buildSchema(`
             dataSourceId: Int! 
             type: String!,
             field: String!
+            preHook: String
+            postHook: String
             requestMapping: String!
             responseMapping: String!
         ): Resolver
@@ -49,6 +51,8 @@ const Schema = buildSchema(`
         id: Int! 
         type: String!
         field: String!
+        preHook: String!
+        postHook: String!
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
@@ -93,12 +97,14 @@ const listResolvers = ({ schemaId, type }) => resolver.findAll({
 });
 
 const upsertResolver = async ({
-    id, schemaId, dataSourceId, type, field,
+    id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
     requestMapping, responseMapping
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
         DataSourceId: dataSourceId,
+        preHook,
+        postHook,
         requestMapping,
         responseMapping,
         type,
