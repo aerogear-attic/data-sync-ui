@@ -1,3 +1,4 @@
+const MAX_VALID_PORT = 65536;
 const Validators = {
     String: {
         nonBlank: s => s
@@ -10,7 +11,7 @@ const Validators = {
         natural: n => !Number.isNaN(n) && parseInt(n, 10) > 0
     },
     Port: {
-        valid: p => Validators.Number.natural(p) && p < 65536
+        valid: p => Validators.Number.natural(p) && p < MAX_VALID_PORT
     },
     Boolean: {
         valid: b => typeof b === typeof true
