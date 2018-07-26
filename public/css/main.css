@@ -64,3 +64,18 @@ span.list-item-name {
 div.list-group-item-container .pficon-close {
     display: none;
 }
+
+.structure-list-item {
+    margin-bottom: 5px;
+}
+
+.structure-list-item span.fa-angle-right {
+    border-right: 1px solid lightgrey;
+    font-weight: bold;
+    padding-right: 15px;
+}
+
+.structure-list-item div.row {
+    margin-top: 5px;
+    font-size: 14px;
+}
