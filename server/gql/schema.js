@@ -63,7 +63,6 @@ const Schema = buildSchema(`
 `);
 
 const createDataSource = async ({ name, type, config }) => {
-    log.info("createDataSource request");
     const created = await dataSource.create({
         name,
         type,
@@ -75,7 +74,6 @@ const createDataSource = async ({ name, type, config }) => {
 };
 
 const listDataSources = ({ name }) => {
-    log.info("listDataSources request");
     if (name) {
         const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
         return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
@@ -135,14 +133,10 @@ const deleteResolver = async ({ id }) => {
 };
 
 
-const getOneDataSource = ({ id }) => {
-    log.info("getOneDataSource request");
-    return dataSource.findById(id);
-};
+const getOneDataSource = ({ id }) => dataSource.findById(id);
+
 
 const deleteDataSource = async ({ id }) => {
-    log.info(`deleteDataSource request for id ${id}`);
-
     const foundDataSource = await dataSource.findById(id);
     if (!foundDataSource) {
         return null;
@@ -156,7 +150,6 @@ const deleteDataSource = async ({ id }) => {
 };
 
 const updateDataSource = async ({ id, name, type, config }) => {
-    log.info("updateDataSource request");
     const current = await dataSource.findById(id);
     const updated = await current.update({
         name,
@@ -169,8 +162,6 @@ const updateDataSource = async ({ id, name, type, config }) => {
 };
 
 const getSchema = async ({ name }) => {
-    log.info("getSchema request");
-
     const [defaultSchema, created] = await schema.findOrCreate({
         where: { name },
         defaults: {
@@ -199,8 +190,6 @@ const getSchema = async ({ name }) => {
 };
 
 const updateSchema = async args => {
-    log.info("updateSchema request");
-
     try {
         const compiled = await compileSchemaString(args.schema);
         if (compiled.errors) {
