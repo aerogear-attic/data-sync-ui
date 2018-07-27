@@ -118,15 +118,13 @@ const upsertResolver = async ({
 };
 
 const deleteResolver = async ({ id }) => {
-    info(`deleteResolver request for id ${id}`);
-
     const foundResolver = await resolver.findById(id);
     if (!resolver) {
         return null;
     }
 
     const destroyedResolver = await foundResolver.destroy({ force: true });
-    info(`Resolver with id ${destroyedResolver.id} deleted`);
+    log.info(`Resolver with id ${destroyedResolver.id} deleted`);
 
     publish(DEFAULT_CHANNEL, { reload: "Resolver" });
     return foundResolver;
