@@ -47,7 +47,7 @@ class TypeList extends Component {
                 leftContent={<div className={style["structure-heading"]}>{type.name}</div>}
                 description={<span />}
                 hideCloseIcon
-                additionalInfo={this.renderAdditionalInfo(type)}
+                additionalInfo={[this.renderAdditionalInfo(type)]}
             >
                 <Grid fluid>
                     <Row className={style["structure-field-row"]}>
