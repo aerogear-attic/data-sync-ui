@@ -44,14 +44,11 @@ class TypeList extends Component {
             <ListViewItem
                 key={type.name}
                 className="structure-list-item"
-                leftContent={<p className={style["structure-name"]}>{type.name}</p>}
+                leftContent={<div className={style["structure-heading"]}>{type.name}</div>}
                 description={<span />}
                 hideCloseIcon
-                additionalInfo={[
-                    <p key={type.name} className={style["structure-name"]}>
-                        {this.renderAdditionalInfo(type)}
-                    </p>]}
-            >
+                additionalInfo={this.renderAdditionalInfo(type)}
+                >
                 <Grid fluid>
                     <Row className={style["structure-field-row"]}>
                         <Col xs={6} md={6}>

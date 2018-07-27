@@ -42,6 +42,11 @@
 .structure-item-edit-btn{
     margin-right:2px;
 }
-.structure-item-delete-btn{
+.structure-item-delete-btn {
     margin-left:5px;
+}
+
+.structure-heading {
+    font-size: 16px;
+    padding-top: 4px;
 }

@@ -43,18 +43,8 @@ const renderContent = (compiled, schemaId) => (
     <div className={style["structure-content"]}>
         <div className={style["structure-header"]}>
             <span>Data Types</span>
-            <a
-                className={style["ag-link"]}
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://docs.aerogear.org"
-            >
-                {"Learn more \u2139"}
-            </a>
         </div>
-        <div>
-            { renderListView(compiled, schemaId) }
-        </div>
+        { renderListView(compiled, schemaId) }
     </div>
 );
 
