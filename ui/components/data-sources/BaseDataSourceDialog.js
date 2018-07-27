@@ -16,7 +16,7 @@ import some from "lodash.some";
 
 import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
-import { Validators, Validate } from "../common/Validators";
+import { Validators, Validate } from "../../helper/Validators";
 
 class BaseDataSourceDialog extends Component {
 

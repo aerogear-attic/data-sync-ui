@@ -1,3 +1,3 @@
 export * from "./CommonToolbar";
 export * from "./CodeEditor";
-export * from "./Validators";
+export * from "../../helper/Validators";

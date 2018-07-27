@@ -25,12 +25,6 @@
     margin: 10px;
 }
 
-.structure-list-item span.fa-angle-right {
-    border-right: 1px solid lightgrey;
-    font-weight: bold;
-    padding-right: 15px;
-}
-
 .structure-name {
     font-size: 15px;
     font-weight: bold;
@@ -42,17 +36,17 @@
     padding-bottom: 5px;
 }
 
-.structure-list-item div.row {
-    margin-top: 5px;
-    font-size: 14px;
-}
-
 .structure-item-row {
     margin-top: 5px;
 }
 .structure-item-edit-btn{
     margin-right:2px;
 }
-.structure-item-delete-btn{
+.structure-item-delete-btn {
     margin-left:5px;
+}
+
+.structure-heading {
+    font-size: 16px;
+    padding-top: 4px;
 }
