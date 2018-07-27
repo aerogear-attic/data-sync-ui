@@ -36,7 +36,7 @@ const sync = () => database.sync({ force: false });
  * Drops all tables. Should only be used in combination with sync
  * to start from scratch
  */
-const reset = () => database.dropAllSchemas({logging: false});
+const reset = () => database.dropAllSchemas({ logging: false });
 
 module.exports = {
     database,
