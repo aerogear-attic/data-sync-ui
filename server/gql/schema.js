@@ -1,5 +1,5 @@
 const { buildSchema } = require("graphql");
-const { log, warn, error } = require("../logger");
+const { log } = require("../logger");
 const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
@@ -189,7 +189,7 @@ const getSchema = async ({ name }) => {
         compiled = await compileSchemaString(defaultSchema.schema);
         valid = true;
     } catch (err) {
-        warn("Schema not valid: ", err);
+        log.warn("Schema not valid: ", err);
     }
 
     // ...and add the result to the response object
@@ -220,7 +220,7 @@ const updateSchema = async args => {
             compiled: JSON.stringify(compiled)
         };
     } catch (err) {
-        error(`Error updating schema with id ${args.id}`, err);
+        log.error(`Error updating schema with id ${args.id}`, err);
         return err;
     }
 };
