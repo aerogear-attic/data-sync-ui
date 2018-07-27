@@ -41,8 +41,7 @@
     "react-keydown": "^1.9.7",
     "sequelize": "^4.38.0",
     "sqlite3": "^4.0.1",
-    "style-loader": "^0.21.0",
-    "winston": "^3.0.0"
+    "style-loader": "^0.21.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",
