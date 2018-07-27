@@ -4,7 +4,7 @@ import {
 } from "patternfly-react";
 
 import style from "./structureView.css";
-import { formatType } from "../common/GraphQLFormatters";
+import { formatType } from "../../helper/GraphQLFormatters";
 
 class TypeList extends Component {
 
@@ -36,7 +36,7 @@ class TypeList extends Component {
         });
     }
 
-    renderList() {
+    render() {
         const { type } = this.props;
         const subItems = this.renderFields(type.fields);
 
@@ -63,10 +63,6 @@ class TypeList extends Component {
                 </Grid>
             </ListViewItem>
         );
-    }
-
-    render() {
-        return this.renderList();
     }
 
 }
