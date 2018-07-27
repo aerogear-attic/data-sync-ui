@@ -1,0 +1,21 @@
+.flexWrapper {
+    /* 206 being the exact height of the components on top of SchemaContainer */
+    height: calc(100vh - 206px) !important;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    background-color: white !important;
+}
+
+.left {
+    width: 40%;
+    border-right: 1px solid lightgrey;
+    overflow-y: auto;
+}
+
+.right {
+    width: 60%;
+}
