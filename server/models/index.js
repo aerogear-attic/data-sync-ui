@@ -26,12 +26,23 @@ resolver.belongsTo(schema, {
 dataSource.hasMany(resolver, { as: "resolvers" });
 schema.hasMany(resolver, { as: "resolvers" });
 
+/**
+ * Syncs the models with the database to create all tables
+ * and associations
+ */
 const sync = () => database.sync({ force: false });
+
+/**
+ * Drops all tables. Should only be used in combination with sync
+ * to start from scratch
+ */
+const reset = () => database.dropAllSchemas({logging: false});
 
 module.exports = {
     database,
     dataSource,
     sync,
+    reset,
     schema,
     resolver,
     supportsiLike

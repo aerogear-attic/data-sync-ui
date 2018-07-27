@@ -3,6 +3,7 @@ const { graphql } = require("graphql");
 const { run, stop } = require("../../server/server");
 const { Schema, root } = require("../../server/gql/schema");
 const { queries } = require("./queries");
+const { reset, sync } = require("../../server/models");
 
 const assert = (condition, message) => {
     if (!condition) {
@@ -24,6 +25,13 @@ describe("Basic", () => {
     after(done => {
         stop();
         done();
+    });
+
+    // Clear the database after each test
+    afterEach(done => {
+        reset()
+            .then(() => sync())
+            .then(() => done());
     });
 
     it("should serve the ui", done => {
