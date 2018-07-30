@@ -80,3 +80,19 @@ div.list-group-item-container .pficon-close {
 .structure-list-item div.row {
     font-size: 14px;
 }
+
+.resolvers-list div.list-group-item-text {
+    margin-top: 7px;
+    text-align: center;
+}
+
+.resolvers-list div.list-view-pf-additional-info {
+    margin-top: 7px;
+    text-align: right;
+    color: #188bcc;
+}
+
+.resolvers-list span {
+    width: 100%;
+}
+

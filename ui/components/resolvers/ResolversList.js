@@ -1,26 +1,25 @@
 import React from "react";
 import GetSchema from "../../graphql/GetSchema.graphql";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 import { Query } from "react-apollo";
-import { Spinner } from "patternfly-react";
+import { Spinner, ListView } from "patternfly-react";
 import { wellKnownTypes } from "../../helper/GraphQLWellKnownTypes";
 import { DefaultEmptyView } from "../common/DefaultEmptyView";
+import { ResolversListItem } from "./ResolversListItem";
+import style from "./resolversList.css";
 
 const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, type) => {
     switch (type.name) {
         case query.name:
-            type.isQuery = true;
             acc.queries.push(type);
             break;
         case mutation.name:
-            type.isMutation = true;
             acc.mutations.push(type);
             break;
         case subscription.name:
-            type.isSubscription = true;
             acc.subscriptions.push(type);
             break;
         default:
-            type.isCustom = true;
             acc.custom.push(type);
             break;
     }
@@ -32,16 +31,66 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
     custom: []
 });
 
-const renderList = (id, compiled) => {
+const renderList = (schemaId, compiled) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
     const grouped = groupTypes(relevantTypes, queryType, mutationType, subscriptionType);
-    return <div>done</div>;
+
+    return (
+        <React.Fragment>
+            { renderQueries(schemaId, grouped.queries) }
+        </React.Fragment>
+    );
+};
+
+const renderQueryItem = (schemaId, query) => {
+    const { name, fields } = query;
+
+    return (<Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
+        {({loading, error, data}) => {
+            if (loading) return <Spinner className="spinner" loading />;
+            if (error) return error.message;
+
+            const queryList = fields.map(field => {
+                field.isQuery = true;
+                return <ResolversListItem
+                    key={name}
+                    type={name}
+                    kind="query"
+                    item={field}
+                    resolvers={data}
+                />
+            });
+
+            return (
+                <div className={style["structure-content"]}>
+                    <div className={style["structure-header"]}>
+                        <span>Queries</span>
+                    </div>
+                    <ListView>
+                        { queryList }
+                    </ListView>
+                </div>
+            );
+        }}
+    </Query>);
+};
+
+const renderQueries = (schemaId, queries) => {
+    const queryItems = queries.map(query => {
+        return renderQueryItem(schemaId, query);
+    });
+
+    return (
+        <React.Fragment>
+            { queryItems }
+        </React.Fragment>
+    );
 };
 
 const renderEmpty = () => {
     return <DefaultEmptyView text="No Resolvers Defined" />
-}
+};
 
 const ResolversList = () => {
     return (
