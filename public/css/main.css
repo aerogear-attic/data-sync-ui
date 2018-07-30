@@ -82,12 +82,10 @@ div.list-group-item-container .pficon-close {
 }
 
 .resolvers-list div.list-group-item-text {
-    margin-top: 7px;
-    text-align: center;
+    text-align: right;
 }
 
 .resolvers-list div.list-view-pf-additional-info {
-    margin-top: 7px;
     text-align: right;
     color: #188bcc;
 }
@@ -96,3 +94,10 @@ div.list-group-item-container .pficon-close {
     width: 100%;
 }
 
+.resolvers-list div.list-view-pf-left {
+    width: auto;
+}
+
+.resolvers-list div.list-view-pf-main-info {
+    margin-top: 7px;
+}

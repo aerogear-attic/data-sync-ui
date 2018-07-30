@@ -34,18 +34,23 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
 const renderList = (schemaId, compiled) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
-    const grouped = groupTypes(relevantTypes, queryType, mutationType, subscriptionType);
+    const {
+        queries,
+        mutations,
+        subscriptions
+    } = groupTypes(relevantTypes, queryType, mutationType, subscriptionType);
 
     return (
         <React.Fragment>
-            { renderQueries(schemaId, grouped.queries) }
+            { renderGeneric(schemaId, queries, "Queries", "query") }
+            { renderGeneric(schemaId, mutations, "Mutations", "mutation") }
+            { renderGeneric(schemaId, subscriptions, "Subscriptions", "subscription") }
         </React.Fragment>
     );
 };
 
-const renderQueryItem = (schemaId, query) => {
-    const { name, fields } = query;
-
+const renderGeneric = (schemaId, items, text, kind) => {
+    const { name, fields } = items[0];
     return (<Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
         {({loading, error, data}) => {
             if (loading) return <Spinner className="spinner" loading />;
@@ -56,7 +61,7 @@ const renderQueryItem = (schemaId, query) => {
                 return <ResolversListItem
                     key={name}
                     type={name}
-                    kind="query"
+                    kind={kind}
                     item={field}
                     resolvers={data}
                 />
@@ -65,7 +70,7 @@ const renderQueryItem = (schemaId, query) => {
             return (
                 <div className={style["structure-content"]}>
                     <div className={style["structure-header"]}>
-                        <span>Queries</span>
+                        <span>{text}</span>
                     </div>
                     <ListView>
                         { queryList }
@@ -74,18 +79,6 @@ const renderQueryItem = (schemaId, query) => {
             );
         }}
     </Query>);
-};
-
-const renderQueries = (schemaId, queries) => {
-    const queryItems = queries.map(query => {
-        return renderQueryItem(schemaId, query);
-    });
-
-    return (
-        <React.Fragment>
-            { queryItems }
-        </React.Fragment>
-    );
 };
 
 const renderEmpty = () => {
