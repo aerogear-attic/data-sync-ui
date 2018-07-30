@@ -6,14 +6,5 @@ module.exports = (sequelize, DataTypes) => {
         filter: DataTypes.JSON
     });
 
-    Subscription.associate = models => {
-        models.Subscription.belongsTo(models.GraphQLSchema, {
-            onDelete: "CASCADE",
-            foreignKey: {
-                allowNull: false
-            }
-        });
-    };
-
     return Subscription;
 };
