@@ -54,9 +54,10 @@ const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
     >No Resolver</span>;
 };
 
-const ResolversListItem = ({ kind, type, item, resolvers, onEdit }) => {
-    const { name, args } = item;
+const renderGeneric = ({ kind, type, item, resolvers, onEdit }) => {
+    const { args, name } = item;
     const argsText = `${args.length} Argument${args.length !== 1 ? "s" : ""}`;
+
     return (
         <ListViewItem
             key={name}
@@ -69,6 +70,36 @@ const ResolversListItem = ({ kind, type, item, resolvers, onEdit }) => {
             { renderArguments(args, resolvers) }
         </ListViewItem>
     );
+};
+
+const renderCustom = ({ kind, type, item, resolvers, onEdit }) => {
+    const { fields, name } = item;
+    const fieldsText = `${fields.length} Field${fields.length !== 1 ? "s" : ""}`;
+
+    return (
+        <ListViewItem
+            key={name}
+            className="structure-list-item resolvers-list"
+            leftContent={<span className={style["structure-heading"]}>{name}</span>}
+            description={<span>{fieldsText}</span>}
+            hideCloseIcon
+            additionalInfo={[]}
+        >
+            { renderArguments(fields, resolvers) }
+        </ListViewItem>
+    );
+};
+
+const ResolversListItem = (props) => {
+    const { kind } = props;
+    switch (kind) {
+        case "custom":
+            return renderCustom(props);
+            break;
+        default:
+            return renderGeneric(props);
+            break;
+    }
 };
 
 export { ResolversListItem };
