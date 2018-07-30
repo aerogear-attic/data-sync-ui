@@ -18,4 +18,22 @@
 
 .right {
     width: 60%;
+    border-left: 5px solid lightgrey; 
+    border-top: 50px solid lightgrey;
 }
+
+.resolverDetailsArea {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.resolverHeader {
+    margin-left: 20px;
+    height: 64px;
+    font-size: 24px;
+}
+
+.resolverInputArea {
+    height: 120px;
+    border: 1px solid lightgrey;
+} 
