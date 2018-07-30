@@ -1,5 +1,5 @@
 const PGPubSub = require("pg-pubsub");
-const { info } = require("../../logger");
+const { log } = require("../../logger");
 
 /**
  * A pubsub implementation that uses Postgres notify/listen feature and the
@@ -15,7 +15,7 @@ module.exports = class PostgresNotifier {
             password: config.password,
             port: config.port
         });
-        info("Postgres notifier initialized");
+        log.info("Postgres notifier initialized");
     }
 
     /**
@@ -25,7 +25,7 @@ module.exports = class PostgresNotifier {
      */
     publish(channel, payload) {
         this.instance.publish(channel, payload);
-        info(`published message to ${channel}`);
+        log.info(`published message to ${channel}`);
     }
 
     /**
@@ -36,7 +36,7 @@ module.exports = class PostgresNotifier {
      */
     addChannel(channel, onNotification) {
         this.instance.addChannel(channel, onNotification);
-        info(`listening for notifications on ${channel}`);
+        log.info(`listening for notifications on ${channel}`);
     }
 
     /**

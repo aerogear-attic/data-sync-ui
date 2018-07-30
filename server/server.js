@@ -1,11 +1,12 @@
 const { urlencoded, json } = require("body-parser");
 const express = require("express");
 const { join } = require("path");
+const { log } = require("./logger");
+const { expressPino } = require("./logger");
 const { port } = require("./config");
 const { sync, database, schema } = require("./models");
 const { stopNotifications } = require("./configNotifiers/configNotifierCreator");
 const { runHealthChecks } = require("./health");
-const { info, error } = require("./logger");
 const setupGraphQLServer = require("./gql");
 const { compileSchemaString } = require("./gql/helper");
 
@@ -17,6 +18,7 @@ App.use(urlencoded({ extended: false }));
 App.use(json());
 
 App.use(express.static(join(__dirname, "../public")));
+App.use(expressPino);
 
 App.get("/", (req, res) => res.sendFile(join(__dirname, "../public/index.html")));
 App.get("/healthz", (req, res) => {
@@ -24,7 +26,7 @@ App.get("/healthz", (req, res) => {
         res.status(result.ok ? 200 : 503);
         return res.json(result);
     }).catch(err => {
-        error(err);
+        log.error(err);
         return res.sendStatus(500);
     });
 });
@@ -45,7 +47,7 @@ App.get("/schema/:schemaId", async (req, res) => {
             res.sendStatus(404);
         }
     } catch (err) {
-        error(err);
+        log.error(err);
         res.sendStatus(500);
     }
 });
@@ -60,7 +62,7 @@ exports.run = callback => {
 };
 
 exports.stop = () => {
-    info("Shutting down UI server");
+    log.info("Shutting down UI server");
     server.close();
     stopNotifications();
     database.close();

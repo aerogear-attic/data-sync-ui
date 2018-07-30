@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { postgresConfig } = require("../config");
+const { log } = require("../logger");
 
 exports.supportsiLike = function () {
     return process.env.NODE_ENV !== "test";
@@ -14,6 +15,6 @@ exports.createDatabase = function () {
         postgresConfig.password, {
             host: postgresConfig.host,
             dialect: "postgres",
-            logging: postgresConfig.logSql ? console.log : false
+            logging: postgresConfig.logSql ? log.debug : false
         });
 };

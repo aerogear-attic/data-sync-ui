@@ -1,5 +1,5 @@
 const ExpressGraphQL = require("express-graphql");
-const { info } = require("../logger");
+const { log } = require("../logger");
 const { graphql } = require("../config");
 const { Schema, root } = require("./schema");
 
@@ -12,5 +12,5 @@ module.exports = App => {
         graphiql: graphql.debug
     }));
 
-    info(`GraphQl server mounted at /${GQL_PATH}`);
+    log.info(`GraphQl server mounted at /${GQL_PATH}`);
 };
