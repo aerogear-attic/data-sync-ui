@@ -3,11 +3,13 @@ const { createDatabase, supportsiLike } = require("./database");
 const DataSourceModel = require("./dataSource");
 const SchemaModel = require("./schema");
 const ResolverModel = require("./resolver");
+const SubscriptionModel = require("./subscription");
 
 const database = createDatabase();
 const dataSource = DataSourceModel(database, Sequelize);
 const schema = SchemaModel(database, Sequelize);
 const resolver = ResolverModel(database, Sequelize);
+const subscription = SubscriptionModel(database, Sequelize);
 
 resolver.belongsTo(dataSource, {
     onDelete: "cascade",
@@ -17,6 +19,13 @@ resolver.belongsTo(dataSource, {
 });
 
 resolver.belongsTo(schema, {
+    onDelete: "cascade",
+    foreignKey: {
+        allowNull: false
+    }
+});
+
+subscription.belongsTo(schema, {
     onDelete: "cascade",
     foreignKey: {
         allowNull: false
@@ -45,5 +54,6 @@ module.exports = {
     reset,
     schema,
     resolver,
-    supportsiLike
+    supportsiLike,
+    subscription
 };
