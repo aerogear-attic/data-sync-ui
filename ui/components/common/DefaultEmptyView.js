@@ -5,15 +5,15 @@ import {
     EmptyStateTitle
 } from "patternfly-react";
 
-import style from "./structureView.css";
+import style from "./defaultEmptyView.css";
 
-const EmptyStructureView = () => (
+const DefaultEmptyView = ({ text }) => (
     <EmptyState style={{ margin: "5px" }} className={style.reducePadding}>
         <EmptyStateIcon />
         <EmptyStateTitle>
-            No Schema defined
+            {text}
         </EmptyStateTitle>
     </EmptyState>
 );
 
-export { EmptyStructureView };
+export { DefaultEmptyView };

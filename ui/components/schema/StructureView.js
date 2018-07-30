@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, ListView } from "patternfly-react";
-import { EmptyStructureView } from "./EmptyStructureView";
+import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { TypeList } from "./TypeList";
 import { wellKnownTypes } from "../../helper/GraphQLWellKnownTypes";
 
@@ -47,7 +47,7 @@ const StructureView = props => {
     } if (compiled) {
         return renderContent(compiled, schemaId);
     }
-    return <EmptyStructureView />;
+    return <DefaultEmptyView text="No Schema Defined" />;
 };
 
 export { StructureView };
