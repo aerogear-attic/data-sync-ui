@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
         preHook: DataTypes.STRING,
         postHook: DataTypes.STRING,
         requestMapping: DataTypes.TEXT,
-        responseMapping: DataTypes.TEXT
+        responseMapping: DataTypes.TEXT,
+        publish: DataTypes.TEXT
     });
     return Schema;
 };
