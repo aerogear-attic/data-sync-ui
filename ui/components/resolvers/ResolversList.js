@@ -37,7 +37,8 @@ const renderList = (schemaId, compiled) => {
     const {
         queries,
         mutations,
-        subscriptions
+        subscriptions,
+        custom
     } = groupTypes(relevantTypes, queryType, mutationType, subscriptionType);
 
     return (
@@ -47,6 +48,13 @@ const renderList = (schemaId, compiled) => {
             { renderGeneric(schemaId, subscriptions, "Subscriptions", "subscription") }
         </React.Fragment>
     );
+};
+
+const onEdit = (type, field, resolver) => {
+    console.log("on edit resolver");
+    console.log(type);
+    console.log(field);
+    console.log(resolver);
 };
 
 const renderGeneric = (schemaId, items, text, kind) => {
@@ -64,6 +72,7 @@ const renderGeneric = (schemaId, items, text, kind) => {
                     kind={kind}
                     item={field}
                     resolvers={data}
+                    onEdit={onEdit}
                 />
             });
 

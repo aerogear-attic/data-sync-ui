@@ -35,31 +35,36 @@ const getResolverForField = (data, field) => {
     return resolvers.find(item => item.field === field);
 };
 
-const renderAdditionalInfo = (resolvers, kind, field) => {
+const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
     if (kind === "subscription") {
-        return <span></span>;
+        return <span key={field}></span>;
     }
 
     const resolver = getResolverForField(resolvers, field);
     if (resolver) {
-        return <span key={field}>resolver.DataSource.name</span>;
+        return (<span
+            onClick={() => {onEdit(type, field, resolver)}}
+            key={field}
+        >{resolver.DataSource.name}</span>);
     }
 
-    return <span key={field}>No Resolver</span>;
+    return <span
+        key={field}
+        onClick={() => {onEdit(type, field, resolver)}}
+    >No Resolver</span>;
 };
 
-const ResolversListItem = ({ kind, type, item, resolvers }) => {
+const ResolversListItem = ({ kind, type, item, resolvers, onEdit }) => {
     const { name, args } = item;
     const argsText = `${args.length} Argument${args.length !== 1 ? "s" : ""}`;
     return (
         <ListViewItem
             key={name}
-            onClick={() => { console.log("click") }}
             className="structure-list-item resolvers-list"
             leftContent={<span className={style["structure-heading"]}>{name}</span>}
             description={<span>{argsText}</span>}
             hideCloseIcon
-            additionalInfo={[renderAdditionalInfo(resolvers, kind, name)]}
+            additionalInfo={[renderAdditionalInfo(resolvers, kind, name, type, onEdit)]}
         >
             { renderArguments(args, resolvers) }
         </ListViewItem>
