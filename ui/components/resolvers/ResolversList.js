@@ -3,10 +3,11 @@ import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
-import { wellKnownTypes } from "../../helper/GraphQLWellKnownTypes";
+import { wellKnownTypes } from "../../graphql/types/GraphQLWellKnownTypes";
 import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { ResolversListItem } from "./ResolversListItem";
 import style from "./resolversList.css";
+import { CustomTypeItem } from "./CustomTypeItem";
 
 const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, type) => {
     // If those types are not defined it usually means that the schema does not have
@@ -83,48 +84,6 @@ const renderGeneric = (schemaId, items, text, kind, onClick) => {
     );
 };
 
-const renderCustomType = (schemaId, item, text, kind, onClick) => {
-    const { name } = item;
-    return (
-        <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
-            {({ loading, error, data }) => {
-                if (loading) {
-                    return <Spinner className="spinner" loading />;
-                }
-                if (error) {
-                    return error.message;
-                }
-
-                return (
-                    <ResolversListItem
-                        key={name}
-                        type={name}
-                        kind={kind}
-                        item={item}
-                        resolvers={data}
-                        onClick={onClick}
-                    />
-                );
-            }}
-        </Query>
-    );
-};
-
-const renderCustom = (schemaId, items, text, kind, onClick) => {
-    const list = items.map(item => renderCustomType(schemaId, item, text, kind, onClick));
-
-    return (
-        <div className={style["structure-content"]}>
-            <div className={style["structure-header"]}>
-                <span>{text}</span>
-            </div>
-            <ListView>
-                { list }
-            </ListView>
-        </div>
-    );
-};
-
 const renderList = (schemaId, compiled, onClick) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
@@ -140,7 +99,13 @@ const renderList = (schemaId, compiled, onClick) => {
             { renderGeneric(schemaId, queries, "Queries", "query", onClick) }
             { renderGeneric(schemaId, mutations, "Mutations", "mutation", onClick) }
             { renderGeneric(schemaId, subscriptions, "Subscriptions", "subscription", onClick) }
-            { renderCustom(schemaId, custom, "Custom Types", "custom", onClick) }
+            <CustomTypeItem
+                schemaId={schemaId}
+                items={custom}
+                text="Custom Types"
+                kind="custom"
+                onClick={onClick}
+            />
         </React.Fragment>
     );
 };

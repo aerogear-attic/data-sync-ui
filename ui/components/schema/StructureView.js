@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, ListView } from "patternfly-react";
 import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { TypeList } from "./TypeList";
-import { wellKnownTypes } from "../../helper/GraphQLWellKnownTypes";
+import { wellKnownTypes } from "../../graphql/types/GraphQLWellKnownTypes";
 
 import style from "./structureView.css";
 
