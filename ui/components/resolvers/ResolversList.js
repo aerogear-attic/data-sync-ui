@@ -43,9 +43,6 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
 const renderList = (schemaId, compiled, onClick) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
 
-    console.log("=== schema");
-    console.log(compiled.data.__schema);
-
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
     const {
         queries,
