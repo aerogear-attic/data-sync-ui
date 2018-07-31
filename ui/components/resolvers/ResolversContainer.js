@@ -24,6 +24,11 @@ class ResolversContainer extends Component {
         // TODO
     }
 
+    onResolverClicked(type, field, resolver) {
+        // TODO
+        console.log(type, field, resolver);
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -33,7 +38,7 @@ class ResolversContainer extends Component {
                 />
                 <div className={styles.flexWrapper}>
                     <div className={styles.left}>
-                        <ResolversList />
+                        <ResolversList onClick={this.onResolverClicked} />
                     </div>
                     <div className={styles.right}>
                         <ResolverDetail />

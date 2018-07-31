@@ -16,11 +16,7 @@ const getResolverForField = (data, field) => {
     return resolvers.find(item => item.field === field);
 };
 
-const renderFields = (type, fields, resolvers, onEdit) => {
-    if (!fields || !fields.length) {
-        return null;
-    }
-
+const renderFields = (type, fields, resolvers, onClick) => {
     const mapped = fields.map(field => {
         const resolver = getResolverForField(resolvers, field.name);
         const resolverText = resolver ? resolver.DataSource.name : "No Resolver";
@@ -38,10 +34,10 @@ const renderFields = (type, fields, resolvers, onEdit) => {
                         role="button"
                         tabIndex={0}
                         onClick={() => {
-                            fireEditEvent(onEdit, type, field.name, resolver);
+                            fireEditEvent(onClick, type, field.name, resolver);
                         }}
                         onKeyDown={() => {
-                            fireEditEvent(onEdit, type, field.name, resolver);
+                            fireEditEvent(onClick, type, field.name, resolver);
                         }}
                     >{resolverText}
                     </span>
@@ -58,7 +54,8 @@ const renderFields = (type, fields, resolvers, onEdit) => {
 };
 
 const renderArguments = args => {
-    if (!args || !args.length) {
+    // Don't render anything (not even an empty grid) when there are no args
+    if (!args.length) {
         return null;
     }
 
@@ -80,7 +77,9 @@ const renderArguments = args => {
     );
 };
 
-const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
+const renderAdditionalInfo = (resolvers, kind, field, type, onClick) => {
+    // TODO:implement subscription resolvers
+    // For the moment we just don't display anything here
     if (kind === "subscription") {
         return <span key={field} />;
     }
@@ -93,10 +92,10 @@ const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
             role="button"
             tabIndex={0}
             onClick={() => {
-                fireEditEvent(onEdit, type, field, resolver);
+                fireEditEvent(onClick, type, field, resolver);
             }}
             onKeyDown={() => {
-                fireEditEvent(onEdit, type, field, resolver);
+                fireEditEvent(onClick, type, field, resolver);
             }}
             key={field}
         >{resolverText}
@@ -104,7 +103,7 @@ const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
     );
 };
 
-const renderGeneric = ({ kind, type, item, resolvers, onEdit }) => {
+const renderGeneric = ({ kind, type, item, resolvers, onClick }) => {
     const { args, name } = item;
     const argsText = `${args.length} Argument${args.length !== 1 ? "s" : ""}`;
 
@@ -115,14 +114,14 @@ const renderGeneric = ({ kind, type, item, resolvers, onEdit }) => {
             leftContent={<span className={style["structure-heading"]}>{name}</span>}
             description={<span>{argsText}</span>}
             hideCloseIcon
-            additionalInfo={[renderAdditionalInfo(resolvers, kind, name, type, onEdit)]}
+            additionalInfo={[renderAdditionalInfo(resolvers, kind, name, type, onClick)]}
         >
             { renderArguments(args, resolvers) }
         </ListViewItem>
     );
 };
 
-const renderCustom = ({ type, item, resolvers, onEdit }) => {
+const renderCustom = ({ type, item, resolvers, onClick }) => {
     const { fields, name } = item;
     const fieldsText = `${fields.length} Field${fields.length !== 1 ? "s" : ""}`;
 
@@ -133,19 +132,19 @@ const renderCustom = ({ type, item, resolvers, onEdit }) => {
             leftContent={<span className={style["structure-heading"]}>{name}</span>}
             description={<span>{fieldsText}</span>}
             hideCloseIcon
-            additionalInfo={[]}
         >
-            { renderFields(type, fields, resolvers, onEdit) }
+            { renderFields(type, fields, resolvers, onClick) }
         </ListViewItem>
     );
 };
 
 const ResolversListItem = props => {
-    const { kind } = props;
-    switch (kind) {
+    switch (props.kind) {
         case "custom":
+            // Renders custom types
             return renderCustom(props);
         default:
+            // Renders Queries, Mutations and Subscriptions
             return renderGeneric(props);
     }
 };

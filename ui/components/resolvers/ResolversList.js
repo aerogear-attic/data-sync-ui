@@ -31,7 +31,7 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
     custom: []
 });
 
-const renderGeneric = (schemaId, items, text, kind) => {
+const renderGeneric = (schemaId, items, text, kind, onClick) => {
     const { name, fields } = items[0];
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -52,6 +52,7 @@ const renderGeneric = (schemaId, items, text, kind) => {
                             kind={kind}
                             item={field}
                             resolvers={data}
+                            onClick={onClick}
                         />
                     );
                 });
@@ -71,7 +72,7 @@ const renderGeneric = (schemaId, items, text, kind) => {
     );
 };
 
-const renderCustomType = (schemaId, item, text, kind) => {
+const renderCustomType = (schemaId, item, text, kind, onClick) => {
     const { name } = item;
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -90,6 +91,7 @@ const renderCustomType = (schemaId, item, text, kind) => {
                         kind={kind}
                         item={item}
                         resolvers={data}
+                        onClick={onClick}
                     />
                 );
             }}
@@ -97,8 +99,8 @@ const renderCustomType = (schemaId, item, text, kind) => {
     );
 };
 
-const renderCustom = (schemaId, items, text, kind) => {
-    const list = items.map(item => renderCustomType(schemaId, item, text, kind));
+const renderCustom = (schemaId, items, text, kind, onClick) => {
+    const list = items.map(item => renderCustomType(schemaId, item, text, kind, onClick));
 
     return (
         <div className={style["structure-content"]}>
@@ -112,7 +114,7 @@ const renderCustom = (schemaId, items, text, kind) => {
     );
 };
 
-const renderList = (schemaId, compiled) => {
+const renderList = (schemaId, compiled, onClick) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
     const {
@@ -124,17 +126,17 @@ const renderList = (schemaId, compiled) => {
 
     return (
         <React.Fragment>
-            { renderGeneric(schemaId, queries, "Queries", "query") }
-            { renderGeneric(schemaId, mutations, "Mutations", "mutation") }
-            { renderGeneric(schemaId, subscriptions, "Subscriptions", "subscription") }
-            { renderCustom(schemaId, custom, "Custom Types", "custom") }
+            { renderGeneric(schemaId, queries, "Queries", "query", onClick) }
+            { renderGeneric(schemaId, mutations, "Mutations", "mutation", onClick) }
+            { renderGeneric(schemaId, subscriptions, "Subscriptions", "subscription", onClick) }
+            { renderCustom(schemaId, custom, "Custom Types", "custom", onClick) }
         </React.Fragment>
     );
 };
 
 const renderEmpty = () => <DefaultEmptyView text="No Resolvers Defined" />;
 
-const ResolversList = () => (
+const ResolversList = ({ onClick }) => (
     <Query query={GetSchema} variables={{ name: "default" }}>
         {({ loading, error, data }) => {
             if (loading) {
@@ -149,7 +151,7 @@ const ResolversList = () => (
             if (!schema.data) {
                 return renderEmpty();
             }
-            return renderList(id, schema);
+            return renderList(id, schema, onClick);
         }}
     </Query>
 );
