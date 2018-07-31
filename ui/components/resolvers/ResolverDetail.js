@@ -6,6 +6,7 @@ import {
     FormControl,
     InputGroup,
     Col,
+    Button,
     DropdownButton,
     Spinner,
     MenuItem
@@ -35,6 +36,14 @@ class ResolverDetail extends Component {
         this.state = INITIAL_STATE;
     }
 
+    save() {
+        console.log("called save");
+    }
+
+    cancel() {
+        console.log("called cancel");
+    }
+
     renderDataSources() {
         const filter = undefined;
         return (
@@ -49,7 +58,7 @@ class ResolverDetail extends Component {
                     if (data.dataSources.length) {
                         const { dataSources } = data;
                         return dataSources.map(dataSource => (
-                            <MenuItem key={dataSource.name} eventKey={dataSource}>
+                            <MenuItem key={dataSource.id} eventKey={dataSource}>
                                 {`${dataSource.name} (${dataSource.type})`}
                             </MenuItem>
                         ));
@@ -95,8 +104,8 @@ class ResolverDetail extends Component {
                     </FormGroup>
 
                     <FormGroup controlId="">
-                        <Col sm={10}><b>Request Mapping Template</b></Col>
-                        <Col sm={2} className="pull-right">
+                        <Col sm={9}><b>Request Mapping Template</b></Col>
+                        <Col sm={3} className="pull-right">
                             <InputGroup>
                                 <FormControl
                                     disabled
@@ -136,8 +145,8 @@ class ResolverDetail extends Component {
                         </Col>
                     </FormGroup>
                     <FormGroup controlId="">
-                        <Col sm={10}><b>Response Mapping Template</b></Col>
-                        <Col sm={2} className="pull-right">
+                        <Col sm={9}><b>Response Mapping Template</b></Col>
+                        <Col sm={3} className="pull-right">
                             <InputGroup>
                                 <FormControl
                                     disabled
@@ -178,13 +187,14 @@ class ResolverDetail extends Component {
                     </FormGroup>
                 </Form>
                 {this.renderSecurity()}
+                {this.renderButtons()}
             </div>
         );
     }
 
     renderSecurity() {
         return (
-            <div>
+            <div className={styles.resolverSecurity}>
                 <div className={styles.resolverHeader}>
                     <span>Security</span>
                 </div>
@@ -219,6 +229,26 @@ class ResolverDetail extends Component {
                         </Col>
                     </FormGroup>
                 </Form>
+            </div>
+        );
+    }
+
+    renderButtons() {
+        return (
+            <div className={styles.resolverButtons}>
+                <Button
+                    className={styles.buttonSave}
+                    bsStyle="primary"
+                    onClick={() => this.save()}
+                >
+                    Save
+                </Button>
+                <Button
+                    bsStyle="default"
+                    onClick={() => this.cancel()}
+                >
+                Cancel
+                </Button>
             </div>
         );
     }

@@ -30,6 +30,7 @@
 .resolverHeader {
     margin-left: 20px;
     height: 64px;
+    padding-top: 15px;
     font-size: 24px;
 }
 
@@ -37,3 +38,18 @@
     height: 120px;
     border: 1px solid lightgrey;
 } 
+
+.resolverSecurity {
+    border-bottom: 1px solid lightgrey;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.resolverButtons {
+    padding-left: 30px;
+    padding-top: 15px;
+}
+
+.buttonSave {
+    margin-right: 5px;
+}
