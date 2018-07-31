@@ -5,7 +5,41 @@ import {
 import style from "./resolversList.css";
 import { formatType } from "../../helper/GraphQLFormatters";
 
-const renderArguments = (args, resolvers) => {
+const renderFields = (type, fields, resolvers, onEdit) => {
+    if (!fields || !fields.length) {
+        return null;
+    }
+
+    const mapped = fields.map(field => {
+        const resolver = getResolverForField(resolvers, field.name);
+        const resolverText = resolver ? resolver.DataSource.name : "No Resolver";
+
+        return (
+            <Row key={field.name}>
+                <Col xs={6} md={4}>
+                    {field.name}
+                </Col>
+                <Col xs={6} md={4} style={{textAlign: "center"}}>
+                    {formatType(field.type)}
+                </Col>
+                <Col xs={6} md={4} style={{textAlign: "right", color: "#188bcc"}}>
+                    <span
+                        onClick={() => {onEdit(type, field.name, resolver)}}
+                    >{resolverText}</span>
+                </Col>
+            </Row>
+        );
+    });
+
+    return (
+        <Grid fluid>
+            {mapped}
+        </Grid>
+    );
+
+};
+
+const renderArguments = (args) => {
     if (!args || !args.length) {
         return null;
     }
@@ -85,7 +119,7 @@ const renderCustom = ({ kind, type, item, resolvers, onEdit }) => {
             hideCloseIcon
             additionalInfo={[]}
         >
-            { renderArguments(fields, resolvers) }
+            { renderFields(type, fields, resolvers, onEdit) }
         </ListViewItem>
     );
 };
