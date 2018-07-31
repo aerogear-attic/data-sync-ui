@@ -37,9 +37,8 @@
             }
         ]
     },
-    "plugins": ["mocha", "jest"],
+    "plugins": ["jest"],
     "env": {
-        "mocha": true,
         "browser": true
     },
     "parser": "babel-eslint"
