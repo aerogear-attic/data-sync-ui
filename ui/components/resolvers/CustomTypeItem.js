@@ -1,11 +1,11 @@
 import React from "react";
-import { ResolversListItem } from "./ResolversListItem";
 import { Query } from "react-apollo";
-import GetResolvers from "../../graphql/GetResolvers.graphql";
 import { Spinner, ListView } from "patternfly-react";
+import { ResolversListItem } from "./ResolversListItem";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 import style from "./resolversList.css";
 
-const renderCustomType = ({schemaId, item, text, kind, onClick}) => {
+const renderCustomType = ({ schemaId, item, kind, onClick }) => {
     const { name } = item;
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -32,7 +32,11 @@ const renderCustomType = ({schemaId, item, text, kind, onClick}) => {
     );
 };
 
-const CustomTypeItem = (props) => {
+/**
+ * A CustomTypeItem is used to render a user defined GraphQL type in the resolver tab's
+ * structure view
+ */
+const CustomTypeItem = props => {
     const { items, text } = props;
     const list = items.map(item => renderCustomType({ ...props, item }));
 
@@ -48,5 +52,4 @@ const CustomTypeItem = (props) => {
     );
 };
 
-
-export { CustomTypeItem }
+export { CustomTypeItem };
