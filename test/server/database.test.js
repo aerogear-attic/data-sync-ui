@@ -157,7 +157,9 @@ describe("Resolvers", () => {
         fetch = await graphql(Schema, GET_SCHEMAS, root);
         expect(fetch.data.schemas).toHaveLength(0);
 
-        const create = await graphql(Schema, UPSERT_RESOLVER, root, null, { schemaId: 1, dataSourceId: 1, ...resolver });
+        const create = await graphql(Schema, UPSERT_RESOLVER, root, null, {
+            schemaId: 1, dataSourceId: 1, ...resolver
+        });
         expect(create.errors).toHaveLength(1);
     });
 
@@ -170,7 +172,9 @@ describe("Resolvers", () => {
         fetch = await graphql(Schema, GET_DATA_SOURCES, root);
         expect(fetch.data.dataSources).toHaveLength(0);
 
-        const create = await graphql(Schema, UPSERT_RESOLVER, root, null, { schemaId: 1, dataSourceId: 1, ...resolver });
+        const create = await graphql(Schema, UPSERT_RESOLVER, root, null, {
+            schemaId: 1, dataSourceId: 1, ...resolver
+        });
         expect(create.errors).toHaveLength(1);
     });
 

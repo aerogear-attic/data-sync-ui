@@ -61,11 +61,13 @@ exports.run = callback => {
     });
 };
 
-exports.stop = () => {
+exports.stop = callback => {
     log.info("Shutting down UI server");
-    server.close();
     stopNotifications();
-    database.close();
+    database.close()
+        .then(() => {
+            server.close(() => callback());
+        });
 };
 
 process.on("SIGTERM", exports.stop);

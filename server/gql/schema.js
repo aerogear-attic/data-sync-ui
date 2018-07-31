@@ -162,13 +162,9 @@ const updateDataSource = async ({ id, name, type, config }) => {
     return updated;
 };
 
-const listSchemas = async () => {
-    info("listSchemas request");
-
-    return schema.findAll({
-        include: [{ all: true }]
-    });
-};
+const listSchemas = async () => schema.findAll({
+    include: [{ all: true }]
+});
 
 const getSchema = async ({ name }) => {
     const [defaultSchema, created] = await schema.findOrCreate({
