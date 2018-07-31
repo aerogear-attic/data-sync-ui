@@ -12,6 +12,7 @@ const Schema = buildSchema(`
     type Query {
         dataSources(name: String): [DataSource]
         getOneDataSource(id: Int!): DataSource
+        schemas: [Schema]
         getSchema(name: String!): Schema
         resolvers(schemaId: Int!, type: String):[Resolver]
     },
@@ -131,7 +132,9 @@ const deleteResolver = async ({ id }) => {
 };
 
 
-const getOneDataSource = ({ id }) => dataSource.findById(id);
+const getOneDataSource = ({ id }) => dataSource.findById(id, {
+    include: [{ all: true }]
+});
 
 
 const deleteDataSource = async ({ id }) => {
@@ -157,6 +160,14 @@ const updateDataSource = async ({ id, name, type, config }) => {
 
     publish(DEFAULT_CHANNEL, { reload: "DataSource" });
     return updated;
+};
+
+const listSchemas = async () => {
+    info("listSchemas request");
+
+    return schema.findAll({
+        include: [{ all: true }]
+    });
 };
 
 const getSchema = async ({ name }) => {
@@ -222,6 +233,7 @@ const root = {
     deleteDataSource,
     updateDataSource,
     updateSchema,
+    schemas: listSchemas,
     getSchema
 };
 
