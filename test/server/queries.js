@@ -1,65 +1,118 @@
-const queries = {
-    CREATE_DATA_SOURCE_QUERY: ` 
-        mutation createDataSource($name: String!, $type: DataSourceType!, $config: JSON!) {
-          createDataSource(name: $name, type: $type, config: $config) {
+module.exports = {
+    CREATE_DATA_SOURCE: ` 
+      mutation createDataSource($name: String!, $type: DataSourceType!, $config: JSON!) {
+        createDataSource(name: $name, type: $type, config: $config) {
+          id
+          name
+          type
+          config
+          resolvers {
             id
-            name
             type
-            config
+            field
+            requestMapping
+            responseMapping
           }
         }
+      }
     `,
-    GET_DATA_SOURCES_QUERY: `
-       query getDataSourcesQuery {
-         dataSources {
+    GET_DATA_SOURCES: `
+      query getDataSourcesQuery {
+        dataSources {
+          id
+          name
+          type
+          config
+          resolvers {
+            id
+            type
+            field
+            requestMapping
+            responseMapping
+          }
+        }
+      }
+    `,
+    GET_DATA_SOURCE: `
+      query getSingleDataSource($id: Int!) {
+        getOneDataSource(id: $id) {
+          id
+          name
+          type
+          config
+          resolvers {
+            id
+            type
+            field
+            requestMapping
+            responseMapping
+          }
+        }
+      }
+    `,
+    DELETE_DATA_SOURCE: `
+      mutation deleteDataSource($id: Int!) {
+        deleteDataSource(id: $id) {
+          name
+        }
+      }
+    `,
+    UPDATE_DATA_SOURCE: `
+      mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: JSON!) {
+        updateDataSource(id: $id, name: $name, type: $type, config: $config) {
+          name
+        }
+      }
+    `,
+    GET_SCHEMAS: `
+      query listSchemas {
+        schemas {
+          id
+          name
+          schema
+        }
+      }
+    `,
+    GET_SCHEMA: `
+      query getSchema($name: String!) {
+        getSchema(name: $name) {
+          id
+          name
+          schema
+          compiled
+        }
+      }
+    `,
+    UPDATE_SCHEMA: `
+      mutation updateSchema($id: Int!, $schema: String!) {
+        updateSchema(id: $id, schema: $schema) {
+          compiled
+        }
+      }
+    `,
+    GET_RESOLVERS: `
+      query listResolvers($schemaId: Int!, $type: String!) {
+        resolvers(schemaId: $schemaId, type: $type) {
+          id
+          type
+          field
+          preHook
+          postHook
+          responseMapping
+          requestMapping
+          DataSource {
             id
             name
             type
-            config
           }
-       }
-    `,
-    GET_ONE_DATA_SOURCE_QUERY: `
-    query getSingleDataSource($id: Int!) {
-      getOneDataSource(id: $id) {
-        id
-        name
-        type
-        config
+        }
       }
-    }`,
-    DELETE_DATA_SOURCE_QUERY: `
-     mutation deleteDataSource($id: Int!) {
-      deleteDataSource(id: $id) {
-        name
-      }
-    }`,
-    UPDATE_DATA_SOURCE_QUERY: `
-    mutation updateDataSource($id: Int!, $name: String!, $type: DataSourceType!, $config: JSON!) {
-      updateDataSource(id: $id, name: $name, type: $type, config: $config) {
-        name
-      }
-    }`,
-    GET_SCHEMA: `
-    query getSchema($name: String!) {
-      getSchema(name: $name) {
-        id          
-      }
-    }
-    `,
-    UPDATE_SCHEMA: `
-    mutation updateSchema($id: Int!, $schema: String!) {
-      updateSchema(id: $id, schema: $schema) {
-        compiled
-      }
-    }
     `,
     UPSERT_RESOLVER: `
-    mutation upsertResolver($id: Int, $schemaId: Int!, $dataSourceId: Int!, $type: String!, $field: String!, $requestMapping: String!, $responseMapping: String!) {
-      upsertResolver(id: $id, schemaId: $schemaId, dataSourceId: $dataSourceId, type: $type, field: $field, requestMapping: $requestMapping, responseMapping: $responseMapping) {
-        id
+      mutation upsertResolver($id: Int, $schemaId: Int!, $dataSourceId: Int!, $type: String!, $field: String!, $requestMapping: String!, $responseMapping: String!) {
+        upsertResolver(id: $id, schemaId: $schemaId, dataSourceId: $dataSourceId, type: $type, field: $field, requestMapping: $requestMapping, responseMapping: $responseMapping) {
+          id
+        }
       }
-    }    
     `
 };
-module.exports = { queries };
