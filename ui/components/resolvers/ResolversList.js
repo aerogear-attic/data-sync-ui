@@ -1,8 +1,8 @@
 import React from "react";
-import GetSchema from "../../graphql/GetSchema.graphql";
-import GetResolvers from "../../graphql/GetResolvers.graphql";
 import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
+import GetSchema from "../../graphql/GetSchema.graphql";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 import { wellKnownTypes } from "../../helper/GraphQLWellKnownTypes";
 import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { ResolversListItem } from "./ResolversListItem";
@@ -31,6 +31,87 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
     custom: []
 });
 
+const renderGeneric = (schemaId, items, text, kind) => {
+    const { name, fields } = items[0];
+    return (
+        <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
+            {({ loading, error, data }) => {
+                if (loading) {
+                    return <Spinner className="spinner" loading />;
+                }
+                if (error) {
+                    return error.message;
+                }
+
+                const list = fields.map(field => {
+                    field.isQuery = true;
+                    return (
+                        <ResolversListItem
+                            key={name + field.name}
+                            type={name}
+                            kind={kind}
+                            item={field}
+                            resolvers={data}
+                        />
+                    );
+                });
+
+                return (
+                    <div className={style["structure-content"]}>
+                        <div className={style["structure-header"]}>
+                            <span>{text}</span>
+                        </div>
+                        <ListView>
+                            { list }
+                        </ListView>
+                    </div>
+                );
+            }}
+        </Query>
+    );
+};
+
+const renderCustomType = (schemaId, item, text, kind) => {
+    const { name } = item;
+    return (
+        <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
+            {({ loading, error, data }) => {
+                if (loading) {
+                    return <Spinner className="spinner" loading />;
+                }
+                if (error) {
+                    return error.message;
+                }
+
+                return (
+                    <ResolversListItem
+                        key={name}
+                        type={name}
+                        kind={kind}
+                        item={item}
+                        resolvers={data}
+                    />
+                );
+            }}
+        </Query>
+    );
+};
+
+const renderCustom = (schemaId, items, text, kind) => {
+    const list = items.map(item => renderCustomType(schemaId, item, text, kind));
+
+    return (
+        <div className={style["structure-content"]}>
+            <div className={style["structure-header"]}>
+                <span>{text}</span>
+            </div>
+            <ListView>
+                { list }
+            </ListView>
+        </div>
+    );
+};
+
 const renderList = (schemaId, compiled) => {
     const { types, queryType, mutationType, subscriptionType } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
@@ -51,101 +132,26 @@ const renderList = (schemaId, compiled) => {
     );
 };
 
-const onEdit = (type, field, resolver) => {
-    console.log("on edit resolver");
-    console.log(type);
-    console.log(field);
-    console.log(resolver);
-};
+const renderEmpty = () => <DefaultEmptyView text="No Resolvers Defined" />;
 
-const renderCustom = (schemaId, items, text, kind) => {
-    const list = items.map(item => {
-        return renderCustomType(schemaId, item, text, kind)
-    });
+const ResolversList = () => (
+    <Query query={GetSchema} variables={{ name: "default" }}>
+        {({ loading, error, data }) => {
+            if (loading) {
+                return <Spinner className="spinner" loading />;
+            }
+            if (error) {
+                return error.message;
+            }
 
-    return (
-        <div className={style["structure-content"]}>
-            <div className={style["structure-header"]}>
-                <span>{text}</span>
-            </div>
-            <ListView>
-                { list }
-            </ListView>
-        </div>
-    );
-};
-
-const renderCustomType = (schemaId, item, text, kind) => {
-    const { name } = item;
-    return (<Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
-        {({loading, error, data}) => {
-            if (loading) return <Spinner className="spinner" loading />;
-            if (error) return error.message;
-
-            return <ResolversListItem
-                key={name}
-                type={name}
-                kind={kind}
-                item={item}
-                resolvers={data}
-                onEdit={onEdit}
-            />
+            const { getSchema: { id, compiled } } = data;
+            const schema = JSON.parse(compiled);
+            if (!schema.data) {
+                return renderEmpty();
+            }
+            return renderList(id, schema);
         }}
-    </Query>);
-
-};
-
-const renderGeneric = (schemaId, items, text, kind) => {
-    const { name, fields } = items[0];
-    return (<Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
-        {({loading, error, data}) => {
-            if (loading) return <Spinner className="spinner" loading />;
-            if (error) return error.message;
-
-            const list = fields.map(field => {
-                field.isQuery = true;
-                return <ResolversListItem
-                    key={name + field.name}
-                    type={name}
-                    kind={kind}
-                    item={field}
-                    resolvers={data}
-                    onEdit={onEdit}
-                />
-            });
-
-            return (
-                <div className={style["structure-content"]}>
-                    <div className={style["structure-header"]}>
-                        <span>{text}</span>
-                    </div>
-                    <ListView>
-                        { list }
-                    </ListView>
-                </div>
-            );
-        }}
-    </Query>);
-};
-
-const renderEmpty = () => {
-    return <DefaultEmptyView text="No Resolvers Defined" />
-};
-
-const ResolversList = () => {
-    return (
-        <Query query={GetSchema} variables={{name: "default"}}>
-            {({loading, error, data}) => {
-                if (loading) return <Spinner className="spinner" loading />;
-                if (error) return error.message;
-
-                const { getSchema: { id, compiled } } = data;
-                const schema = JSON.parse(compiled);
-                if (!schema.data) return renderEmpty();
-                return renderList(id, schema);
-            }}
-        </Query>
-    );
-};
+    </Query>
+);
 
 export { ResolversList };

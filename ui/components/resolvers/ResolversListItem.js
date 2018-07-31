@@ -1,9 +1,20 @@
 import React from "react";
 import {
-    ListViewItem, Grid, Row, Col, Spinner
+    ListViewItem, Grid, Row, Col
 } from "patternfly-react";
 import style from "./resolversList.css";
 import { formatType } from "../../helper/GraphQLFormatters";
+
+const fireEditEvent = (handler, type, field, resolver) => {
+    if (handler) {
+        handler(type, field, resolver);
+    }
+};
+
+const getResolverForField = (data, field) => {
+    const { resolvers } = data;
+    return resolvers.find(item => item.field === field);
+};
 
 const renderFields = (type, fields, resolvers, onEdit) => {
     if (!fields || !fields.length) {
@@ -19,13 +30,21 @@ const renderFields = (type, fields, resolvers, onEdit) => {
                 <Col xs={6} md={4}>
                     {field.name}
                 </Col>
-                <Col xs={6} md={4} style={{textAlign: "center"}}>
+                <Col xs={6} md={4} style={{ textAlign: "center" }}>
                     {formatType(field.type)}
                 </Col>
-                <Col xs={6} md={4} style={{textAlign: "right", color: "#188bcc"}}>
+                <Col xs={6} md={4} style={{ textAlign: "right", color: "#188bcc" }}>
                     <span
-                        onClick={() => {onEdit(type, field.name, resolver)}}
-                    >{resolverText}</span>
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => {
+                            fireEditEvent(onEdit, type, field.name, resolver);
+                        }}
+                        onKeyDown={() => {
+                            fireEditEvent(onEdit, type, field.name, resolver);
+                        }}
+                    >{resolverText}
+                    </span>
                 </Col>
             </Row>
         );
@@ -36,26 +55,23 @@ const renderFields = (type, fields, resolvers, onEdit) => {
             {mapped}
         </Grid>
     );
-
 };
 
-const renderArguments = (args) => {
+const renderArguments = args => {
     if (!args || !args.length) {
         return null;
     }
 
-    const mapped = args.map(arg => {
-        return (
-            <Row key={arg.name}>
-                <Col xs={6} md={6}>
-                    {arg.name}
-                </Col>
-                <Col xs={6} md={6} style={{textAlign: "right"}}>
-                    {formatType(arg.type)}
-                </Col>
-            </Row>
-        );
-    });
+    const mapped = args.map(arg => (
+        <Row key={arg.name}>
+            <Col xs={6} md={6}>
+                {arg.name}
+            </Col>
+            <Col xs={6} md={6} style={{ textAlign: "right" }}>
+                {formatType(arg.type)}
+            </Col>
+        </Row>
+    ));
 
     return (
         <Grid fluid>
@@ -64,28 +80,28 @@ const renderArguments = (args) => {
     );
 };
 
-const getResolverForField = (data, field) => {
-    const { resolvers } = data;
-    return resolvers.find(item => item.field === field);
-};
-
 const renderAdditionalInfo = (resolvers, kind, field, type, onEdit) => {
     if (kind === "subscription") {
-        return <span key={field}></span>;
+        return <span key={field} />;
     }
 
     const resolver = getResolverForField(resolvers, field);
-    if (resolver) {
-        return (<span
-            onClick={() => {onEdit(type, field, resolver)}}
-            key={field}
-        >{resolver.DataSource.name}</span>);
-    }
+    const resolverText = resolver ? resolver.DataSource.name : "No Resolver";
 
-    return <span
-        key={field}
-        onClick={() => {onEdit(type, field, resolver)}}
-    >No Resolver</span>;
+    return (
+        <span
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+                fireEditEvent(onEdit, type, field, resolver);
+            }}
+            onKeyDown={() => {
+                fireEditEvent(onEdit, type, field, resolver);
+            }}
+            key={field}
+        >{resolverText}
+        </span>
+    );
 };
 
 const renderGeneric = ({ kind, type, item, resolvers, onEdit }) => {
@@ -106,7 +122,7 @@ const renderGeneric = ({ kind, type, item, resolvers, onEdit }) => {
     );
 };
 
-const renderCustom = ({ kind, type, item, resolvers, onEdit }) => {
+const renderCustom = ({ type, item, resolvers, onEdit }) => {
     const { fields, name } = item;
     const fieldsText = `${fields.length} Field${fields.length !== 1 ? "s" : ""}`;
 
@@ -124,15 +140,13 @@ const renderCustom = ({ kind, type, item, resolvers, onEdit }) => {
     );
 };
 
-const ResolversListItem = (props) => {
+const ResolversListItem = props => {
     const { kind } = props;
     switch (kind) {
         case "custom":
             return renderCustom(props);
-            break;
         default:
             return renderGeneric(props);
-            break;
     }
 };
 
