@@ -9,14 +9,20 @@ import { ResolversListItem } from "./ResolversListItem";
 import style from "./resolversList.css";
 
 const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, type) => {
+    // If those types are not defined it usually means that the schema does not have
+    // them. We can safely ignore them.
+    const queryTypeName = query ? query.name : "Query";
+    const mutationTypeName = mutation ? mutation.name : "Mutation";
+    const subscriptionTypeName = subscription ? subscription.name : "Subscription";
+
     switch (type.name) {
-        case query.name:
+        case queryTypeName:
             acc.queries.push(type);
             break;
-        case mutation.name:
+        case mutationTypeName:
             acc.mutations.push(type);
             break;
-        case subscription.name:
+        case subscriptionTypeName:
             acc.subscriptions.push(type);
             break;
         default:
@@ -32,6 +38,11 @@ const groupTypes = (types, query, mutation, subscription) => types.reduce((acc, 
 });
 
 const renderGeneric = (schemaId, items, text, kind, onClick) => {
+    // If there are no instances of a type render nothing (not even an empty list)
+    if (!items || !items.length) {
+        return null;
+    }
+
     const { name, fields } = items[0];
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
