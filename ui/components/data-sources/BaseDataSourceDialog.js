@@ -151,9 +151,33 @@ class BaseDataSourceDialog extends Component {
         throw new Error(`isDisabled(controlId: string) not implemented in ${this.constructor.name}`);
     }
 
+    /**
+     * Test the data source and show message on the dialog.
+     */
+    onTest() {
+        this.testDataSource()
+            .then(() => this.setState({ success: "Connection to data source is successful" }))
+            .catch((message) => this.setState({ err: message }));
+    }
+
+    testDataSource() {
+        const { name, type } = this.state;
+
+        const config = { options: this.getConfigByType(type) };
+        // TODO: what here?
+        // TODO: how to call `getDataSourceTestResult` query?
+
+        // TODO: only for testing the alerts
+        return new Promise(function(resolve, reject){
+            return resolve();
+            // OR
+            // return reject("Unable to connect data source: CONNREFUSED");
+        });
+    }
+
     render() {
         const { visible } = this.props;
-        const { name, type, err, validations } = this.state;
+        const { name, type, err, success, validations } = this.state;
         const submitButtonDisabled = some(validations, s => !s || s === "error");
 
         return (
@@ -174,6 +198,7 @@ class BaseDataSourceDialog extends Component {
                 <Modal.Body>
                     {/* Alert */}
                     {err && <Alert onDismiss={() => this.setState({ err: "" })}>{err}</Alert>}
+                    {success && <Alert type="success" onDismiss={() => this.setState({ success: "" })}>{success}</Alert>}
 
                     {type === DataSourceType.InMemory && (
                         <Alert type="warning">
@@ -235,6 +260,14 @@ class BaseDataSourceDialog extends Component {
                 </Modal.Body>
 
                 <Modal.Footer>
+                    {type === DataSourceType.Postgres && (
+                        <Button
+                            bsStyle="secondary"
+                            onClick={() => this.onTest()}
+                        >
+                            Test
+                        </Button>
+                    )}
                     <Button
                         bsStyle="default"
                         className="btn-cancel"
