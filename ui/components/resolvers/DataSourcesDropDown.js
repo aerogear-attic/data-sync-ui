@@ -2,7 +2,6 @@ import React from "react";
 import { Query } from "react-apollo";
 
 import {
-    Spinner,
     MenuItem,
     InputGroup,
     FormControl,
@@ -15,7 +14,7 @@ import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 import styles from "./DataSourcesDropDown.css";
 
-const DataSourcesDropDown = ({ value, validation }) => {
+const DataSourcesDropDown = ({ selected, validation, onDataSourceSelect }) => {
     const filter = undefined;
     return (
         <FormGroup controlId="dataSource" validationState={validation}>
@@ -40,7 +39,8 @@ const DataSourcesDropDown = ({ value, validation }) => {
                                 <FormControl
                                     disabled
                                     style={{ background: "unset", color: "#363636" }}
-                                    value={value}
+                                    value={selected ? selected.name : ""}
+                                    placeholder="asdasd"
                                 />
                                 <InputGroup.Button>
                                     <DropdownButton
@@ -48,7 +48,7 @@ const DataSourcesDropDown = ({ value, validation }) => {
                                         bsStyle="default"
                                         id="dropdown-type"
                                         title=""
-                                        onSelect={key => console.log(key)}
+                                        onSelect={ds => onDataSourceSelect(ds)}
                                     >
                                         {options}
                                     </DropdownButton>

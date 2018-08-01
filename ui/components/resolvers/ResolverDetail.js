@@ -22,6 +22,7 @@ import styles from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
     resolver: null,
+    dataSource: null,
     requestMapping: "",
     responseMapping: "",
     err: "",
@@ -46,6 +47,10 @@ class ResolverDetail extends Component {
         }
     }
 
+    onDataSourceSelect(dataSource) {
+        this.setState({ dataSource });
+    }
+
     save() {
         console.log("called save");
     }
@@ -66,7 +71,7 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, responseMapping, requestMapping, validations } = this.state;
+        const { resolver, dataSource, responseMapping, requestMapping, validations } = this.state;
 
         if (!resolver) {
             return this.renderEmptyScreen();
@@ -82,7 +87,11 @@ class ResolverDetail extends Component {
                 </h3>
 
                 <Form horizontal className={styles.formContainer}>
-                    <DataSourcesDropDown validation={validations.dataSource} />
+                    <DataSourcesDropDown
+                        selected={dataSource}
+                        validation={validations.dataSource}
+                        onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
+                    />
                 </Form>
 
             </React.Fragment>
