@@ -10,16 +10,14 @@
     background-color: white !important;
 }
 
-.left {
+.resolversListContainer {
     width: 40%;
-    border-right: 1px solid lightgrey;
     overflow-y: auto;
 }
 
-.right {
+.resolverDetailContainer {
     width: 60%;
-    border-left: 5px solid lightgrey; 
-    border-top: 50px solid lightgrey;
+    border-left: 6px solid #EDEDED; 
 }
 
 .resolverDetailsArea {
@@ -36,14 +34,8 @@
 
 .resolverInputArea {
     height: 120px;
-    border: 1px solid lightgrey;
+    border: 1px solid #EDEDED;
 } 
-
-.resolverSecurity {
-    border-bottom: 1px solid lightgrey;
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
 
 .resolverButtons {
     padding-left: 30px;

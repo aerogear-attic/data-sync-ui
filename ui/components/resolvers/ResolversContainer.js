@@ -37,10 +37,10 @@ class ResolversContainer extends Component {
                     onFilter={name => this.setFilter(name)}
                 />
                 <div className={styles.flexWrapper}>
-                    <div className={styles.left}>
+                    <div className={styles.resolversListContainer}>
                         <ResolversList onClick={this.onResolverClicked} />
                     </div>
-                    <div className={styles.right}>
+                    <div className={styles.resolverDetailContainer}>
                         <ResolverDetail />
                     </div>
                 </div>

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
 import {
     Form,
     FormGroup,
@@ -8,22 +7,25 @@ import {
     Col,
     Button,
     DropdownButton,
-    Spinner,
-    MenuItem
+    MenuItem,
+    EmptyState,
+    EmptyStateIcon,
+    EmptyStateTitle
 } from "patternfly-react";
 
 import { CodeEditor } from "../common/CodeEditor";
+import { DataSourcesDropDown } from "./DataSourcesDropDown";
+import { Security } from "./Security";
+
 import styles from "./resolversContainer.css";
-import GetDataSources from "../../graphql/GetDataSources.graphql";
-import { Row } from "../../../node_modules/patternfly-react/dist/js/components/Grid";
 
 const INITIAL_STATE = {
-    dataSourceName: "",
+    dataSource: null,
     requestMapping: "",
     responseMapping: "",
     err: "",
     validations: {
-        dataSourceName: null,
+        name: null,
         requestMapping: "warning",
         responseMapping: "success"
     }
@@ -36,6 +38,12 @@ class ResolverDetail extends Component {
         this.state = INITIAL_STATE;
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.dataSource !== nextProps.dataSource) {
+            this.setState({ dataSource: nextProps.dataSource });
+        }
+    }
+
     save() {
         console.log("called save");
     }
@@ -44,62 +52,52 @@ class ResolverDetail extends Component {
         console.log("called cancel");
     }
 
-    renderDataSources() {
-        const filter = undefined;
+    renderButtons() {
         return (
-            <Query query={GetDataSources} variables={filter}>
-                {({ loading, error, data }) => {
-                    if (loading) {
-                        return <Spinner className="spinner" loading />;
-                    }
-                    if (error) {
-                        return error.message;
-                    }
-                    if (data.dataSources.length) {
-                        const { dataSources } = data;
-                        return dataSources.map(dataSource => (
-                            <MenuItem key={dataSource.id} eventKey={dataSource}>
-                                {`${dataSource.name} (${dataSource.type})`}
-                            </MenuItem>
-                        ));
-                    }
-                    return null;
-                }}
-            </Query>
+            <div className={styles.resolverButtons}>
+                <Button
+                    className={styles.buttonSave}
+                    bsStyle="primary"
+                    onClick={() => this.save()}
+                >
+                    Save
+                </Button>
+                <Button
+                    bsStyle="default"
+                    onClick={() => this.cancel()}
+                >
+                Cancel
+                </Button>
+            </div>
+        );
+    }
+
+    renderEmptyScreen() {
+        return (
+            <EmptyState style={{ border: 0, backgroundColor: "unset" }}>
+                <EmptyStateIcon name="info" />
+                <EmptyStateTitle>Select an item to view and edit its details</EmptyStateTitle>
+            </EmptyState>
         );
     }
 
     render() {
-        const { dataSourceName, responseMapping, requestMapping, validations } = this.state;
+        const { dataSource, responseMapping, requestMapping, validations } = this.state;
+
+        if (!dataSource) {
+            return this.renderEmptyScreen();
+        }
+
         return (
-            <div>
+            <React.Fragment>
                 <div className={styles.resolverHeader}>
                     <span>Resolver</span>
                 </div>
                 <Form horizontal className={styles.resolverDetailsArea}>
-                    <FormGroup controlId="dataSource" validationState={validations.dataSourceName}>
+                    <FormGroup controlId="dataSource" validationState={validations.name}>
                         <Col sm={2}><b>Data Source</b></Col>
-                        <Col sm={10} style={{ width: "350px" }}>
-                            <InputGroup>
-                                <FormControl
-                                    disabled
-                                    style={{ backgroundColor: "#fff", color: "#363636" }}
-                                    value={dataSourceName}
-                                />
-                                <InputGroup.Button>
-                                    <DropdownButton
-                                        disabled={false}
-                                        bsStyle="default"
-                                        id="dropdown-type"
-                                        title=""
-                                        onSelect={() => {
-                                            console.log("on select called");
-                                        }}
-                                    >
-                                        {this.renderDataSources()}
-                                    </DropdownButton>
-                                </InputGroup.Button>
-                            </InputGroup>
+                        <Col sm={10}>
+                            <DataSourcesDropDown dataSourceName={dataSource.name} />
                         </Col>
                     </FormGroup>
 
@@ -186,70 +184,9 @@ class ResolverDetail extends Component {
                         </Col>
                     </FormGroup>
                 </Form>
-                {this.renderSecurity()}
+                <Security />
                 {this.renderButtons()}
-            </div>
-        );
-    }
-
-    renderSecurity() {
-        return (
-            <div className={styles.resolverSecurity}>
-                <div className={styles.resolverHeader}>
-                    <span>Security</span>
-                </div>
-                <Form horizontal className={styles.resolverDetailsArea}>
-                    <Row>
-                        <Col sm={4}>Add a Keycloak role to this object</Col>
-                    </Row>
-                    <FormGroup controlId="role">
-                        <Col sm={10} style={{ width: "350px" }}>
-                            <InputGroup>
-                                <FormControl
-                                    disabled
-                                    style={{ backgroundColor: "#fff", color: "#363636" }}
-                                    value="AppDeveloper"
-                                />
-                                <InputGroup.Button>
-                                    <DropdownButton
-                                        disabled={false}
-                                        bsStyle="default"
-                                        id="dropdown-type"
-                                        title=""
-                                        onSelect={() => {
-                                            console.log("on select called");
-                                        }}
-                                    >
-                                        <MenuItem>
-                                            AppDeveloper
-                                        </MenuItem>
-                                    </DropdownButton>
-                                </InputGroup.Button>
-                            </InputGroup>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </div>
-        );
-    }
-
-    renderButtons() {
-        return (
-            <div className={styles.resolverButtons}>
-                <Button
-                    className={styles.buttonSave}
-                    bsStyle="primary"
-                    onClick={() => this.save()}
-                >
-                    Save
-                </Button>
-                <Button
-                    bsStyle="default"
-                    onClick={() => this.cancel()}
-                >
-                Cancel
-                </Button>
-            </div>
+            </React.Fragment>
         );
     }
 
