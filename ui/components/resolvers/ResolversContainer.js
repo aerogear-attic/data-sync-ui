@@ -6,6 +6,7 @@ import { ResolverDetail } from "./ResolverDetail";
 import styles from "./resolversContainer.css";
 
 const INITIAL_STATE = {
+    resolver: null,
     filter: {}
 };
 
@@ -24,12 +25,13 @@ class ResolversContainer extends Component {
         // TODO
     }
 
-    onResolverClicked(type, field, resolver) {
-        // TODO
-        console.log(type, field, resolver);
+    onResolverClicked(resolver) {
+        this.setState({ resolver });
     }
 
     render() {
+        const { resolver } = this.state;
+
         return (
             <React.Fragment>
                 <CommonToolbar
@@ -38,10 +40,10 @@ class ResolversContainer extends Component {
                 />
                 <div className={styles.flexWrapper}>
                     <div className={styles.resolversListContainer}>
-                        <ResolversList onClick={this.onResolverClicked} />
+                        <ResolversList onClick={res => this.onResolverClicked(res)} />
                     </div>
                     <div className={styles.resolverDetailContainer}>
-                        <ResolverDetail />
+                        <ResolverDetail resolver={resolver} />
                     </div>
                 </div>
             </React.Fragment>

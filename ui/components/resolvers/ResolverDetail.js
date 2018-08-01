@@ -20,7 +20,7 @@ import { Security } from "./Security";
 import styles from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
-    dataSource: null,
+    resolver: null,
     requestMapping: "",
     responseMapping: "",
     err: "",
@@ -39,8 +39,8 @@ class ResolverDetail extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.dataSource !== nextProps.dataSource) {
-            this.setState({ dataSource: nextProps.dataSource });
+        if (this.props.resolver !== nextProps.resolver) {
+            this.setState({ resolver: nextProps.resolver });
         }
     }
 
@@ -64,9 +64,9 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { dataSource, responseMapping, requestMapping, validations } = this.state;
+        const { resolver, responseMapping, requestMapping, validations } = this.state;
 
-        if (!dataSource) {
+        if (!resolver) {
             return this.renderEmptyScreen();
         }
 
@@ -79,7 +79,7 @@ class ResolverDetail extends Component {
                     <FormGroup controlId="dataSource" validationState={validations.name}>
                         <Col sm={2}><b>Data Source</b></Col>
                         <Col sm={10}>
-                            <DataSourcesDropDown dataSourceName={dataSource.name} />
+                            <DataSourcesDropDown dataSourceName={resolver.name} />
                         </Col>
                     </FormGroup>
 

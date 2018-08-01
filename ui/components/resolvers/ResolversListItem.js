@@ -7,7 +7,7 @@ import { formatType } from "../../helper/GraphQLFormatters";
 
 const fireEditEvent = (handler, type, field, resolver) => {
     if (handler) {
-        handler(type, field, resolver);
+        handler({ type, field, resolver });
     }
 };
 
