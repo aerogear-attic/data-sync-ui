@@ -14,8 +14,9 @@ import {
     EmptyStateTitle
 } from "patternfly-react";
 
-import { CodeEditor } from "../common/CodeEditor";
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
+import { RequestMappingTemplate } from "./RequestMappingTemplate";
+import { CodeEditor } from "../common/CodeEditor";
 import { Security } from "./Security";
 
 import styles from "./ResolverDetail.css";
@@ -92,6 +93,7 @@ class ResolverDetail extends Component {
                         validation={validations.dataSource}
                         onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
                     />
+                    <RequestMappingTemplate />
                 </Form>
 
             </React.Fragment>

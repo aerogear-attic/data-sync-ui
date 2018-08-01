@@ -1,0 +1,10 @@
+.requestMappingControlLabel {
+    font-weight: 600;
+}
+
+.requestMappingDropDown {
+    font-weight: 500;
+    background: none;
+    min-width: 110px;
+    text-align: left;
+}
