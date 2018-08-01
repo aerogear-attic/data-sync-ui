@@ -8,6 +8,7 @@ import {
     Button,
     DropdownButton,
     MenuItem,
+    Icon,
     EmptyState,
     EmptyStateIcon,
     EmptyStateTitle
@@ -40,6 +41,7 @@ class ResolverDetail extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.resolver !== nextProps.resolver) {
+            console.log("Selected:", nextProps.resolver);
             this.setState({ resolver: nextProps.resolver });
         }
     }
@@ -72,116 +74,13 @@ class ResolverDetail extends Component {
 
         return (
             <React.Fragment>
-                <div className={styles.resolverHeader}>
-                    <span>Resolver</span>
-                </div>
-                <Form horizontal className={styles.resolverDetailsArea}>
-                    <FormGroup controlId="dataSource" validationState={validations.name}>
-                        <Col sm={2}><b>Data Source</b></Col>
-                        <Col sm={10}>
-                            <DataSourcesDropDown dataSourceName={resolver.name} />
-                        </Col>
-                    </FormGroup>
+                <h3 className={styles.detailHeader}>Edit {resolver.type}.{resolver.field}</h3>
+                <h3 className={styles.detailSubHeader}>Resolver
+                    <span className={styles.learnMore}>
+                        <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
+                    </span>
+                </h3>
 
-                    <FormGroup controlId="">
-                        <Col sm={9}><b>Request Mapping Template</b></Col>
-                        <Col sm={3} className="pull-right">
-                            <InputGroup>
-                                <FormControl
-                                    disabled
-                                    style={{ backgroundColor: "#fff", color: "#363636" }}
-                                    value="Custom"
-                                />
-                                <InputGroup.Button>
-                                    <DropdownButton
-                                        disabled={false}
-                                        bsStyle="default"
-                                        id="dropdown-type"
-                                        title=""
-                                        onSelect={() => {
-                                            console.log("on select called");
-                                        }}
-                                    >
-                                        <MenuItem>
-                                            Custom
-                                        </MenuItem>
-                                    </DropdownButton>
-                                </InputGroup.Button>
-                            </InputGroup>
-                        </Col>
-                    </FormGroup>
-
-                    {/* Resolver request mapping */}
-                    <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
-                        <Col sm={12}>
-                            <div className={styles.resolverInputArea}>
-                                <CodeEditor
-                                    value={requestMapping}
-                                    onChange={() => {
-                                        console.log("on change");
-                                    }}
-                                />
-                            </div>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup controlId="">
-                        <Col sm={9}><b>Response Mapping Template</b></Col>
-                        <Col sm={3} className="pull-right">
-                            <InputGroup>
-                                <FormControl
-                                    disabled
-                                    style={{ backgroundColor: "#fff", color: "#363636" }}
-                                    value="Custom"
-                                />
-                                <InputGroup.Button>
-                                    <DropdownButton
-                                        disabled={false}
-                                        bsStyle="default"
-                                        id="dropdown-type"
-                                        title=""
-                                        onSelect={() => {
-                                            console.log("on select called");
-                                        }}
-                                    >
-                                        <MenuItem>
-                                            Custom
-                                        </MenuItem>
-                                    </DropdownButton>
-                                </InputGroup.Button>
-                            </InputGroup>
-                        </Col>
-                    </FormGroup>
-
-                    {/* Resolver response mapping */}
-                    <FormGroup controlId="responseMapping" validationState={validations.responseMapping}>
-                        <Col sm={12}>
-                            <div className={styles.resolverInputArea}>
-                                <CodeEditor
-                                    value={responseMapping}
-                                    onChange={() => {
-                                        console.log("on change");
-                                    }}
-                                />
-                            </div>
-                        </Col>
-                    </FormGroup>
-                </Form>
-                <Security />
-                <div className={styles.resolverButtons}>
-                    <Button
-                        className={styles.buttonSave}
-                        bsStyle="primary"
-                        onClick={() => this.save()}
-                    >
-                        Save
-                    </Button>
-                    <Button
-                        bsStyle="default"
-                        onClick={() => this.cancel()}
-                    >
-                        Cancel
-                    </Button>
-                </div>
             </React.Fragment>
         );
     }
