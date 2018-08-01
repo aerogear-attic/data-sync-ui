@@ -8,11 +8,6 @@
     font-size: 17px;
 }
 
-.resolverDetailsArea {
-    margin: 0 auto;
-    width: 80%;
-}
-
 .detailHeader {
     padding: 12px 15px;
     margin: 0;
@@ -47,4 +42,5 @@
 .formContainer {
     padding-left: 35px;
     padding-top: 10px;
+    padding-right: 20px;
 }
