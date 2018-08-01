@@ -7,3 +7,39 @@
 .emptyTitle {
     font-size: 17px;
 }
+
+.resolverDetailsArea {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.detailHeader {
+    padding: 12px 15px;
+    margin: 0;
+    background: #EDEDED;
+}
+
+.detailSubHeader {
+    padding: 12px 15px 15px 15px;
+    margin: 0;
+}
+
+.resolverInputArea {
+    height: 120px;
+    border: 1px solid #EDEDED;
+} 
+
+.resolverButtons {
+    padding-left: 30px;
+    padding-top: 15px;
+}
+
+.buttonSave {
+    margin-right: 5px;
+}
+
+.learnMore {
+    font-size: 9px;
+    color: #4EABDA;
+    margin-left: 12px;
+}
