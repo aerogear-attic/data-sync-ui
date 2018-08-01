@@ -1,6 +1,6 @@
 # AeroGear Sync UI
 
-The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync-server). Based on react and patternfly.
+The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync-server). Based on [React](https://reactjs.org/) and [PatternFly](https://www.patternfly.org/).
 
 ## Prerequisites
 
