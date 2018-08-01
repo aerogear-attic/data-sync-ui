@@ -15,7 +15,7 @@ import {
 } from "patternfly-react";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
-import { RequestMappingTemplate } from "./RequestMappingTemplate";
+import { RequestMappingTemplateDropDown } from "./RequestMappingTemplateDropDown";
 import { CodeEditor } from "../common/CodeEditor";
 import { Security } from "./Security";
 
@@ -24,7 +24,7 @@ import styles from "./ResolverDetail.css";
 const INITIAL_STATE = {
     resolver: null,
     dataSource: null,
-    requestMapping: "",
+    requestMapping: "Custom",
     responseMapping: "",
     err: "",
     validations: {
@@ -43,13 +43,16 @@ class ResolverDetail extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.resolver !== nextProps.resolver) {
-            console.log("Selected:", nextProps.resolver);
             this.setState({ resolver: nextProps.resolver });
         }
     }
 
     onDataSourceSelect(dataSource) {
         this.setState({ dataSource });
+    }
+
+    onRequestMappingDropDownSelect(requestMapping) {
+        this.setState({ requestMapping });
     }
 
     onRequestMappingChange(text) {
@@ -97,7 +100,10 @@ class ResolverDetail extends Component {
                         validation={validations.dataSource}
                         onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
                     />
-                    <RequestMappingTemplate />
+                    <RequestMappingTemplateDropDown
+                        value={requestMapping}
+                        onSelect={item => this.onRequestMappingDropDownSelect(item)}
+                    />
                     <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
                         <Col sm={12}>
                             <div className={styles.detailCodeEditor}>

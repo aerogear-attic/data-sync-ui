@@ -7,9 +7,10 @@ import {
     SplitButton
 } from "patternfly-react";
 
-import styles from "./RequestMappingTemplate.css";
+import styles from "./RequestMappingTemplateDropDown.css";
 
-const RequestMappingTemplate = ({ onSelect }) => (
+// TODO: rename "value" and "onSelect" properly
+const RequestMappingTemplateDropDown = ({ value, onSelect }) => (
     <FormGroup controlId="">
         <Col sm={9} className={styles.requestMappingControlLabel}>Request Mapping Template</Col>
         <Col sm={3}>
@@ -18,16 +19,15 @@ const RequestMappingTemplate = ({ onSelect }) => (
                     pullRight
                     bsStyle="default"
                     id="dropdown-type"
-                    title="Custom"
+                    title={value}
                     className={styles.requestMappingDropDown}
-                    onClick={() => onSelect()}
-                    onSelect={() => {}}
+                    onSelect={eventKey => onSelect(eventKey)}
                 >
-                    <MenuItem eventKey="custom">Custom</MenuItem>
+                    <MenuItem eventKey="Custom">Custom</MenuItem>
                 </SplitButton>
             </InputGroup>
         </Col>
     </FormGroup>
 );
 
-export { RequestMappingTemplate };
+export { RequestMappingTemplateDropDown };
