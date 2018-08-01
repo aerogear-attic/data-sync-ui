@@ -52,26 +52,6 @@ class ResolverDetail extends Component {
         console.log("called cancel");
     }
 
-    renderButtons() {
-        return (
-            <div className={styles.resolverButtons}>
-                <Button
-                    className={styles.buttonSave}
-                    bsStyle="primary"
-                    onClick={() => this.save()}
-                >
-                    Save
-                </Button>
-                <Button
-                    bsStyle="default"
-                    onClick={() => this.cancel()}
-                >
-                Cancel
-                </Button>
-            </div>
-        );
-    }
-
     renderEmptyScreen() {
         return (
             <EmptyState className={styles.detailEmpty}>
@@ -187,7 +167,21 @@ class ResolverDetail extends Component {
                     </FormGroup>
                 </Form>
                 <Security />
-                {this.renderButtons()}
+                <div className={styles.resolverButtons}>
+                    <Button
+                        className={styles.buttonSave}
+                        bsStyle="primary"
+                        onClick={() => this.save()}
+                    >
+                        Save
+                    </Button>
+                    <Button
+                        bsStyle="default"
+                        onClick={() => this.cancel()}
+                    >
+                        Cancel
+                    </Button>
+                </div>
             </React.Fragment>
         );
     }
