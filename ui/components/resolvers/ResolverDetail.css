@@ -19,9 +19,11 @@
     margin: 0;
 }
 
-.resolverInputArea {
-    height: 120px;
-    border: 1px solid #EDEDED;
+.detailCodeEditor {
+    height: 200px;
+    border: 1px solid #D1D1D1;
+    margin-top: -8px;
+    /* TODO: allow vertical resize */
 } 
 
 .resolverButtons {

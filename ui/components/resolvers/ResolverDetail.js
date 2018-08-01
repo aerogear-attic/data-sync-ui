@@ -52,6 +52,10 @@ class ResolverDetail extends Component {
         this.setState({ dataSource });
     }
 
+    onRequestMappingChange(text) {
+        console.log("request mapping template:", text);
+    }
+
     save() {
         console.log("called save");
     }
@@ -94,6 +98,16 @@ class ResolverDetail extends Component {
                         onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
                     />
                     <RequestMappingTemplate />
+                    <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
+                        <Col sm={12}>
+                            <div className={styles.detailCodeEditor}>
+                                <CodeEditor
+                                    value={requestMapping}
+                                    onChange={text => this.onRequestMappingChange(text)}
+                                />
+                            </div>
+                        </Col>
+                    </FormGroup>
                 </Form>
 
             </React.Fragment>
