@@ -40,7 +40,7 @@ const DataSourcesDropDown = ({ selected, validation, onDataSourceSelect }) => {
                                     disabled
                                     style={{ background: "unset", color: "#363636" }}
                                     value={selected ? selected.name : ""}
-                                    placeholder="asdasd"
+                                    placeholder="Select a Data Source"
                                 />
                                 <InputGroup.Button>
                                     <DropdownButton
