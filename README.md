@@ -8,6 +8,15 @@
 
 The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync-server). Based on [React](https://reactjs.org/) and [PatternFly](https://www.patternfly.org/).
 
+|                          | Project Info                                                     |
+| ------------------------ | ---------------------------------------------------------------- |
+| License:                 | Apache License, Version 2.0                                      |
+| Build:                   | Docker                                                           |
+| End User Documentation:  | https://docs.aerogear.org                                        |
+| Community Documentation: | https://aerogear.org                                             |
+| Issue tracker:           | https://issues.jboss.org/browse/AEROGEAR                         |
+| Mailing lists:           | [aerogear-dev](https://groups.google.com/forum/#!forum/aerogear) |
+
 ## Prerequisites
 
 1. There is a dependency on having a running postgres server. To run postgres in a docker container use the following command:
