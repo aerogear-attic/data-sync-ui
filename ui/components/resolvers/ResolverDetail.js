@@ -26,7 +26,7 @@ const INITIAL_STATE = {
     responseMapping: "",
     err: "",
     validations: {
-        name: null,
+        dataSource: null,
         requestMapping: "warning",
         responseMapping: "success"
     }
@@ -80,6 +80,10 @@ class ResolverDetail extends Component {
                         <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
                     </span>
                 </h3>
+
+                <Form horizontal className={styles.formContainer}>
+                    <DataSourcesDropDown validation={validations.dataSource} />
+                </Form>
 
             </React.Fragment>
         );
