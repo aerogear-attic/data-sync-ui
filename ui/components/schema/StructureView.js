@@ -1,25 +1,12 @@
 import React from "react";
 import { Alert, ListView } from "patternfly-react";
-import { EmptyStructureView } from "./EmptyStructureView";
+import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { TypeList } from "./TypeList";
+import { wellKnownTypes } from "../../graphql/types/GraphQLWellKnownTypes";
 
 import style from "./structureView.css";
 
 // Graphql internal types that we don't want to render
-const wellKnownTypes = [
-    "String",
-    "Boolean",
-    "Int",
-    "ID",
-    "__Schema",
-    "__Type",
-    "__TypeKind",
-    "__Field",
-    "__InputValue",
-    "__EnumValue",
-    "__Directive",
-    "__DirectiveLocation"
-];
 
 const renderListView = (compiled, schemaId) => {
     const { types } = compiled.data.__schema;
@@ -60,7 +47,7 @@ const StructureView = props => {
     } if (compiled) {
         return renderContent(compiled, schemaId);
     }
-    return <EmptyStructureView />;
+    return <DefaultEmptyView text="No Schema Defined" />;
 };
 
 export { StructureView };
