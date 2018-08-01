@@ -17,7 +17,7 @@ import { CodeEditor } from "../common/CodeEditor";
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { Security } from "./Security";
 
-import styles from "./resolversContainer.css";
+import styles from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
     dataSource: null,
@@ -74,9 +74,11 @@ class ResolverDetail extends Component {
 
     renderEmptyScreen() {
         return (
-            <EmptyState style={{ border: 0, backgroundColor: "unset" }}>
+            <EmptyState className={styles.detailEmpty}>
                 <EmptyStateIcon name="info" />
-                <EmptyStateTitle>Select an item to view and edit its details</EmptyStateTitle>
+                <EmptyStateTitle className={styles.emptyTitle}>
+                    Select an item to view and edit its details
+                </EmptyStateTitle>
             </EmptyState>
         );
     }

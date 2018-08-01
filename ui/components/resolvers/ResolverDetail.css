@@ -1,4 +1,9 @@
-.empty {
-  border: unset;
-  background-color: unset;
+.detailEmpty {
+    border: none;
+    background-color: unset;
+    margin-top: 20%;
+}
+
+.emptyTitle {
+    font-size: 17px;
 }
