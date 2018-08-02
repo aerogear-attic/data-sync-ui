@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    FormGroup,
     Col,
     InputGroup,
     MenuItem,
@@ -11,7 +10,7 @@ import styles from "./RequestMappingTemplateDropDown.css";
 
 // TODO: rename "value" and "onSelect" properly
 const RequestMappingTemplateDropDown = ({ value, onSelect }) => (
-    <FormGroup controlId="">
+    <React.Fragment>
         <Col sm={9} className={styles.requestMappingControlLabel}>Request Mapping Template</Col>
         <Col sm={3}>
             <InputGroup className="pull-right">
@@ -27,7 +26,7 @@ const RequestMappingTemplateDropDown = ({ value, onSelect }) => (
                 </SplitButton>
             </InputGroup>
         </Col>
-    </FormGroup>
+    </React.Fragment>
 );
 
 export { RequestMappingTemplateDropDown };
