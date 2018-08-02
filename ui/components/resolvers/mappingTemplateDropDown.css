@@ -1,8 +1,10 @@
-.requestMappingControlLabel {
+.mappingControlLabel {
+    margin-right: -50px;
+    margin-top: 3px;
     font-weight: 600;
 }
 
-.requestMappingDropDown {
+.mappingDropDown {
     font-weight: 500;
     background: none;
     min-width: 110px;
