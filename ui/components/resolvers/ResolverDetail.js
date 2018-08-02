@@ -16,17 +16,22 @@ import { ResponseMappingTemplateDropDown } from "./ResponseMappingTemplateDropDo
 import { CodeEditor } from "../common/CodeEditor";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
-import GetResolvers from "../../graphql/GetResolvers.graphql";
+import GetSchema from "../../graphql/GetSchema.graphql";
 
 import styles from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
-    resolver: null,
-    dataSource: null,
-    requestMapping: "Custom",
-    responseMapping: "Custom",
-    requestMappingTemplate: "",
-    responseMappingTemplate: "",
+    id: null,
+    schemaId: null,
+    field: null,
+    type: null,
+    DataSource: null,
+    preHook: null,
+    postHook: null,
+    requestMapping: "",
+    responseMapping: "",
+    requestMappingTemplate: "Custom",
+    responseMappingTemplate: "Custom",
     err: ""
 };
 
@@ -38,36 +43,40 @@ class ResolverDetail extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.resolver !== nextProps.resolver) {
-            this.setState({ resolver: nextProps.resolver });
+        if (this.props !== nextProps) {
+            const {
+                id, schemaId, field, type, DataSource, requestMapping,
+                responseMapping
+            } = nextProps;
+            this.setState({
+                id, schemaId, field, type, DataSource, requestMapping, responseMapping
+            });
         }
     }
 
     save() {
-        const { id = undefined, type, field } = this.state.resolver;
-        const { dataSource } = this.state; // ??
-        const { requestMapping, responseMapping } = this.state;
-        const schemaId = 1; // ??
+        const {
+            id, schemaId, field, type, DataSource, requestMapping,
+            responseMapping
+        } = this.state;
 
         const variables = {
             id,
             schemaId,
-            dataSourceId: dataSource.id,
-            type,
             field,
+            type,
+            dataSourceId: DataSource.id,
             requestMapping,
             responseMapping
         };
 
-        console.log("resolver: ", variables);
+        console.log("saving resolver:", variables);
+
         this.props.mutate({
-            variables
-            // TODO:
-            // refetchQueries: [{ query: GetResolvers }]
+            variables,
+            refetchQueries: [{ query: GetSchema, variables: { name: "default" } }]
         })
-            .then(() => {
-                console.log("saved");
-            })
+            .then(() => console.log("saved"))
             .catch(err => console.log(err));
     }
 
@@ -76,10 +85,11 @@ class ResolverDetail extends Component {
     }
 
     renderEmptyScreen() {
+        const { detailEmpty, emptyTitle } = styles;
         return (
-            <EmptyState className={styles.detailEmpty}>
+            <EmptyState className={detailEmpty}>
                 <EmptyStateIcon name="info" />
-                <EmptyStateTitle className={styles.emptyTitle}>
+                <EmptyStateTitle className={emptyTitle}>
                     Select an item to view and edit its details
                 </EmptyStateTitle>
             </EmptyState>
@@ -88,59 +98,62 @@ class ResolverDetail extends Component {
 
     render() {
         const {
-            resolver, dataSource, responseMapping, requestMapping, responseMappingTemplate,
-            requestMappingTemplate
+            field, type, DataSource, requestMapping, responseMapping, requestMappingTemplate,
+            responseMappingTemplate
         } = this.state;
 
-        if (!resolver) {
+        const {
+            detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
+            detailFormGroup, detailCodeEditor, detailButtonFooter, buttonSave
+        } = styles;
+
+        if (!field || !type) {
             return this.renderEmptyScreen();
         }
 
         return (
             <React.Fragment>
-                <h3 className={styles.detailHeader}>Edit {resolver.type}.{resolver.field}</h3>
-                <div className={styles.detailFormsContainer}>
-                    <h3 className={styles.detailFormsHeader}>Resolver
-                        <span className={styles.learnMore}>
+                <h3 className={detailHeader}>Edit {type}.{field}</h3>
+                <div className={detailFormsContainer}>
+                    <h3 className={detailFormsHeader}>Resolver
+                        <span className={learnMore}>
                             <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
                         </span>
                     </h3>
 
-                    <Form horizontal className={styles.formContainer}>
-                        <FormGroup controlId="dataSource" className={styles.detailFormGroup}>
+                    <Form horizontal className={formContainer}>
+                        <FormGroup controlId="dataSource" className={detailFormGroup}>
                             <DataSourcesDropDown
-                                selected={dataSource}
-                                onDataSourceSelect={ds => this.setState({ dataSource: ds })}
+                                selected={DataSource}
+                                onDataSourceSelect={ds => this.setState({ DataSource: ds })}
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="responseMapping" className={styles.detailFormGroup}>
-                            <ResponseMappingTemplateDropDown
-                                value={responseMapping}
-                                onSelect={item => this.setState({ responseMapping: item })}
+                        <FormGroup controlId="requestMapping" className={detailFormGroup}>
+                            <RequestMappingTemplateDropDown
+                                value={requestMappingTemplate}
+                                onSelect={item => this.setState({ requestMappingTemplate: item })}
                             />
                             <Col sm={12}>
-                                <div className={styles.detailCodeEditor}>
+                                <div className={detailCodeEditor}>
                                     <CodeEditor
-                                        value={responseMappingTemplate}
-                                        onChange={
-                                            t => this.setState({ responseMappingTemplate: t })
-                                        }
+                                        value={requestMapping}
+                                        onChange={t => this.setState({ requestMapping: t })}
                                     />
                                 </div>
                             </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="requestMapping" className={styles.detailFormGroup}>
-                            <RequestMappingTemplateDropDown
-                                value={requestMapping}
-                                onSelect={item => this.setState({ requestMapping: item })}
+                        <FormGroup controlId="responseMapping" className={detailFormGroup}>
+                            <ResponseMappingTemplateDropDown
+                                value={responseMappingTemplate}
+                                onSelect={item => this.setState({ responseMappingTemplate: item })}
                             />
                             <Col sm={12}>
-                                <div className={styles.detailCodeEditor}>
+                                <div className={detailCodeEditor}>
                                     <CodeEditor
-                                        value={requestMappingTemplate}
-                                        onChange={t => this.setState({ requestMappingTemplate: t })}
+                                        value={responseMapping}
+                                        onChange={t => this.setState({ responseMapping: t })}
                                     />
                                 </div>
                             </Col>
@@ -148,9 +161,9 @@ class ResolverDetail extends Component {
                     </Form>
                 </div>
 
-                <div className={styles.detailButtonFooter}>
+                <div className={detailButtonFooter}>
                     <Button
-                        className={styles.buttonSave}
+                        className={buttonSave}
                         bsStyle="primary"
                         onClick={() => this.save()}
                     >

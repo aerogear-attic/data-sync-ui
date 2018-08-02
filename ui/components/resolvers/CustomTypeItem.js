@@ -19,6 +19,7 @@ const renderCustomType = ({ schemaId, item, kind, onClick }) => {
 
                 return (
                     <ResolversListItem
+                        schemaId={schemaId}
                         key={name}
                         type={name}
                         kind={kind}
