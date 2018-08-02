@@ -33,7 +33,11 @@ exports.stop = callback => {
     stopNotifications();
     database.close()
         .then(() => {
-            server.close(() => callback());
+            server.close(() => {
+                if (typeof callback === "function") {
+                    callback();
+                }
+            });
         });
 };
 
