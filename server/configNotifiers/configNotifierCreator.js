@@ -1,17 +1,17 @@
 const { log } = require("../logger");
 const notifiers = require("./notifiers");
-const { notfier } = require("../config");
+const { notifier } = require("../config");
 
 let instance = null;
-if (notfier.enabled && notifiers[notfier.type]) {
-    instance = new notifiers[notfier.type](notfier.config);
+if (notifier.enabled && notifiers[notifier.type]) {
+    instance = new notifiers[notifier.type](notifier.config);
 } else {
     // Notifications will not be available for testing because we don't have
     // a running postgres instance
-    log.warn(`notifier unknown or disabled: ${notfier.type}`);
+    log.warn(`notifier unknown or disabled: ${notifier.type}`);
 }
 
-exports.DEFAULT_CHANNEL = notfier.config.channel;
+exports.DEFAULT_CHANNEL = notifier.config.channel;
 
 exports.publish = (channel, payload) => {
     if (instance) {
