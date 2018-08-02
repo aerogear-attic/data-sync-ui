@@ -18,4 +18,6 @@
 .resolverDetailContainer {
     width: 60%;
     border-left: 6px solid #EDEDED;
+    overflow-y: hidden;
+    position: relative;
 }
