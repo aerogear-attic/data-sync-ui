@@ -1,6 +1,34 @@
-const {Client} = require("pg");
+const { Client } = require("pg");
 
 const CONN_TIMEOUT_IN_MS = 10000;
+
+function connectClient(client) {
+    // Node Postgres lib doesn't support timeouts on initial connection.
+    // needed to do it manually
+    return new Promise(((resolve, reject) => {
+        let timedOut = false;
+
+        const connTimeout = setTimeout(() => {
+            timedOut = true;
+            reject(new Error(`Unable to connect to host after ${CONN_TIMEOUT_IN_MS} milliseconds`));
+        }, CONN_TIMEOUT_IN_MS);
+
+
+        client.connect(err => {
+            clearTimeout(connTimeout);
+
+            if (timedOut) {
+                return;
+            }
+
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    }));
+}
 
 module.exports = async config => {
     let client;
@@ -12,7 +40,8 @@ module.exports = async config => {
             database: config.options.database,
             password: config.options.password,
             port: config.options.port,
-            statement_timeout: CONN_TIMEOUT_IN_MS // this is used when test query is executed, not when connection is initialized
+            // this is used when test query is executed, not when connection is initialized
+            statement_timeout: CONN_TIMEOUT_IN_MS
         });
     } catch (ex) {
         return { status: false, message: `Postgres data source config has a bad format: ${ex.message}` };
@@ -35,37 +64,9 @@ module.exports = async config => {
     } finally {
         if (client) {
             // do not block on ending the client
-            client.end((err) => {
+            client.end(() => {
                 // do nothing even when there's an error.
             });
         }
     }
 };
-
-function connectClient(client) {
-    // Node Postgres lib doesn't support timeouts on initial connection.
-    // needed to do it manually
-    return new Promise(function (resolve, reject) {
-        let timedOut = false;
-
-        const connTimeout = setTimeout(function () {
-            timedOut = true;
-            reject(new Error(`Unable to connect to host after ${CONN_TIMEOUT_IN_MS} milliseconds`));
-        }, CONN_TIMEOUT_IN_MS);
-
-
-        client.connect((err) => {
-            clearTimeout(connTimeout);
-
-            if(timedOut){
-                return;
-            }
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
