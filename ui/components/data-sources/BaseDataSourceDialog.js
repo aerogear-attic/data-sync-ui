@@ -14,11 +14,11 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 
+import ApolloClient from "apollo-boost";
 import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
 import { Validators, Validate } from "../../helper/Validators";
 import TestDataSource from "../../graphql/TestDataSource.graphql";
-import ApolloClient from "apollo-boost"
 
 class BaseDataSourceDialog extends Component {
 
@@ -159,7 +159,7 @@ class BaseDataSourceDialog extends Component {
     onTest() {
         this.testDataSource()
             .then(() => this.setState({ success: "Connection to data source is successful" }))
-            .catch((message) => this.setState({ err: message }));
+            .catch(message => this.setState({ err: message }));
     }
 
     testDataSource() {
@@ -178,9 +178,7 @@ class BaseDataSourceDialog extends Component {
                 }
 
                 return reject(message);
-            }).catch(err => {
-                return reject(err.toString());
-            });
+            }).catch(err => reject(err.toString()));
         });
     }
 
@@ -296,6 +294,7 @@ class BaseDataSourceDialog extends Component {
             </Modal>
         );
     }
+
 }
 
 export default BaseDataSourceDialog;
