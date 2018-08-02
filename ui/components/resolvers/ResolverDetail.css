@@ -22,7 +22,7 @@
 .detailCodeEditor {
     height: 200px;
     border: 1px solid #D1D1D1;
-    margin-top: -8px;
+    margin-top: 7px;
     /* TODO: allow vertical resize */
 } 
 
@@ -46,4 +46,8 @@
     padding-top: 10px;
     padding-right: 20px;
     font-size: 11px;
+}
+
+.detailFormGroup {
+    margin-bottom: 25px;
 }

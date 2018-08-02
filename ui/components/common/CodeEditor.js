@@ -95,11 +95,8 @@ const CodeEditor = class extends Component {
                         ref={this.editor}
                         value={editorValue}
                         style={{
-                            opacity: disabled ? 0.2 : 1,
                             lineHeight: `${lineHeight}px`,
-                            whiteSpace: "pre",
-                            overflowWrap: "normal",
-                            overflowY: "auto"
+                            opacity: disabled ? 0.2 : 1
                         }}
                         className={style["editor-area"]}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}

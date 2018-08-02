@@ -26,7 +26,9 @@ const INITIAL_STATE = {
     resolver: null,
     dataSource: null,
     requestMapping: "Custom",
-    responseMapping: "",
+    responseMapping: "Custom",
+    requestMappingTemplate: "",
+    responseMappingTemplate: "",
     err: ""
 };
 
@@ -41,26 +43,6 @@ class ResolverDetail extends Component {
         if (this.props.resolver !== nextProps.resolver) {
             this.setState({ resolver: nextProps.resolver });
         }
-    }
-
-    onDataSourceSelect(dataSource) {
-        this.setState({ dataSource });
-    }
-
-    onRequestMappingDropDownSelect(requestMapping) {
-        this.setState({ requestMapping });
-    }
-
-    onResponseMappingDropDownSelect(responseMapping) {
-        this.setState({ responseMapping });
-    }
-
-    onResponseMappingTemplateChange(text) {
-        console.log("response mapping template:", text);
-    }
-
-    onRequestMappingTemplateChange(text) {
-        console.log("request mapping template:", text);
     }
 
     save() {
@@ -83,7 +65,10 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, dataSource, responseMapping, requestMapping } = this.state;
+        const {
+            resolver, dataSource, responseMapping, requestMapping, responseMappingTemplate,
+            requestMappingTemplate
+        } = this.state;
 
         if (!resolver) {
             return this.renderEmptyScreen();
@@ -99,38 +84,38 @@ class ResolverDetail extends Component {
                 </h3>
 
                 <Form horizontal className={styles.formContainer}>
-                    <FormGroup controlId="dataSource">
+                    <FormGroup controlId="dataSource" className={styles.detailFormGroup}>
                         <DataSourcesDropDown
                             selected={dataSource}
-                            onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
+                            onDataSourceSelect={ds => this.setState({ dataSource: ds })}
                         />
                     </FormGroup>
 
-                    <FormGroup controlId="responseMapping">
+                    <FormGroup controlId="responseMapping" className={styles.detailFormGroup}>
                         <ResponseMappingTemplateDropDown
                             value={responseMapping}
-                            onSelect={item => this.onResponseMappingDropDownSelect(item)}
+                            onSelect={item => this.setState({ responseMapping: item })}
                         />
                         <Col sm={12}>
                             <div className={styles.detailCodeEditor}>
                                 <CodeEditor
-                                    value={responseMapping}
-                                    onChange={text => this.onResponseMappingTemplateChange(text)}
+                                    value={responseMappingTemplate}
+                                    onChange={t => this.setState({ responseMappingTemplate: t })}
                                 />
                             </div>
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="requestMapping">
+                    <FormGroup controlId="requestMapping" className={styles.detailFormGroup}>
                         <RequestMappingTemplateDropDown
                             value={requestMapping}
-                            onSelect={item => this.onRequestMappingDropDownSelect(item)}
+                            onSelect={item => this.setState({ requestMapping: item })}
                         />
                         <Col sm={12}>
                             <div className={styles.detailCodeEditor}>
                                 <CodeEditor
-                                    value={requestMapping}
-                                    onChange={text => this.onRequestMappingTemplateChange(text)}
+                                    value={requestMappingTemplate}
+                                    onChange={t => this.setState({ requestMappingTemplate: t })}
                                 />
                             </div>
                         </Col>
