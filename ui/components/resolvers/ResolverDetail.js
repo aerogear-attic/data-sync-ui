@@ -1,14 +1,10 @@
 import React, { Component } from "react";
+import { graphql } from "react-apollo";
 import {
     Form,
     FormGroup,
-    FormControl,
-    InputGroup,
     Col,
     Button,
-    DropdownButton,
-    MenuItem,
-    Icon,
     EmptyState,
     EmptyStateIcon,
     EmptyStateTitle
@@ -18,7 +14,9 @@ import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { RequestMappingTemplateDropDown } from "./RequestMappingTemplateDropDown";
 import { ResponseMappingTemplateDropDown } from "./ResponseMappingTemplateDropDown";
 import { CodeEditor } from "../common/CodeEditor";
-import { Security } from "./Security";
+
+import UpsertResolver from "../../graphql/UpsertResolver.graphql";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 
 import styles from "./ResolverDetail.css";
 
@@ -46,7 +44,31 @@ class ResolverDetail extends Component {
     }
 
     save() {
-        console.log("called save");
+        const { id = undefined, type, field } = this.state.resolver;
+        const { dataSource } = this.state; // ??
+        const { requestMapping, responseMapping } = this.state;
+        const schemaId = 1; // ??
+
+        const variables = {
+            id,
+            schemaId,
+            dataSourceId: dataSource.id,
+            type,
+            field,
+            requestMapping,
+            responseMapping
+        };
+
+        console.log("resolver: ", variables);
+        this.props.mutate({
+            variables
+            // TODO:
+            // refetchQueries: [{ query: GetResolvers }]
+        })
+            .then(() => {
+                console.log("saved");
+            })
+            .catch(err => console.log(err));
     }
 
     cancel() {
@@ -101,7 +123,9 @@ class ResolverDetail extends Component {
                                 <div className={styles.detailCodeEditor}>
                                     <CodeEditor
                                         value={responseMappingTemplate}
-                                        onChange={t => this.setState({ responseMappingTemplate: t })}
+                                        onChange={
+                                            t => this.setState({ responseMappingTemplate: t })
+                                        }
                                     />
                                 </div>
                             </Col>
@@ -146,4 +170,6 @@ class ResolverDetail extends Component {
 
 }
 
-export { ResolverDetail };
+const ResolverDetailWithMutation = graphql(UpsertResolver)(ResolverDetail);
+
+export { ResolverDetailWithMutation as ResolverDetail };
