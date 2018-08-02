@@ -185,9 +185,6 @@ class BaseDataSourceDialog extends Component {
     }
 
     render() {
-
-        if (!this.state) return null;
-
         const { visible } = this.props;
         const { name, type, err, success, validations } = this.state;
         const submitButtonDisabled = some(validations, s => !s || s === "error");
