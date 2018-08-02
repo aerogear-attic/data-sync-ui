@@ -165,9 +165,7 @@ const updateDataSource = async ({ id, name, type, config }) => {
     return updated;
 };
 
-const getDataSourceTestResult = async ({ type, config }) => {
-    return await dataSourceValidator(type, config);
-};
+const getDataSourceTestResult = async ({ type, config }) => dataSourceValidator(type, config);
 
 const getSchema = async ({ name }) => {
     const [defaultSchema, created] = await schema.findOrCreate({

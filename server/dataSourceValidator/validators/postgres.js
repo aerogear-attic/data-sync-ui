@@ -1,6 +1,6 @@
-const {Client} = require('pg');
+const { Client } = require("pg");
 
-module.exports = async (config) => {
+module.exports = async config => {
     let client;
 
     try {
@@ -12,23 +12,23 @@ module.exports = async (config) => {
             port: config.port
         });
     } catch (ex) {
-        return {status: false, message: "Postgres data source config has a bad format: " + ex.message}
+        return { status: false, message: `Postgres data source config has a bad format: ${ex.message}` };
     }
 
     try {
         try {
             await client.connect();
         } catch (ex) {
-            return {status: false, message: "Unable to connect to Postgres data source: " + ex.message}
+            return { status: false, message: `Unable to connect to Postgres data source: ${ex.message}` };
         }
 
         try {
-            const res = await client.query('SELECT 1');
+            await client.query("SELECT 1");
         } catch (ex) {
-            return {status: false, message: "Error while testing connection " + ex.message}
+            return { status: false, message: `Error while testing connection ${ex.message}` };
         }
 
-        return {status: true}
+        return { status: true };
     } finally {
         if (client) {
             try {
