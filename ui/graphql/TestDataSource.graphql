@@ -1,0 +1,6 @@
+query TestDataSource($type: DataSourceType!, $config: JSON!) {
+    getDataSourceTestResult(type: $type, config: $config) {
+        status
+        message
+    }
+}
