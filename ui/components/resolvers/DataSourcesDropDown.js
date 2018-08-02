@@ -6,7 +6,6 @@ import {
     InputGroup,
     FormControl,
     DropdownButton,
-    FormGroup,
     Col
 } from "patternfly-react";
 
@@ -14,10 +13,10 @@ import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 import styles from "./DataSourcesDropDown.css";
 
-const DataSourcesDropDown = ({ selected, validation, onDataSourceSelect }) => {
+const DataSourcesDropDown = ({ selected, onDataSourceSelect }) => {
     const filter = undefined;
     return (
-        <FormGroup controlId="dataSource" validationState={validation}>
+        <React.Fragment>
             <Col sm={2} className={styles.dataSourceControlLabel}>Data Source</Col>
             <Col sm={6}>
                 <Query query={GetDataSources} variables={filter}>
@@ -58,7 +57,7 @@ const DataSourcesDropDown = ({ selected, validation, onDataSourceSelect }) => {
                     }}
                 </Query>
             </Col>
-        </FormGroup>
+        </React.Fragment>
     );
 };
 
