@@ -158,8 +158,14 @@ class BaseDataSourceDialog extends Component {
      */
     onTest() {
         this.testDataSource()
-            .then(() => this.setState({ success: "Connection to data source is successful" }))
-            .catch(message => this.setState({ err: message }));
+            .then(() => {
+                this.setState({ success: "Connection to data source is successful" });
+                this.setState({ err: "" });
+            })
+            .catch(message => {
+                this.setState({ success: "" });
+                this.setState({ err: message });
+            });
     }
 
     testDataSource() {
