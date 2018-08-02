@@ -16,6 +16,7 @@ import {
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { RequestMappingTemplateDropDown } from "./RequestMappingTemplateDropDown";
+import { ResponseMappingTemplateDropDown } from "./ResponseMappingTemplateDropDown";
 import { CodeEditor } from "../common/CodeEditor";
 import { Security } from "./Security";
 
@@ -26,12 +27,7 @@ const INITIAL_STATE = {
     dataSource: null,
     requestMapping: "Custom",
     responseMapping: "",
-    err: "",
-    validations: {
-        dataSource: null,
-        requestMapping: "warning",
-        responseMapping: "success"
-    }
+    err: ""
 };
 
 class ResolverDetail extends Component {
@@ -55,7 +51,15 @@ class ResolverDetail extends Component {
         this.setState({ requestMapping });
     }
 
-    onRequestMappingChange(text) {
+    onResponseMappingDropDownSelect(responseMapping) {
+        this.setState({ responseMapping });
+    }
+
+    onResponseMappingTemplateChange(text) {
+        console.log("response mapping template:", text);
+    }
+
+    onRequestMappingTemplateChange(text) {
         console.log("request mapping template:", text);
     }
 
@@ -79,7 +83,7 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, dataSource, responseMapping, requestMapping, validations } = this.state;
+        const { resolver, dataSource, responseMapping, requestMapping } = this.state;
 
         if (!resolver) {
             return this.renderEmptyScreen();
@@ -95,21 +99,38 @@ class ResolverDetail extends Component {
                 </h3>
 
                 <Form horizontal className={styles.formContainer}>
-                    <DataSourcesDropDown
-                        selected={dataSource}
-                        validation={validations.dataSource}
-                        onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
-                    />
-                    <RequestMappingTemplateDropDown
-                        value={requestMapping}
-                        onSelect={item => this.onRequestMappingDropDownSelect(item)}
-                    />
-                    <FormGroup controlId="requestMapping" validationState={validations.requestMapping}>
+                    <FormGroup controlId="dataSource">
+                        <DataSourcesDropDown
+                            selected={dataSource}
+                            onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="responseMapping">
+                        <ResponseMappingTemplateDropDown
+                            value={responseMapping}
+                            onSelect={item => this.onResponseMappingDropDownSelect(item)}
+                        />
+                        <Col sm={12}>
+                            <div className={styles.detailCodeEditor}>
+                                <CodeEditor
+                                    value={responseMapping}
+                                    onChange={text => this.onResponseMappingTemplateChange(text)}
+                                />
+                            </div>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="requestMapping">
+                        <RequestMappingTemplateDropDown
+                            value={requestMapping}
+                            onSelect={item => this.onRequestMappingDropDownSelect(item)}
+                        />
                         <Col sm={12}>
                             <div className={styles.detailCodeEditor}>
                                 <CodeEditor
                                     value={requestMapping}
-                                    onChange={text => this.onRequestMappingChange(text)}
+                                    onChange={text => this.onRequestMappingTemplateChange(text)}
                                 />
                             </div>
                         </Col>
