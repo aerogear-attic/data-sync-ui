@@ -5,9 +5,9 @@ import {
 import style from "./resolversList.css";
 import { formatType } from "../../helper/GraphQLFormatters";
 
-const fireEditEvent = (handler, type, field, resolver) => {
+const fireEditEvent = (handler, schemaId, type, field, resolver) => {
     if (handler) {
-        handler({ type, field, resolver });
+        handler({ schemaId, type, field, ...resolver });
     }
 };
 
@@ -16,7 +16,7 @@ const getResolverForField = (data, field) => {
     return resolvers.find(item => item.field === field);
 };
 
-const renderFields = (type, fields, resolvers, onClick) => {
+const renderFields = (schemaId, type, fields, resolvers, onClick) => {
     const mapped = fields.map(field => {
         const resolver = getResolverForField(resolvers, field.name);
         const resolverText = resolver ? resolver.DataSource.name : "No Resolver";
@@ -34,10 +34,10 @@ const renderFields = (type, fields, resolvers, onClick) => {
                         role="button"
                         tabIndex={0}
                         onClick={() => {
-                            fireEditEvent(onClick, type, field.name, resolver);
+                            fireEditEvent(onClick, schemaId, type, field.name, resolver);
                         }}
                         onKeyDown={() => {
-                            fireEditEvent(onClick, type, field.name, resolver);
+                            fireEditEvent(onClick, schemaId, type, field.name, resolver);
                         }}
                     >{resolverText}
                     </span>
@@ -77,7 +77,7 @@ const renderArguments = args => {
     );
 };
 
-const renderAdditionalInfo = (resolvers, kind, field, type, onClick) => {
+const renderAdditionalInfo = (resolvers, schemaId, kind, field, type, onClick) => {
     // TODO:implement subscription resolvers
     // For the moment we just don't display anything here
     if (kind === "subscription") {
@@ -92,10 +92,10 @@ const renderAdditionalInfo = (resolvers, kind, field, type, onClick) => {
             role="button"
             tabIndex={0}
             onClick={() => {
-                fireEditEvent(onClick, type, field, resolver);
+                fireEditEvent(onClick, schemaId, type, field, resolver);
             }}
             onKeyDown={() => {
-                fireEditEvent(onClick, type, field, resolver);
+                fireEditEvent(onClick, schemaId, type, field, resolver);
             }}
             key={field}
         >{resolverText}
@@ -103,7 +103,7 @@ const renderAdditionalInfo = (resolvers, kind, field, type, onClick) => {
     );
 };
 
-const renderGeneric = ({ kind, type, item, resolvers, onClick }) => {
+const renderGeneric = ({ kind, schemaId, type, item, resolvers, onClick }) => {
     const { args, name } = item;
     const argsText = `${args.length} Argument${args.length !== 1 ? "s" : ""}`;
 
@@ -114,14 +114,14 @@ const renderGeneric = ({ kind, type, item, resolvers, onClick }) => {
             leftContent={<span className={style["structure-heading"]}>{name}</span>}
             description={<span>{argsText}</span>}
             hideCloseIcon
-            additionalInfo={[renderAdditionalInfo(resolvers, kind, name, type, onClick)]}
+            additionalInfo={[renderAdditionalInfo(resolvers, schemaId, kind, name, type, onClick)]}
         >
             { renderArguments(args, resolvers) }
         </ListViewItem>
     );
 };
 
-const renderCustom = ({ type, item, resolvers, onClick }) => {
+const renderCustom = ({ schemaId, type, item, resolvers, onClick }) => {
     const { fields, name } = item;
     const fieldsText = `${fields.length} Field${fields.length !== 1 ? "s" : ""}`;
 
@@ -133,7 +133,7 @@ const renderCustom = ({ type, item, resolvers, onClick }) => {
             description={<span>{fieldsText}</span>}
             hideCloseIcon
         >
-            { renderFields(type, fields, resolvers, onClick) }
+            { renderFields(schemaId, type, fields, resolvers, onClick) }
         </ListViewItem>
     );
 };

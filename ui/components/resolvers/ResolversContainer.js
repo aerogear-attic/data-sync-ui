@@ -26,6 +26,7 @@ class ResolversContainer extends Component {
     }
 
     onResolverClicked(resolver) {
+        console.log("selected: ", resolver);
         this.setState({ resolver });
     }
 
@@ -43,7 +44,7 @@ class ResolversContainer extends Component {
                         <ResolversList onClick={res => this.onResolverClicked(res)} />
                     </div>
                     <div className={styles.resolverDetailContainer}>
-                        <ResolverDetail resolver={resolver} />
+                        <ResolverDetail {...resolver} />
                     </div>
                 </div>
             </React.Fragment>
