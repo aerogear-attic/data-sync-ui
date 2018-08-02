@@ -60,13 +60,6 @@ describe("Database", () => {
         resolvers: []
     };
 
-    const resolver = {
-        type: "type",
-        field: "field",
-        requestMapping: "",
-        responseMapping: ""
-    };
-
     describe("DataSources", () => {
         it("should not have any data sources by default", async () => {
             const fetch = await graphql(Schema, GET_DATA_SOURCES, root);
@@ -168,6 +161,13 @@ describe("Database", () => {
     });
 
     describe("Resolvers", () => {
+        const resolver = {
+            type: "type",
+            field: "field",
+            requestMapping: "",
+            responseMapping: ""
+        };
+
         it("should not have any resolvers by default", async () => {
             const fetch = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
             expect(fetch.data.resolvers).toHaveLength(0);
@@ -211,23 +211,14 @@ describe("Database", () => {
                 schemaId: 1, dataSourceId: 1, ...resolver
             });
 
-            const fetch = await graphql(Schema, GET_DATA_SOURCE, root, null, { id: 1 });
-            expect(fetch.data.getOneDataSource.resolvers).toHaveLength(1);
-            expect(fetch.data.getOneDataSource.resolvers[0]).toEqual({ id: 1, ...resolver });
-        });
-
-        it("should create a resolver", async () => {
-            await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
-            await graphql(Schema, CREATE_DATA_SOURCE, root, null, dataSource);
-
-            await graphql(Schema, UPSERT_RESOLVER, root, null, {
-                schemaId: 1, dataSourceId: 1, ...resolver
-            });
-
-            const fetch = await graphql(Schema, GET_RESOLVERS, root, null, {
+            let fetch = await graphql(Schema, GET_RESOLVERS, root, null, {
                 schemaId: 1, type: resolver.type
             });
             expect(fetch.data.resolvers).toHaveLength(1);
+
+            fetch = await graphql(Schema, GET_DATA_SOURCE, root, null, { id: 1 });
+            expect(fetch.data.getOneDataSource.resolvers).toHaveLength(1);
+            expect(fetch.data.getOneDataSource.resolvers[0]).toEqual({ id: 1, ...resolver });
         });
     });
 });
