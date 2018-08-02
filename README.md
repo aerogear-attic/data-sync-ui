@@ -19,33 +19,11 @@ The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync
 
 ## Prerequisites
 
-1. There is a dependency on having a running postgres server. To run postgres in a docker container use the following command:
+There is a dependency on having a running postgres server. To run postgres in a docker container use the following command:
  
     ```shell
     docker-compose up
     ```
-    
-1. Add some data to the database to display in the UI (optional):
-
-    ```sql
-    INSERT INTO DataSources (
-        "id",
-        "name",
-        "type",
-        "config",
-        "createdAt",
-        "updatedAt"
-    )
-    VALUES (
-        DEFAULT,
-        'nedb_notes',
-        'InMemory',
-        '{"options":{"timestampData":true}}',
-        '2018-07-02 15:44:45.467 +00:00',
-        '2018-07-02 15:44:45.467 +00:00'
-    ) 
-    RETURNING *;
-   ```
 
 > Database credentials can be found in [docker-compose.yml](docker-compose.yml)
 
