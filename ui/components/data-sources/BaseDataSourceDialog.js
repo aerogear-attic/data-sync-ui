@@ -17,6 +17,8 @@ import some from "lodash.some";
 import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
 import { Validators, Validate } from "../../helper/Validators";
+import TestDataSource from "../../graphql/TestDataSource.graphql";
+import ApolloClient from "apollo-boost"
 
 class BaseDataSourceDialog extends Component {
 
@@ -161,21 +163,31 @@ class BaseDataSourceDialog extends Component {
     }
 
     testDataSource() {
-        const { name, type } = this.state;
-
+        const { type } = this.state;
         const config = { options: this.getConfigByType(type) };
-        // TODO: what here?
-        // TODO: how to call `getDataSourceTestResult` query?
+        const client = new ApolloClient();
 
-        // TODO: only for testing the alerts
-        return new Promise(function(resolve, reject){
-            return resolve();
-            // OR
-            // return reject("Unable to connect data source: CONNREFUSED");
+        return new Promise((resolve, reject) => {
+            client.query({
+                query: TestDataSource,
+                variables: { config, type }
+            }).then(result => {
+                const { getDataSourceTestResult: { status, message } } = result.data;
+                if (status) {
+                    return resolve();
+                }
+
+                return reject(message);
+            }).catch(err => {
+                return reject(err.toString());
+            });
         });
     }
 
     render() {
+
+        if (!this.state) return null;
+
         const { visible } = this.props;
         const { name, type, err, success, validations } = this.state;
         const submitButtonDisabled = some(validations, s => !s || s === "error");
@@ -262,8 +274,9 @@ class BaseDataSourceDialog extends Component {
                 <Modal.Footer>
                     {type === DataSourceType.Postgres && (
                         <Button
-                            bsStyle="secondary"
+                            bsStyle="info"
                             onClick={() => this.onTest()}
+                            disabled={submitButtonDisabled}
                         >
                             Test
                         </Button>
@@ -286,7 +299,6 @@ class BaseDataSourceDialog extends Component {
             </Modal>
         );
     }
-
 }
 
 export default BaseDataSourceDialog;
