@@ -28,7 +28,7 @@ const MappingTemplateDropDown = ({ label, template, text, onTemplateSelect, onTe
                     className={mappingDropDown}
                     onSelect={t => onTemplateSelect(t)}
                 >
-                    {TEMPLATES.map(t => <MenuItem eventKey={t}>{t}</MenuItem>)}
+                    {TEMPLATES.map(t => <MenuItem eventKey={t} key={t}>{t}</MenuItem>)}
                 </SplitButton>
             </InputGroup>
         </Col>
