@@ -29,7 +29,7 @@ const INITIAL_STATE = {
     isResolverSaved: true,
     err: ""
 };
-console.log("IMPORT", HookFormGroup);
+
 class ResolverDetail extends Component {
 
     constructor(props) {
