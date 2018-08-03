@@ -14,6 +14,7 @@ import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 
 import styles from "./ResolverDetail.css";
 
@@ -71,7 +72,10 @@ class ResolverDetail extends Component {
 
         this.props.mutate({
             variables,
-            refetchQueries: [{ query: GetSchema, variables: { name: "default" } }]
+            refetchQueries: [
+                { query: GetSchema, variables: { name: "default" } },
+                { query: GetResolvers, variables: { schemaId, type } }
+            ]
         })
             .then(() => console.log("saved"))
             .catch(err => console.log(err));
