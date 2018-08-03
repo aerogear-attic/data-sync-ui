@@ -9,6 +9,7 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    line-height: 20px;
     font-family: monospace;
     font-size: 14px;
     border: none;
@@ -16,7 +17,7 @@
     white-space: pre;
     overflow-wrap: normal;
     overflow-y: auto;
-    background-color: #FAFAFA
+    background-color: #FAFAFA;
 }
 
 .expand {
@@ -42,4 +43,5 @@
 .vcenter {
     align-self: flex-end;
     margin-right: 10px;
+    height: 20px;
 }

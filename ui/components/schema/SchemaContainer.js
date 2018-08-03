@@ -12,6 +12,8 @@ import style from "./schemaContainer.css";
 
 const INITIAL_STATE = {
     schema: "",
+    compiled: null,
+    schemaId: null,
     error: null,
     saving: false,
     saved: true
@@ -22,6 +24,16 @@ class SchemaContainer extends Component {
     constructor(props) {
         super(props);
         this.state = INITIAL_STATE;
+    }
+
+    componentWillReceiveProps({ data: { getSchema } }) {
+        if (this.props.data.getSchema !== getSchema) {
+            this.setState({
+                schema: getSchema.schema,
+                compiled: getSchema.compiled,
+                schemaId: getSchema.id
+            });
+        }
     }
 
     onSchemaChange(schema) {
@@ -100,8 +112,7 @@ class SchemaContainer extends Component {
     }
 
     renderContent() {
-        const { getSchema: { id, schema, compiled } } = this.props.data;
-        const { error, saving } = this.state;
+        const { error, saving, schema, compiled, schemaId } = this.state;
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
@@ -117,7 +128,7 @@ class SchemaContainer extends Component {
                         <StructureView
                             compiled={JSON.parse(compiled)}
                             error={error}
-                            schemaId={id}
+                            schemaId={schemaId}
                         />
                     </div>
                 </div>
