@@ -9,7 +9,7 @@ exports.postgresConfig = {
     logSql: false
 };
 
-exports.notfier = {
+exports.notifier = {
     enabled: process.env.NODE_ENV !== "test",
     type: "postgres",
     config: {

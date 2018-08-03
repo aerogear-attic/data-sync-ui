@@ -14,9 +14,11 @@ import {
 } from "patternfly-react";
 import some from "lodash.some";
 
+import ApolloClient from "apollo-boost";
 import { InMemoryOptions, PostgresOptions } from "./options";
 import { DataSourceType } from "../../graphql/types/DataSourceType";
 import { Validators, Validate } from "../../helper/Validators";
+import TestDataSource from "../../graphql/TestDataSource.graphql";
 
 class BaseDataSourceDialog extends Component {
 
@@ -151,9 +153,44 @@ class BaseDataSourceDialog extends Component {
         throw new Error(`isDisabled(controlId: string) not implemented in ${this.constructor.name}`);
     }
 
+    /**
+     * Test the data source and show message on the dialog.
+     */
+    onTest() {
+        this.testDataSource()
+            .then(() => {
+                this.setState({ success: "Connection to data source is successful" });
+                this.setState({ err: "" });
+            })
+            .catch(message => {
+                this.setState({ success: "" });
+                this.setState({ err: message });
+            });
+    }
+
+    testDataSource() {
+        const { type } = this.state;
+        const config = { options: this.getConfigByType(type) };
+        const client = new ApolloClient();
+
+        return new Promise((resolve, reject) => {
+            client.query({
+                query: TestDataSource,
+                variables: { config, type }
+            }).then(result => {
+                const { getDataSourceTestResult: { status, message } } = result.data;
+                if (status) {
+                    return resolve();
+                }
+
+                return reject(message);
+            }).catch(err => reject(err.toString()));
+        });
+    }
+
     render() {
         const { visible } = this.props;
-        const { name, type, err, validations } = this.state;
+        const { name, type, err, success, validations } = this.state;
         const submitButtonDisabled = some(validations, s => !s || s === "error");
 
         return (
@@ -174,6 +211,7 @@ class BaseDataSourceDialog extends Component {
                 <Modal.Body>
                     {/* Alert */}
                     {err && <Alert onDismiss={() => this.setState({ err: "" })}>{err}</Alert>}
+                    {success && <Alert type="success" onDismiss={() => this.setState({ success: "" })}>{success}</Alert>}
 
                     {type === DataSourceType.InMemory && (
                         <Alert type="warning">
@@ -235,6 +273,15 @@ class BaseDataSourceDialog extends Component {
                 </Modal.Body>
 
                 <Modal.Footer>
+                    {type === DataSourceType.Postgres && (
+                        <Button
+                            bsStyle="info"
+                            onClick={() => this.onTest()}
+                            disabled={submitButtonDisabled}
+                        >
+                            Test
+                        </Button>
+                    )}
                     <Button
                         bsStyle="default"
                         className="btn-cancel"

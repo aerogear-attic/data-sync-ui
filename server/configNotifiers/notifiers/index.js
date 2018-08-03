@@ -1,3 +1,3 @@
-const { PostgresNotifier } = require("./postgres");
+const PostgresNotifier = require("./postgres");
 
 module.exports = { postgres: PostgresNotifier };

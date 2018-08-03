@@ -3,6 +3,7 @@ const { log } = require("../logger");
 const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
+const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -15,6 +16,7 @@ const Schema = buildSchema(`
         schemas: [Schema]
         getSchema(name: String!): Schema
         resolvers(schemaId: Int!, type: String):[Resolver]
+        getDataSourceTestResult(type: DataSourceType!, config: JSON!): DataSourceTestResult
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
@@ -58,6 +60,10 @@ const Schema = buildSchema(`
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
+    },
+    type DataSourceTestResult {
+        status: Boolean!
+        message: String
     }
 
     scalar JSON
@@ -166,6 +172,8 @@ const listSchemas = async () => schema.findAll({
     include: [{ all: true }]
 });
 
+const getDataSourceTestResult = async ({ type, config }) => dataSourceValidator(type, config);
+
 const getSchema = async ({ name }) => {
     const [defaultSchema, created] = await schema.findOrCreate({
         where: { name },
@@ -226,6 +234,7 @@ const root = {
     deleteResolver,
     createDataSource,
     getOneDataSource,
+    getDataSourceTestResult,
     deleteDataSource,
     updateDataSource,
     updateSchema,
