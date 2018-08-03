@@ -101,3 +101,7 @@ div.list-group-item-container .pficon-close {
 .resolvers-list div.list-view-pf-main-info {
     margin-top: 7px;
 }
+
+.blank-slate-pf .blank-slate-pf-icon {
+    color: #D1D1D1;
+}

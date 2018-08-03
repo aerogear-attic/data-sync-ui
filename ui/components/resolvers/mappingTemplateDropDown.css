@@ -1,0 +1,19 @@
+.mappingControlLabel {
+    margin-right: -50px;
+    margin-top: 3px;
+    font-weight: 600;
+}
+
+.mappingDropDown {
+    font-weight: 500;
+    background: none;
+    min-width: 110px;
+    text-align: left;
+}
+
+.detailCodeEditor {
+    height: 200px;
+    border: 1px solid #D1D1D1;
+    margin-top: 7px;
+    /* TODO: allow vertical resize */
+} 

@@ -10,12 +10,14 @@
     background-color: white !important;
 }
 
-.left {
+.resolversListContainer {
     width: 40%;
-    border-right: 1px solid lightgrey;
     overflow-y: auto;
 }
 
-.right {
+.resolverDetailContainer {
     width: 60%;
+    border-left: 6px solid #EDEDED;
+    overflow-y: hidden;
+    position: relative;
 }
