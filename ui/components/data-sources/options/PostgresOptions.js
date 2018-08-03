@@ -7,7 +7,6 @@ import {
 
 const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
     <React.Fragment>
-        {/* TimeStamp Data Option */}
         <FormGroup controlId="url">
             <Col sm={3}>Server</Col>
             <Col sm={9}>
