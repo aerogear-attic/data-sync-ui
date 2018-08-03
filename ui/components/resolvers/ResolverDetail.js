@@ -3,7 +3,6 @@ import { graphql } from "react-apollo";
 import {
     Form,
     FormGroup,
-    Col,
     Button,
     EmptyState,
     EmptyStateIcon,
@@ -11,9 +10,7 @@ import {
 } from "patternfly-react";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
-import { RequestMappingTemplateDropDown } from "./RequestMappingTemplateDropDown";
-import { ResponseMappingTemplateDropDown } from "./ResponseMappingTemplateDropDown";
-import { CodeEditor } from "../common/CodeEditor";
+import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
@@ -104,7 +101,7 @@ class ResolverDetail extends Component {
 
         const {
             detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
-            detailFormGroup, detailCodeEditor, detailButtonFooter, buttonSave
+            detailFormGroup, detailButtonFooter, buttonSave
         } = styles;
 
         if (!field || !type) {
@@ -130,33 +127,23 @@ class ResolverDetail extends Component {
                         </FormGroup>
 
                         <FormGroup controlId="requestMapping" className={detailFormGroup}>
-                            <RequestMappingTemplateDropDown
-                                value={requestMappingTemplate}
-                                onSelect={item => this.setState({ requestMappingTemplate: item })}
+                            <MappingTemplateDropDown
+                                label="Request Mapping Template"
+                                template={requestMappingTemplate}
+                                text={requestMapping}
+                                onTemplateSelect={t => this.setState({ requestMappingTemplate: t })}
+                                onTextChange={t => this.setState({ requestMapping: t })}
                             />
-                            <Col sm={12}>
-                                <div className={detailCodeEditor}>
-                                    <CodeEditor
-                                        value={requestMapping}
-                                        onChange={t => this.setState({ requestMapping: t })}
-                                    />
-                                </div>
-                            </Col>
                         </FormGroup>
 
                         <FormGroup controlId="responseMapping" className={detailFormGroup}>
-                            <ResponseMappingTemplateDropDown
-                                value={responseMappingTemplate}
-                                onSelect={item => this.setState({ responseMappingTemplate: item })}
+                            <MappingTemplateDropDown
+                                label="Response Mapping Template"
+                                template={responseMappingTemplate}
+                                text={responseMapping}
+                                onTemplateSelect={t => this.setState({ responseMappingTemplate: t })}
+                                onTextChange={t => this.setState({ responseMapping: t })}
                             />
-                            <Col sm={12}>
-                                <div className={detailCodeEditor}>
-                                    <CodeEditor
-                                        value={responseMapping}
-                                        onChange={t => this.setState({ responseMapping: t })}
-                                    />
-                                </div>
-                            </Col>
                         </FormGroup>
                     </Form>
                 </div>
