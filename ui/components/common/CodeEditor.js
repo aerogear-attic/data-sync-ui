@@ -69,6 +69,7 @@ const CodeEditor = class extends Component {
                         onChange={ev => onChange(ev.currentTarget.value)}
                         onScroll={() => this.onEditorScroll()}
                         disabled={disabled}
+                        placeholder={placeholder}
                     />
                 </div>
             </div>
