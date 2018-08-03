@@ -37,6 +37,7 @@ const MappingTemplateDropDown = ({ label, template, text, onTemplateSelect, onTe
                 <CodeEditor
                     value={text}
                     onChange={t => onTextChange(t)}
+                    placeholder="# Add your mapping here"
                 />
             </div>
         </Col>
