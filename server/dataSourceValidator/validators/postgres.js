@@ -63,10 +63,14 @@ module.exports = async config => {
         return { status: true };
     } finally {
         if (client) {
-            // do not block on ending the client
-            client.end(() => {
+            // force kill the connection if it is open or end it if it is not
+            // see https://github.com/brianc/node-pg-pool/blob/277dc508daea03a8f6c0bcc3c534cab5b2501b12/index.js#L208-L209
+            try{
+                // do not block on ending the client
+                client.connection ? client.connection.stream.destroy() : client.end();
+            } catch{
                 // do nothing even when there's an error.
-            });
+            }
         }
     }
 };
