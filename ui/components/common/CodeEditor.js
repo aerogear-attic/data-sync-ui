@@ -83,7 +83,7 @@ const CodeEditor = class extends Component {
     }
 
     render() {
-        const { disabled } = this.props;
+        const { disabled, placeholder } = this.props;
         const { editorValue, lineHeight } = this.state;
         return (
             <div className={style["editor-container"]}>
@@ -103,6 +103,7 @@ const CodeEditor = class extends Component {
                         onChange={() => this.onEditorChange()}
                         onScroll={() => this.onEditorScroll()}
                         disabled={disabled}
+                        placeholder={placeholder}
                     />
                 </div>
             </div>
