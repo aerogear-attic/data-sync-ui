@@ -7,38 +7,8 @@ const CodeEditor = class extends Component {
     constructor(props) {
         super(props);
 
-        const { lineHeight, value } = this.props;
-
-        this.state = {
-            editorValue: value || "",
-            lineHeight: lineHeight || 20
-        };
-
         this.editor = createRef();
         this.gutter = createRef();
-    }
-
-    componentDidMount() {
-        this.drawLineNumbers();
-    }
-
-    componentWillReceiveProps({ value = "" }) {
-        if (this.props.value !== value) {
-            this.drawLineNumbers();
-            this.setState({ editorValue: value });
-        }
-    }
-
-    onEditorChange() {
-        this.drawLineNumbers();
-        this.setState({ editorValue: this.editor.current.value });
-
-        const { onChange } = this.props;
-
-        // Propagate update
-        if (onChange) {
-            onChange(this.editor.current.value);
-        }
     }
 
     // Deal with the tab key: we don't want to loose focus on the
@@ -63,35 +33,27 @@ const CodeEditor = class extends Component {
     }
 
     getLineCount() {
-        const { editorValue } = this.state;
-        return editorValue.split("\n").length;
-    }
-
-    drawLineNumbers() {
-        const { lineHeight } = this.state;
-        let lines = Math.floor(this.getLineCount());
-        if (!lines) {
-            lines = 1;
-        }
-
-        return [...Array(lines).keys()].map(index => (
-            <div
-                key={index}
-                style={{ height: lineHeight }}
-                className={style.vcenter}
-            >
-                <span>{index + 1}</span>
-            </div>
-        ));
+        const { value } = this.props;
+        return value.split("\n").length || 1;
     }
 
     adjustGutterPosition() {
         this.gutter.current.scrollTop = this.editor.current.scrollTop;
     }
 
+    drawLineNumbers() {
+        const lines = this.getLineCount();
+
+        return [...Array(lines).keys()].map(index => (
+            <div key={index} className={style.vcenter}>
+                {index + 1}
+            </div>
+        ));
+    }
+
     render() {
-        const { disabled, placeholder } = this.props;
-        const { editorValue, lineHeight } = this.state;
+        const { disabled, placeholder, value, onChange } = this.props;
+
         return (
             <div className={style["editor-container"]}>
                 <div className={style.numbers} ref={this.gutter}>
@@ -100,14 +62,11 @@ const CodeEditor = class extends Component {
                 <div className={style.expand}>
                     <textarea
                         ref={this.editor}
-                        value={editorValue}
-                        style={{
-                            lineHeight: `${lineHeight}px`,
-                            opacity: disabled ? 0.2 : 1
-                        }}
+                        value={value}
+                        style={{ opacity: disabled ? 0.2 : 1 }}
                         className={style["editor-area"]}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
-                        onChange={() => this.onEditorChange()}
+                        onChange={ev => onChange(ev.currentTarget.value)}
                         onScroll={() => this.onEditorScroll()}
                         disabled={disabled}
                         placeholder={placeholder}
