@@ -11,6 +11,7 @@ import {
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
+import { HookFormGroup } from "./HookFormGroup";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
@@ -28,7 +29,7 @@ const INITIAL_STATE = {
     isResolverSaved: true,
     err: ""
 };
-
+console.log("IMPORT", HookFormGroup);
 class ResolverDetail extends Component {
 
     constructor(props) {
@@ -43,7 +44,6 @@ class ResolverDetail extends Component {
     }
 
     updateResolver(newProps) {
-        console.log("resolver updated with: ", newProps);
         const { resolver } = this.state;
         const { onResolverEdit } = this.props;
 
@@ -137,6 +137,22 @@ class ResolverDetail extends Component {
                                 text={responseMapping}
                                 onTemplateSelect={t => this.setState({ responseMappingTemplate: t })}
                                 onTextChange={t => this.updateResolver({ responseMapping: t })}
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="preHook" className={detailFormGroup}>
+                            <HookFormGroup
+                                label="Pre Hook"
+                                url={preHook}
+                                onChange={h => this.updateResolver({ preHook: h })}
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="postHook" className={detailFormGroup}>
+                            <HookFormGroup
+                                label="Post Hook"
+                                url={postHook}
+                                onChange={h => this.updateResolver({ postHook: h })}
                             />
                         </FormGroup>
                     </Form>
