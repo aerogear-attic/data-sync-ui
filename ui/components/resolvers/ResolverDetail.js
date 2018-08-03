@@ -16,18 +16,13 @@ import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
-import styles from "./ResolverDetail.css";
+import {
+    detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
+    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle
+} from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
-    id: null,
-    schemaId: null,
-    field: null,
-    type: null,
-    DataSource: null,
-    preHook: null,
-    postHook: null,
-    requestMapping: "",
-    responseMapping: "",
+    resolver: null,
     requestMappingTemplate: "Custom",
     responseMappingTemplate: "Custom",
     err: ""
@@ -40,53 +35,38 @@ class ResolverDetail extends Component {
         this.state = INITIAL_STATE;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
-            const {
-                id, schemaId, field, type, DataSource, requestMapping,
-                responseMapping
-            } = nextProps;
-            this.setState({
-                id, schemaId, field, type, DataSource, requestMapping, responseMapping
-            });
+    componentWillReceiveProps({ resolver }) {
+        console.log("new resolver", resolver);
+        if (this.props.resolver !== resolver) {
+            console.log("new state", { ...INITIAL_STATE, ...resolver });
+            this.setState({ ...INITIAL_STATE, resolver });
         }
     }
 
+    updateResolver(newProps) {
+        this.setState({ resolver: { ...newProps } });
+    }
+
     save() {
-        const {
-            id, schemaId, field, type, DataSource, requestMapping,
-            responseMapping
-        } = this.state;
-
-        const variables = {
-            id,
-            schemaId,
-            field,
-            type,
-            dataSourceId: DataSource.id,
-            requestMapping,
-            responseMapping
-        };
-
-        console.log("saving resolver:", variables);
-
-        this.props.mutate({
-            variables,
-            refetchQueries: [
-                { query: GetSchema, variables: { name: "default" } },
-                { query: GetResolvers, variables: { schemaId, type } }
-            ]
-        })
+        this.upsertResolver()
             .then(() => console.log("saved"))
             .catch(err => console.log(err));
     }
 
-    cancel() {
-        console.log("called cancel");
+    upsertResolver() {
+        const { resolver } = this.state;
+        const { schemaId, type } = resolver;
+
+        return this.props.mutate({
+            variables: { ...resolver },
+            refetchQueries: [
+                { query: GetSchema, variables: { name: "default" } },
+                { query: GetResolvers, variables: { schemaId, type } }
+            ]
+        });
     }
 
     renderEmptyScreen() {
-        const { detailEmpty, emptyTitle } = styles;
         return (
             <EmptyState className={detailEmpty}>
                 <EmptyStateIcon name="info" />
@@ -98,19 +78,13 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const {
-            field, type, DataSource, requestMapping, responseMapping, requestMappingTemplate,
-            responseMappingTemplate
-        } = this.state;
+        const { resolver, requestMappingTemplate, responseMappingTemplate } = this.state;
 
-        const {
-            detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
-            detailFormGroup, detailButtonFooter, buttonSave
-        } = styles;
-
-        if (!field || !type) {
+        if (!resolver) {
             return this.renderEmptyScreen();
         }
+
+        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
 
         return (
             <React.Fragment>
@@ -126,7 +100,7 @@ class ResolverDetail extends Component {
                         <FormGroup controlId="dataSource" className={detailFormGroup}>
                             <DataSourcesDropDown
                                 selected={DataSource}
-                                onDataSourceSelect={ds => this.setState({ DataSource: ds })}
+                                onDataSourceSelect={ds => this.updateResolver({ DataSource: ds })}
                             />
                         </FormGroup>
 
@@ -136,7 +110,7 @@ class ResolverDetail extends Component {
                                 template={requestMappingTemplate}
                                 text={requestMapping}
                                 onTemplateSelect={t => this.setState({ requestMappingTemplate: t })}
-                                onTextChange={t => this.setState({ requestMapping: t })}
+                                onTextChange={t => this.updateResolver({ requestMapping: t })}
                             />
                         </FormGroup>
 
@@ -146,7 +120,7 @@ class ResolverDetail extends Component {
                                 template={responseMappingTemplate}
                                 text={responseMapping}
                                 onTemplateSelect={t => this.setState({ responseMappingTemplate: t })}
-                                onTextChange={t => this.setState({ responseMapping: t })}
+                                onTextChange={t => this.updateResolver({ responseMapping: t })}
                             />
                         </FormGroup>
                     </Form>
@@ -160,12 +134,7 @@ class ResolverDetail extends Component {
                     >
                         Save
                     </Button>
-                    <Button
-                        bsStyle="default"
-                        onClick={() => this.cancel()}
-                    >
-                        Cancel
-                    </Button>
+                    {/* <Button bsStyle="default" onClick={() => console.log("cancel")}>Cancel</Button> */}
                 </div>
 
             </React.Fragment>
