@@ -25,7 +25,7 @@ const INITIAL_STATE = {
     resolver: null,
     requestMappingTemplate: "Custom",
     responseMappingTemplate: "Custom",
-    resolverSaved: true,
+    isResolverSaved: true,
     err: ""
 };
 
@@ -43,13 +43,21 @@ class ResolverDetail extends Component {
     }
 
     updateResolver(newProps) {
+        console.log("resolver updated with: ", newProps);
         const { resolver } = this.state;
-        this.setState({ resolverSaved: false, resolver: { ...resolver, ...newProps } });
+        const { onResolverEdit } = this.props;
+
+        onResolverEdit({ isResolverSaved: false });
+        this.setState({ isResolverSaved: false, resolver: { ...resolver, ...newProps } });
     }
 
     save() {
+        const { onResolverEdit } = this.props;
         this.upsertResolver()
-            .then(() => this.setState({ resolverSaved: true }))
+            .then(() => {
+                onResolverEdit({ isResolverSaved: true });
+                this.setState({ isResolverSaved: true });
+            })
             .catch(err => console.log(err));
     }
 
@@ -86,7 +94,7 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, requestMappingTemplate, responseMappingTemplate, resolverSaved } = this.state;
+        const { resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved } = this.state;
 
         if (!resolver) {
             return this.renderEmptyScreen();
@@ -139,7 +147,7 @@ class ResolverDetail extends Component {
                         className={buttonSave}
                         bsStyle="primary"
                         onClick={() => this.save()}
-                        disabled={resolverSaved}
+                        disabled={isResolverSaved}
                     >
                         Save
                     </Button>

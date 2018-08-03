@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { MessageDialog, Icon } from "patternfly-react";
 import { CommonToolbar } from "../common";
 import { ResolversList } from "./ResolversList";
 import { ResolverDetail } from "./ResolverDetail";
@@ -7,6 +8,9 @@ import styles from "./resolversContainer.css";
 
 const INITIAL_STATE = {
     resolver: null,
+    clickedResolver: null,
+    isResolverSaved: true,
+    showChangeConfirmation: false,
     filter: {}
 };
 
@@ -26,11 +30,35 @@ class ResolversContainer extends Component {
     }
 
     onResolverClicked(resolver) {
-        this.setState({ resolver });
+        const { isResolverSaved } = this.state;
+
+        if (isResolverSaved) {
+            this.setState({ resolver });
+        } else {
+            this.setState({ showChangeConfirmation: true, clickedResolver: resolver });
+        }
+    }
+
+    ignoreChangesAndChangeResolver() {
+        const { clickedResolver } = this.state;
+        this.setState({
+            resolver: clickedResolver,
+            clickedResolver: null,
+            showChangeConfirmation: false,
+            isResolverSaved: true
+        });
+    }
+
+    cancelChangeResolver() {
+        this.setState({ showChangeConfirmation: false, clickedResolver: null });
+    }
+
+    onResolverEdit({ isResolverSaved }) {
+        this.setState({ isResolverSaved });
     }
 
     render() {
-        const { resolver } = this.state;
+        const { resolver, showChangeConfirmation } = this.state;
 
         return (
             <React.Fragment>
@@ -43,9 +71,21 @@ class ResolversContainer extends Component {
                         <ResolversList onClick={res => this.onResolverClicked(res)} />
                     </div>
                     <div className={styles.resolverDetailContainer}>
-                        <ResolverDetail resolver={resolver} />
+                        <ResolverDetail resolver={resolver} onResolverEdit={e => this.onResolverEdit(e)} />
                     </div>
                 </div>
+                <MessageDialog
+                    show={showChangeConfirmation}
+                    onHide={() => this.cancelChangeResolver()}
+                    primaryAction={() => this.ignoreChangesAndChangeResolver()}
+                    secondaryAction={() => this.cancelChangeResolver()}
+                    primaryActionButtonContent="Ignore Changes"
+                    secondaryActionButtonContent="Cancel"
+                    title="Unsaved Changes"
+                    icon={<Icon type="pf" name="warning-triangle-o" />}
+                    primaryContent={<p className="lead">Changes on the resolver will be lost</p>}
+                    secondaryContent={<p>Please save your resolver before selecting a different one or all changes will be lost.</p>}
+                />
             </React.Fragment>
         );
     }
