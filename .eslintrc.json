@@ -1,6 +1,7 @@
 {
     "extends": ["airbnb", "plugin:jest/recommended"],
     "rules": {
+        "max-len": "warn",
         "quotes": ["error", "double"],
         "comma-dangle": ["error", "never"],
         "arrow-parens": ["error", "as-needed"],
