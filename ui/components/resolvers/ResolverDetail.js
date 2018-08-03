@@ -17,6 +17,8 @@ import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
+import { getTemplatesForDataSource } from "./MappingTemplates";
+
 import {
     detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
     detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle
@@ -41,6 +43,16 @@ class ResolverDetail extends Component {
         if (this.props.resolver !== resolver) {
             this.setState({ ...INITIAL_STATE, resolver });
         }
+    }
+
+    onRequestTemplateSelect(template) {
+        this.setState({ requestMappingTemplate: template.key });
+        this.updateResolver({ requestMapping: template.value });
+    }
+
+    onResponseTemplateSelect(template) {
+        this.setState({ responseMappingTemplate: template.key });
+        this.updateResolver({ responseMapping: template.value });
     }
 
     updateResolver(newProps) {
@@ -101,6 +113,7 @@ class ResolverDetail extends Component {
         }
 
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
+        const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         return (
             <React.Fragment>
@@ -124,8 +137,9 @@ class ResolverDetail extends Component {
                             <MappingTemplateDropDown
                                 label="Request Mapping Template"
                                 template={requestMappingTemplate}
+                                templates={requestMappingTemplates}
                                 text={requestMapping}
-                                onTemplateSelect={t => this.setState({ requestMappingTemplate: t })}
+                                onTemplateSelect={t => this.onRequestTemplateSelect(t)}
                                 onTextChange={t => this.updateResolver({ requestMapping: t })}
                             />
                         </FormGroup>
@@ -134,8 +148,9 @@ class ResolverDetail extends Component {
                             <MappingTemplateDropDown
                                 label="Response Mapping Template"
                                 template={responseMappingTemplate}
+                                templates={responseMappingTemplates}
                                 text={responseMapping}
-                                onTemplateSelect={t => this.setState({ responseMappingTemplate: t })}
+                                onTemplateSelect={t => this.onResponseTemplateSelect(t)}
                                 onTextChange={t => this.updateResolver({ responseMapping: t })}
                             />
                         </FormGroup>

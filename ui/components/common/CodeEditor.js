@@ -64,6 +64,10 @@ const CodeEditor = class extends Component {
 
     getLineCount() {
         const { editorValue } = this.state;
+        if (!editorValue) {
+            return 0;
+        }
+
         return editorValue.split("\n").length;
     }
 

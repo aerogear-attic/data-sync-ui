@@ -13,9 +13,7 @@ import {
     detailCodeEditor
 } from "./mappingTemplateDropDown.css";
 
-const TEMPLATES = ["Custom", "Template 1", "Template 2"];
-
-const MappingTemplateDropDown = ({ label, template, text, onTemplateSelect, onTextChange }) => (
+const MappingTemplateDropDown = ({ label, template, templates, text, onTemplateSelect, onTextChange }) => (
     <React.Fragment>
         <Col sm={6} className={mappingControlLabel}>{label}</Col>
         <Col sm={6} className="pull-right">
@@ -28,7 +26,13 @@ const MappingTemplateDropDown = ({ label, template, text, onTemplateSelect, onTe
                     className={mappingDropDown}
                     onSelect={t => onTemplateSelect(t)}
                 >
-                    {TEMPLATES.map(t => <MenuItem eventKey={t} key={t}>{t}</MenuItem>)}
+                    {
+                        Object.keys(templates).map((key, value) => (
+                            <MenuItem key={key} eventKey={{ key, value }}>
+                                {key}
+                            </MenuItem>
+                        ))
+                    }
                 </SplitButton>
             </InputGroup>
         </Col>
