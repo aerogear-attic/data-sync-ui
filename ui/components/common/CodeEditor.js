@@ -22,6 +22,13 @@ const CodeEditor = class extends Component {
         this.drawLineNumbers();
     }
 
+    componentWillReceiveProps({ value = "" }) {
+        if (this.props.value !== value) {
+            this.drawLineNumbers();
+            this.setState({ editorValue: value });
+        }
+    }
+
     onEditorChange() {
         this.drawLineNumbers();
         this.setState({ editorValue: this.editor.current.value });
