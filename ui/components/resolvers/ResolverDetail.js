@@ -25,6 +25,7 @@ const INITIAL_STATE = {
     resolver: null,
     requestMappingTemplate: "Custom",
     responseMappingTemplate: "Custom",
+    resolverSaved: true,
     err: ""
 };
 
@@ -36,29 +37,36 @@ class ResolverDetail extends Component {
     }
 
     componentWillReceiveProps({ resolver }) {
-        console.log("new resolver", resolver);
         if (this.props.resolver !== resolver) {
-            console.log("new state", { ...INITIAL_STATE, ...resolver });
             this.setState({ ...INITIAL_STATE, resolver });
         }
     }
 
     updateResolver(newProps) {
-        this.setState({ resolver: { ...newProps } });
+        const { resolver } = this.state;
+        this.setState({ resolverSaved: false, resolver: { ...resolver, ...newProps } });
     }
 
     save() {
         this.upsertResolver()
-            .then(() => console.log("saved"))
+            .then(() => this.setState({ resolverSaved: true }))
             .catch(err => console.log(err));
     }
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { schemaId, type } = resolver;
+        const { id, schemaId, DataSource, type, field, requestMapping, responseMapping } = resolver;
 
         return this.props.mutate({
-            variables: { ...resolver },
+            variables: {
+                id,
+                schemaId,
+                dataSourceId: DataSource.id,
+                type,
+                field,
+                requestMapping,
+                responseMapping
+            },
             refetchQueries: [
                 { query: GetSchema, variables: { name: "default" } },
                 { query: GetResolvers, variables: { schemaId, type } }
@@ -78,7 +86,7 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, requestMappingTemplate, responseMappingTemplate } = this.state;
+        const { resolver, requestMappingTemplate, responseMappingTemplate, resolverSaved } = this.state;
 
         if (!resolver) {
             return this.renderEmptyScreen();
@@ -131,6 +139,7 @@ class ResolverDetail extends Component {
                         className={buttonSave}
                         bsStyle="primary"
                         onClick={() => this.save()}
+                        disabled={resolverSaved}
                     >
                         Save
                     </Button>
