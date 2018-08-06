@@ -44,6 +44,8 @@ module.exports = {
             id
             type
             field
+            preHook
+            postHook
             requestMapping
             responseMapping
           }
@@ -109,8 +111,28 @@ module.exports = {
       }
     `,
     UPSERT_RESOLVER: `
-      mutation upsertResolver($id: Int, $schemaId: Int!, $dataSourceId: Int!, $type: String!, $field: String!, $requestMapping: String!, $responseMapping: String!) {
-        upsertResolver(id: $id, schemaId: $schemaId, dataSourceId: $dataSourceId, type: $type, field: $field, requestMapping: $requestMapping, responseMapping: $responseMapping) {
+      mutation upsertResolver(
+        $id: Int,
+        $schemaId: Int!,
+        $dataSourceId: Int!,
+        $type: String!,
+        $field: String!,
+        $preHook: String,
+        $postHook: String,
+        $requestMapping: String!,
+        $responseMapping: String!
+      ) {
+        upsertResolver(
+          id: $id,
+          schemaId: $schemaId,
+          dataSourceId: $dataSourceId,
+          type: $type,
+          field: $field,
+          preHook: $preHook,
+          postHook: $postHook,
+          requestMapping: $requestMapping,
+          responseMapping: $responseMapping
+        ) {
           id
         }
       }

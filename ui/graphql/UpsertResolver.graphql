@@ -4,6 +4,8 @@ mutation UpsertResolver(
     $dataSourceId: Int!,
     $type: String!,
     $field: String!,
+    $preHook: String,
+    $postHook: String
     $requestMapping: String!,
     $responseMapping: String!
 ) {
@@ -13,6 +15,8 @@ mutation UpsertResolver(
         dataSourceId: $dataSourceId,
         type: $type,
         field: $field,
+        preHook: $preHook,
+        postHook: $postHook,
         requestMapping: $requestMapping,
         responseMapping: $responseMapping
     ) {
