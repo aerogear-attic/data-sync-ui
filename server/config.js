@@ -23,6 +23,6 @@ exports.notifier = {
 };
 
 exports.auditLogConfig = {
-    enabled : process.env.AUDIT_LOGGING !== "false" && process.env.AUDIT_LOGGING !== false,
+    enabled: process.env.AUDIT_LOGGING !== "false" && process.env.AUDIT_LOGGING !== false,
     tag: "AUDIT"
 };
