@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
     Col,
     FormControl,
@@ -6,30 +6,36 @@ import {
     Button
 } from "patternfly-react";
 
-const HookFormGroup = ({ url = "", label, onChange }) => {
-    const testHook = () => {
-        console.log(`Test url: ${url}`);
-    };
+class HookFormGroup extends Component {
 
-    return (
-        <React.Fragment>
-            <Col sm={3}>{label}</Col>
-            <Col sm={9}>
-                <InputGroup>
-                    <FormControl
-                        type="url"
-                        value={url}
-                        onChange={ev => onChange(ev.currentTarget.value)}
-                    />
-                    <InputGroup.Button>
-                        <Button onClick={testHook}>
+    testHook() {
+        const { url = "" } = this.props;
+        console.log(`Test url: ${url}`);
+    }
+
+    render() {
+        const { url = "", label, onChange } = this.props;
+
+        return (
+            <React.Fragment>
+                <Col sm={3}>{label}</Col>
+                <Col sm={9}>
+                    <InputGroup>
+                        <FormControl
+                            type="url"
+                            value={url}
+                            onChange={ev => onChange(ev.currentTarget.value)}
+                        />
+                        <InputGroup.Button>
+                            <Button onClick={() => this.testHook()}>
                             Verify URL
-                        </Button>
-                    </InputGroup.Button>
-                </InputGroup>
-            </Col>
-        </React.Fragment>
-    );
-};
+                            </Button>
+                        </InputGroup.Button>
+                    </InputGroup>
+                </Col>
+            </React.Fragment>
+        );
+    }
+}
 
 export { HookFormGroup };
