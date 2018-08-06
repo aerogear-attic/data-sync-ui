@@ -27,8 +27,8 @@ const MappingTemplateDropDown = ({ label, template, templates, text, onTemplateS
                     onSelect={t => onTemplateSelect(t)}
                 >
                     {
-                        Object.keys(templates).map((key, value) => (
-                            <MenuItem key={key} eventKey={{ key, value }}>
+                        Object.keys(templates).map(key => (
+                            <MenuItem key={key} eventKey={{ key, value: templates[key] }}>
                                 {key}
                             </MenuItem>
                         ))
