@@ -1,5 +1,5 @@
 const { buildSchema } = require("graphql");
-const { log } = require("../logger");
+const { log, auditLog } = require("../logger");
 const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
@@ -77,6 +77,12 @@ const createDataSource = async ({ name, type, config }) => {
     });
 
     publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    auditLog({
+        operation: "createDataSource",
+        name,
+        type,
+        config
+    });
     return created;
 };
 
@@ -117,11 +123,24 @@ const upsertResolver = async ({
         field
     };
 
+    let result;
     if (id) {
         const updated = await resolver.findById(id);
-        return updated.update(properties);
+        result = updated.update(properties);
+    } else {
+        result = resolver.create(properties);
     }
-    return resolver.create(properties);
+
+    publish(DEFAULT_CHANNEL, { reload: "Resolver" });
+    auditLog({
+        operation: "upsertResolver",
+        id,
+        type,
+        field,
+        config: properties
+    });
+
+    return result;
 };
 
 const deleteResolver = async ({ id }) => {
@@ -134,6 +153,12 @@ const deleteResolver = async ({ id }) => {
     log.info(`Resolver with id ${destroyedResolver.id} deleted`);
 
     publish(DEFAULT_CHANNEL, { reload: "Resolver" });
+    auditLog({
+        operation: "deleteResolver",
+        id,
+        type: foundResolver.type,
+        field: foundResolver.field
+    });
     return foundResolver;
 };
 
@@ -153,6 +178,13 @@ const deleteDataSource = async ({ id }) => {
     log.info(`Data source with id ${destroyed.id} deleted`);
 
     publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    auditLog({
+        operation: "deleteDataSource",
+        id,
+        name: foundDataSource.name,
+        type: foundDataSource.type,
+        config: foundDataSource.config
+    });
     return foundDataSource;
 };
 
@@ -165,6 +197,13 @@ const updateDataSource = async ({ id, name, type, config }) => {
     });
 
     publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    auditLog({
+        operation: "updateDataSource",
+        id,
+        name,
+        type,
+        config
+    });
     return updated;
 };
 
@@ -215,8 +254,14 @@ const updateSchema = async args => {
         });
 
         publish(DEFAULT_CHANNEL, { reload: "Schema" });
+        auditLog({
+            operation: "updateSchema",
+            id: args.id,
+            name: updatedSchema.name,
+            type: updatedSchema.schema
+        });
         return {
-            id: updatedSchema.id,
+            id: args.id,
             name: updatedSchema.name,
             schema: updatedSchema.schema,
             compiled: JSON.stringify(compiled)
