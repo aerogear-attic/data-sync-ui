@@ -1,12 +1,12 @@
+
 const log = require("pino")();
 const expressPino = require("express-pino-logger")({ level: "silent", logger: log });
+const { auditLogConfig } = require("./config");
 
-const auditLogger = log.child({ tag: "AUDIT" });
-
-const auditLogEnabled = process.env.AUDIT_LOGGING !== "false" && process.env.AUDIT_LOGGING !== false;
+const auditLogger = log.child({ tag: auditLogConfig.tag });
 
 function auditLog(obj) {
-    if (auditLogEnabled) {
+    if (auditLogConfig.enabled) {
         auditLogger.info(obj);
     }
 }

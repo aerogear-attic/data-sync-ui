@@ -21,3 +21,8 @@ exports.notifier = {
         port: exports.postgresConfig.port
     }
 };
+
+exports.auditLogConfig = {
+    enabled: process.env.AUDIT_LOGGING !== "false" && process.env.AUDIT_LOGGING !== false,
+    tag: "AUDIT"
+};
