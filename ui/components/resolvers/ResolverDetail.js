@@ -79,7 +79,8 @@ class ResolverDetail extends Component {
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { id, schemaId, DataSource, type, field, requestMapping, responseMapping } = resolver;
+        const { id, schemaId, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+
         return this.props.mutate({
             variables: {
                 id,
@@ -87,6 +88,8 @@ class ResolverDetail extends Component {
                 dataSourceId: DataSource.id,
                 type,
                 field,
+                preHook,
+                postHook,
                 requestMapping,
                 responseMapping
             },
