@@ -3,12 +3,12 @@ const Validators = {
     String: {
         nonBlank: s => s
                 && typeof s === typeof ""
-                && s.length > 0,
+                && s.trim().length > 0,
         minLength: l => s => Validators.String.nonBlank(s) && s.length >= l,
         maxLength: l => s => Validators.String.nonBlank(s) && s.length < l
     },
     Number: {
-        natural: n => !Number.isNaN(n) && parseInt(n, 10) > 0
+        natural: n => Number.isInteger(n) && n >= 0
     },
     Port: {
         valid: p => Validators.Number.natural(p) && p < MAX_PORT_NUM
