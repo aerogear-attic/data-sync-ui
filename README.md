@@ -64,3 +64,9 @@ There is a dependency on having a running postgres server. To run postgres in a 
    ```shell
    docker stop sync-ui
    ```
+
+# Configuration
+
+UI server has some environment variables to be set. If they're not set, defaults for development will be used.
+
+* `AUDIT_LOGGING`:   : If true, audit logs of resolver operations will be logged to stdout. Defaults to true.
