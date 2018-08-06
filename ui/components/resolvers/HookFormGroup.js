@@ -6,7 +6,7 @@ import {
     Button
 } from "patternfly-react";
 
-const HookFormGroup = ({ url, label, onChange }) => {
+const HookFormGroup = ({ url = "", label, onChange }) => {
     const testHook = () => {
         console.log(`Test url: ${url}`);
     };
