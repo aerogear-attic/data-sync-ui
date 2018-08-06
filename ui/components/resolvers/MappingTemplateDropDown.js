@@ -13,7 +13,7 @@ import {
     detailCodeEditor
 } from "./mappingTemplateDropDown.css";
 
-const MappingTemplateDropDown = ({ label, template, templates, text, onTemplateSelect, onTextChange }) => (
+const MappingTemplateDropDown = ({ label, template, templates, text = "", onTemplateSelect, onTextChange }) => (
     <React.Fragment>
         <Col sm={6} className={mappingControlLabel}>{label}</Col>
         <Col sm={6} className="pull-right">
