@@ -8,6 +8,8 @@ import {
     EmptyStateIcon,
     EmptyStateTitle
 } from "patternfly-react";
+import some from "lodash.some";
+import { Validate, Validators } from "../../helper/Validators";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
@@ -31,7 +33,12 @@ const INITIAL_STATE = {
     responseMappingTemplate: "Custom",
     isResolverSaved: true,
     err: "",
-    showDeleteModal: false
+    showDeleteModal: false,
+    validations: {
+        dataSource: null,
+        preHook: null,
+        postHook: null
+    }
 };
 
 class ResolverDetail extends Component {
@@ -55,6 +62,44 @@ class ResolverDetail extends Component {
     onResponseTemplateSelect(template) {
         this.setState({ responseMappingTemplate: template.key });
         this.updateResolver({ responseMapping: template.value });
+    }
+
+    onDataSourceSelect(DataSource) {
+        const dsValidation = DataSource !== null ? "success" : "error";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, dataSource: dsValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ DataSource });
+    }
+
+    onPreHookChange(preHook) {
+        const preHookValidation = Validate([
+            Validators.String.minLength(1), preHook,
+            Validators.String.maxLength(255), preHook,
+            Validators.URL.valid, preHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, preHook: preHookValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ preHook });
+    }
+
+    onPostHookChange(postHook) {
+        const postHookValidation = Validate([
+            Validators.String.minLength(1), postHook,
+            Validators.String.maxLength(255), postHook,
+            Validators.URL.valid, postHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, postHook: postHookValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ postHook });
     }
 
     updateResolver(newProps) {
@@ -120,13 +165,19 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved, showDeleteModal } = this.state;
+        const {
+            resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved,
+            showDeleteModal, validations
+        } = this.state;
+
         if (!resolver) {
             return this.renderEmptyScreen();
         }
 
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
+
+        const isSaveButtonDisabled = isResolverSaved || some(validations, s => !s || s === "error");
 
         return (
             <React.Fragment>
@@ -139,10 +190,10 @@ class ResolverDetail extends Component {
                     </h3>
 
                     <Form horizontal className={formContainer}>
-                        <FormGroup controlId="dataSource" className={detailFormGroup}>
+                        <FormGroup controlId="dataSource" className={detailFormGroup} validationState={validations.dataSource}>
                             <DataSourcesDropDown
                                 selected={DataSource}
-                                onDataSourceSelect={ds => this.updateResolver({ DataSource: ds })}
+                                onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
                             />
                         </FormGroup>
 
@@ -168,19 +219,19 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="preHook" className={detailFormGroup}>
+                        <FormGroup controlId="preHook" className={detailFormGroup} validationState={validations.preHook}>
                             <HookFormGroup
                                 label="Pre Hook"
                                 url={preHook}
-                                onChange={h => this.updateResolver({ preHook: h })}
+                                onChange={hook => this.onPreHookChange(hook)}
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="postHook" className={detailFormGroup}>
+                        <FormGroup controlId="postHook" className={detailFormGroup} validationState={validations.postHook}>
                             <HookFormGroup
                                 label="Post Hook"
                                 url={postHook}
-                                onChange={h => this.updateResolver({ postHook: h })}
+                                onChange={hook => this.onPostHookChange(hook)}
                             />
                         </FormGroup>
                     </Form>
@@ -191,7 +242,7 @@ class ResolverDetail extends Component {
                         className={buttonSave}
                         bsStyle="primary"
                         onClick={() => this.save()}
-                        disabled={isResolverSaved}
+                        disabled={isSaveButtonDisabled}
                     >
                         Save
                     </Button>
