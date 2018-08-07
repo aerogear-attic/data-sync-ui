@@ -191,6 +191,7 @@ class ResolverDetail extends Component {
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         const disableHooks = type === "Query";
+        // TODO: are preHook and postHook mandatory? Can they be saved if wrong urls?
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => !s || s === "error");
 
         return (
