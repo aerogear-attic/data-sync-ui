@@ -45,7 +45,7 @@ const Validate = (validations, details) => {
 
     // One validation takes 3 arguments if fiel names are used (validator, input valud and field name)
     // and only two if not (validator, input value)
-    let increase = details ? 3 : 2 ;
+    const increase = details ? 3 : 2;
 
     if (validations && validations.length % increase === 0) {
         result = true; // Init value
