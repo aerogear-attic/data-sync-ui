@@ -65,21 +65,29 @@ class BaseDataSourceDialog extends Component {
     onPostgresOptionsChange(postgresOptions) {
         const { url, port, database, username } = postgresOptions;
 
-        const optionsValidation = Validate([
-            Validators.String.nonBlank, url,
-            Validators.String.nonBlank, database,
-            Validators.String.nonBlank, username,
-            Validators.Port.valid, port
-        ]);
+        // Set the initial validation state and assume that port is valid
+        // (because we set a default value there)
+        const validationDetails = {
+            url: "error",
+            database: "error",
+            username: "error",
+            port: "success"
+        };
+
+        Validate([
+            Validators.String.nonBlank, url, "url",
+            Validators.String.nonBlank, database, "database",
+            Validators.String.nonBlank, username, "username",
+            Validators.Port.valid, port, "port"
+        ], validationDetails);
 
         const { validations } = this.state;
-        const newValidations = { ...validations, optionsValidation };
-
+        const newValidations = { ...validations, ...validationDetails };
         this.setState({ postgresOptions, validations: newValidations });
     }
 
     renderSpecificOptionsFormsForSelectedType() {
-        const { type, inMemoryOptions, postgresOptions } = this.state;
+        const { type, inMemoryOptions, postgresOptions, validations } = this.state;
 
         switch (type) {
             case DataSourceType.InMemory:
@@ -95,6 +103,7 @@ class BaseDataSourceDialog extends Component {
                     <PostgresOptions
                         isDisabled={this.isDisabled}
                         options={postgresOptions}
+                        validations={validations}
                         onOptionsChange={newOps => this.onPostgresOptionsChange(newOps)}
                     />
                 );
