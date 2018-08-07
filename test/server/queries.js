@@ -120,7 +120,7 @@ module.exports = {
         $preHook: String,
         $postHook: String,
         $requestMapping: String!,
-        $responseMapping: String!
+        $responseMapping: String
       ) {
         upsertResolver(
           id: $id,

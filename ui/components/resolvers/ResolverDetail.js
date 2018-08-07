@@ -36,6 +36,7 @@ const INITIAL_STATE = {
     showDeleteModal: false,
     validations: {
         dataSource: null,
+        requestMapping: null,
         preHook: null,
         postHook: null
     }
@@ -62,6 +63,18 @@ class ResolverDetail extends Component {
     onResponseTemplateSelect(template) {
         this.setState({ responseMappingTemplate: template.key });
         this.updateResolver({ responseMapping: template.value });
+    }
+
+    onRequestMappingChange(text) {
+        const requestMappingValidation = Validate([
+            Validators.String.nonBlank, text
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, requestMapping: requestMappingValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ requestMapping: text });
     }
 
     onDataSourceSelect(DataSource) {
@@ -198,14 +211,15 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="requestMapping" className={detailFormGroup}>
+                        {/* FIXME: add validation state visual feedback */}
+                        <FormGroup controlId="requestMapping" className={detailFormGroup} validationState={validations.requestMapping}>
                             <MappingTemplateDropDown
                                 label="Request Mapping Template"
                                 template={requestMappingTemplate}
                                 templates={requestMappingTemplates}
                                 text={requestMapping}
                                 onTemplateSelect={t => this.onRequestTemplateSelect(t)}
-                                onTextChange={t => this.updateResolver({ requestMapping: t })}
+                                onTextChange={t => this.onRequestMappingChange(t)}
                             />
                         </FormGroup>
 

@@ -32,7 +32,7 @@ const Schema = buildSchema(`
             preHook: String
             postHook: String
             requestMapping: String!
-            responseMapping: String!
+            responseMapping: String
         ): Resolver
         deleteResolver(id: Int!): Resolver
     },  
@@ -114,7 +114,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping
+    requestMapping, responseMapping = ""
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
