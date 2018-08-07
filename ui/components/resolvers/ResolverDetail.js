@@ -45,7 +45,7 @@ class ResolverDetail extends Component {
 
     constructor(props) {
         super(props);
-        this.state = INITIAL_STATE;
+        this.state = { ...INITIAL_STATE, resolver: this.props.resolver };
     }
 
     componentWillReceiveProps({ resolver }) {
@@ -177,6 +177,7 @@ class ResolverDetail extends Component {
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
+        const disableHooks = type === "Query";
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => !s || s === "error");
 
         return (
@@ -221,6 +222,7 @@ class ResolverDetail extends Component {
 
                         <FormGroup controlId="preHook" className={detailFormGroup} validationState={validations.preHook}>
                             <HookFormGroup
+                                disabled={disableHooks}
                                 label="Pre Hook"
                                 url={preHook}
                                 onChange={hook => this.onPreHookChange(hook)}
@@ -229,6 +231,7 @@ class ResolverDetail extends Component {
 
                         <FormGroup controlId="postHook" className={detailFormGroup} validationState={validations.postHook}>
                             <HookFormGroup
+                                disabled={disableHooks}
                                 label="Post Hook"
                                 url={postHook}
                                 onChange={hook => this.onPostHookChange(hook)}

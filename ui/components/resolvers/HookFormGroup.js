@@ -50,7 +50,7 @@ class HookFormGroup extends Component {
     }
 
     render() {
-        const { url = "", label, onChange } = this.props;
+        const { url = "", label, onChange, disabled = false } = this.props;
         const { verifyingUrl } = this.state;
 
         return (
@@ -59,12 +59,17 @@ class HookFormGroup extends Component {
                 <Col sm={9}>
                     <InputGroup>
                         <FormControl
+                            disabled={disabled}
                             type="url"
                             value={url}
                             onChange={ev => onChange(ev.currentTarget.value)}
                         />
                         <InputGroup.Button>
-                            <Button onClick={() => this.testHook()} className={verifyButton}>
+                            <Button
+                                disabled={disabled}
+                                onClick={() => this.testHook()}
+                                className={verifyButton}
+                            >
                                 <span className={verifyButtonLabel}>{verifyingUrl ? "Verifying..." : "Verify URL"}</span>
                                 {this.renderVerificationIcon()}
                             </Button>
