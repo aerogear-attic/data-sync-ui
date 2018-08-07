@@ -75,7 +75,7 @@ class BaseDataSourceDialog extends Component {
         };
 
         Validate([
-            Validators.String.nonBlank, url, "url",
+            Validators.URL.valid, url, "url",
             Validators.String.nonBlank, database, "database",
             Validators.String.nonBlank, username, "username",
             Validators.Port.valid, port, "port"
