@@ -36,9 +36,7 @@ const INITIAL_STATE = {
     showDeleteModal: false,
     validations: {
         dataSource: null,
-        requestMapping: null,
-        preHook: null,
-        postHook: null
+        requestMapping: null
     }
 };
 
@@ -88,30 +86,10 @@ class ResolverDetail extends Component {
     }
 
     onPreHookChange(preHook) {
-        const preHookValidation = Validate([
-            Validators.String.minLength(1), preHook,
-            Validators.String.maxLength(255), preHook,
-            Validators.URL.valid, preHook
-        ]);
-
-        const { validations } = this.state;
-        const newValidations = { ...validations, preHook: preHookValidation };
-
-        this.setState({ validations: newValidations });
         this.updateResolver({ preHook });
     }
 
     onPostHookChange(postHook) {
-        const postHookValidation = Validate([
-            Validators.String.minLength(1), postHook,
-            Validators.String.maxLength(255), postHook,
-            Validators.URL.valid, postHook
-        ]);
-
-        const { validations } = this.state;
-        const newValidations = { ...validations, postHook: postHookValidation };
-
-        this.setState({ validations: newValidations });
         this.updateResolver({ postHook });
     }
 
