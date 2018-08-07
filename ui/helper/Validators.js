@@ -26,21 +26,35 @@ const Validators = {
  *  <Validator N>, <Input Value N>
  * ]
  *
- * It always has to be exactly one validator per input value, so the total length
- * of the array mod 2 must be zero.
+ * or
+ *
+ * [
+ *  <Validator 1>, <Input Value 1>, <Field Name>
+ *  ...
+ *  <Validator N>, <Input Value N>, <Field Name>
+ * ]
  *
  * @param validations The validations array
+ * @param details An object to store the validation results per field. Must be set if Field Names
+ * are used in the validations
  * @returns {string} "success" on success, otherwise "error"
  */
-const Validate = validations => {
+const Validate = (validations, details) => {
     let result = false;
     let index = 0;
 
-    if (validations && validations.length % 2 === 0) {
+    // One validation takes 3 arguments if fiel names are used (validator, input valud and field name)
+    // and only two if not (validator, input value)
+    let increase = details ? 3 : 2 ;
+
+    if (validations && validations.length % increase === 0) {
         result = true; // Init value
         while (result && index < validations.length) {
             result = result && validations[index](validations[index + 1]);
-            index += 2;
+            if (details) {
+                details[validations[index + 2]] = result ? "success" : "error";
+            }
+            index += increase;
         }
     }
 

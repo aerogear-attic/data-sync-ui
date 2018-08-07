@@ -5,9 +5,9 @@ import {
     FormControl
 } from "patternfly-react";
 
-const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
+const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) => (
     <React.Fragment>
-        <FormGroup controlId="url">
+        <FormGroup controlId="url" validationState={validations.url}>
             <Col sm={3}>Server</Col>
             <Col sm={9}>
                 <FormControl
@@ -21,7 +21,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="port">
+        <FormGroup controlId="port" validationState={validations.port}>
             <Col sm={3}>Port</Col>
             <Col sm={9}>
                 <FormControl
@@ -35,7 +35,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="database">
+        <FormGroup controlId="database" validationState={validations.database}>
             <Col sm={3}>Database</Col>
             <Col sm={9}>
                 <FormControl
@@ -49,7 +49,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="username">
+        <FormGroup controlId="username" validationState={validations.username}>
             <Col sm={3}>Username</Col>
             <Col sm={9}>
                 <FormControl
@@ -63,7 +63,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled }) => (
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="password">
+        <FormGroup controlId="password" validationState={validations.password}>
             <Col sm={3}>Password</Col>
             <Col sm={9}>
                 <FormControl
