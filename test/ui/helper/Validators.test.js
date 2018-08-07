@@ -1,5 +1,56 @@
 import { Validate, Validators } from "../../../ui/helper/Validators";
 
+it("should correctly validate a bunch of cases", () => {
+    const result = Validate([
+        Validators.String.nonBlank, "some random string",
+        Validators.Number.natural, 123,
+        Validators.URL.valid, "http://localhost",
+        Validators.Port.valid, 123
+    ]);
+
+    expect(result).toEqual("success");
+});
+
+it("should find a wrong value from a bunch of validations", () => {
+    const result = Validate([
+        Validators.String.nonBlank, "some random string",
+        Validators.Number.natural, null,
+        Validators.URL.valid, "http://localhost",
+        Validators.Port.valid, 123
+    ]);
+
+    expect(result).toEqual("error");
+});
+
+it("should correctly validate a bunch of cases and put results in a details object", () => {
+    const results = {};
+
+    Validate([
+        Validators.String.nonBlank, "some random string", "string",
+        Validators.String.nonBlank, null, "nullString",
+        Validators.Port.valid, 123, "port"
+    ], results);
+
+    expect(results).toEqual({
+        string: "success",
+        nullString: "error",
+        port: "success"
+    });
+
+    Validate([
+        Validators.String.nonBlank, "some random string", "string",
+        Validators.String.nonBlank, null, "nullString",
+        Validators.Port.valid, 123, "port",
+        Validators.URL.valid, "http://localhost", url
+    ], results);
+
+    expect(results).toEqual({
+        string: "success",
+        nullString: "error",
+        port: "success",
+        url: "success"
+});
+
 describe("String", () => {
     it("should validate the min length and not only spaces", () => {
         const stringShort = "too short";
@@ -60,5 +111,16 @@ describe("Boolean", () => {
         expect(Validate([Validators.Boolean.valid, false])).toEqual("success");
         expect(Validate([Validators.Boolean.valid, 1])).toEqual("error");
         expect(Validate([Validators.Boolean.valid, null])).toEqual("error");
+    });
+});
+
+describe("URL", () => {
+    it("should validate a valid url", () => {
+        expect(Validate([Validators.URL.valid, "http://hello"])).toEqual("success");
+        expect(Validate([Validators.URL.valid, "https://hello"])).toEqual("success");
+        expect(Validate([Validators.URL.valid, "localhost:8080"])).toEqual("success");
+        expect(Validate([Validators.URL.valid, "not an url"])).toEqual("error");
+        expect(Validate([Validators.URL.valid, 123])).toEqual("error");
+        expect(Validate([Validators.URL.valid, {}])).toEqual("error");
     });
 });
