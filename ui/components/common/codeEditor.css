@@ -9,9 +9,15 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    line-height: 20px;
+    font-family: monospace;
+    font-size: 14px;
     border: none;
     resize: none;
-    font-size: 16px;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-y: auto;
+    background-color: #FAFAFA;
 }
 
 .expand {
@@ -21,19 +27,21 @@
 }
 
 .numbers {
-    float: left;
-    width: 32px;
-    background-color: #f5f5f5;
-    color: lightgrey;
-    text-align: center;
     height: 100%;
+    width: 32px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    background-color: #EDEDED;
     overflow: hidden;
-    font-size: 16px;
-    border-right: 1px solid lightgrey;
+    color: #424242;
+    text-align: center;
+    font-size: 12px;
+    font-family: monospace;
 }
 
 .vcenter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    align-self: flex-end;
+    margin-right: 10px;
+    height: 20px;
 }

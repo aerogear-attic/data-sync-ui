@@ -1,0 +1,21 @@
+mutation UpsertResolver(
+    $id: Int,
+    $schemaId: Int!,
+    $dataSourceId: Int!,
+    $type: String!,
+    $field: String!,
+    $requestMapping: String!,
+    $responseMapping: String!
+) {
+    upsertResolver(
+        id: $id,
+        schemaId: $schemaId,
+        dataSourceId: $dataSourceId,
+        type: $type,
+        field: $field,
+        requestMapping: $requestMapping,
+        responseMapping: $responseMapping
+    ) {
+        id
+    }
+}

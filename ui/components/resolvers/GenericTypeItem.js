@@ -36,6 +36,7 @@ const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
                     field.isQuery = true;
                     return (
                         <ResolversListItem
+                            schemaId={schemaId}
                             key={name + field.name}
                             type={name}
                             kind={kind}

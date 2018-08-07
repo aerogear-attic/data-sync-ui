@@ -1,0 +1,62 @@
+.detailEmpty {
+    border: none;
+    background-color: unset;
+    margin-top: 20%;
+}
+
+.emptyTitle {
+    font-size: 17px;
+}
+
+.detailHeader {
+    padding: 12px 15px;
+    margin: 0;
+    background: #EDEDED;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.detailFormsContainer {
+    /* 206 being the exact height of the components on top of SchemaContainer + FormsHeader and buttons */
+    height: calc(100vh - 303px) !important;
+    margin-top: 40px;
+    overflow-y: auto;
+}
+
+.detailFormsHeader {
+    padding: 12px 15px 15px 15px;
+    margin: 0;
+}
+
+.detailButtonFooter {
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 -0.5px 0.5px 0.5px lightgrey;
+}
+
+.buttonSave {
+    margin-right: 5px;
+}
+
+.learnMore {
+    font-size: 9px;
+    color: #4EABDA;
+    margin-left: 12px;
+}
+
+.formContainer {
+    padding-left: 35px;
+    padding-top: 10px;
+    padding-right: 20px;
+    font-size: 11px;
+}
+
+.detailFormGroup {
+    margin-bottom: 25px;
+}
