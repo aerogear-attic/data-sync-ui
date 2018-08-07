@@ -15,6 +15,15 @@ const Validators = {
     },
     Boolean: {
         valid: b => typeof b === typeof true
+    },
+    URL: {
+        valid: u => {
+            try {
+                return !!new URL(u);
+            } catch (e) {
+                return false;
+            }
+        }
     }
 };
 
