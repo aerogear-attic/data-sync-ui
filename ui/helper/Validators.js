@@ -19,7 +19,7 @@ const Validators = {
         }
     },
     Port: {
-        valid: p => Validators.Number.natural(p) && parseInt(p, 10) < MAX_PORT_NUM
+        valid: p => Validators.Number.natural(p) && parseInt(p, 10) <= MAX_PORT_NUM
     },
     Boolean: {
         valid: b => typeof b === typeof true
