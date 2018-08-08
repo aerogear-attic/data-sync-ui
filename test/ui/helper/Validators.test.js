@@ -82,15 +82,18 @@ describe("String", () => {
 
 describe("Number", () => {
     it("should validate a natural number", () => {
+        expect(Validate([Validators.Number.natural, "4"])).toEqual("success");
+        expect(Validate([Validators.Number.natural, "0"])).toEqual("success");
+
         expect(Validate([Validators.Number.natural, 4])).toEqual("error");
         expect(Validate([Validators.Number.natural, 0])).toEqual("error");
         expect(Validate([Validators.Number.natural, -0])).toEqual("error");
+        expect(Validate([Validators.Number.natural, NaN])).toEqual("error");
+        expect(Validate([Validators.Number.natural, undefined])).toEqual("error");
+        expect(Validate([Validators.Number.natural, null])).toEqual("error");
         expect(Validate([Validators.Number.natural, 1.1])).toEqual("error");
         expect(Validate([Validators.Number.natural, -1])).toEqual("error");
         expect(Validate([Validators.Number.natural, -1.1])).toEqual("error");
-
-        expect(Validate([Validators.Number.natural, "4"])).toEqual("success");
-        expect(Validate([Validators.Number.natural, "0"])).toEqual("success");
         expect(Validate([Validators.Number.natural, "-0"])).toEqual("error");
         expect(Validate([Validators.Number.natural, "1.1"])).toEqual("error");
         expect(Validate([Validators.Number.natural, "-1"])).toEqual("error");
