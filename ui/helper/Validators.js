@@ -8,10 +8,15 @@ const Validators = {
         maxLength: l => s => Validators.String.nonBlank(s) && s.length < l
     },
     Number: {
-        natural: n => Number.isInteger(n) && n >= 0
+        natural: n => {
+            const n0 = n.toString();
+            const n1 = Math.abs(n);
+            const n2 = parseInt(n0, 10);
+            return !Number.isNaN(n1) && n2 === n1 && n1.toString() === n;
+        }
     },
     Port: {
-        valid: p => Validators.Number.natural(p) && p < MAX_PORT_NUM
+        valid: p => Validators.Number.natural(p) && parseInt(p, 10) < MAX_PORT_NUM
     },
     Boolean: {
         valid: b => typeof b === typeof true
@@ -58,10 +63,15 @@ const Validate = (validations, details) => {
 
     if (validations && validations.length % increase === 0) {
         result = true; // Init value
-        while (result && index < validations.length) {
-            result = result && validations[index](validations[index + 1]);
+
+        // Don't exit early, always evaluate all inputs to gather all the results
+        // in the detaile object
+        while (index < validations.length) {
+            const validationResult = validations[index](validations[index + 1]);
+            result = result && validationResult;
+
             if (details) {
-                details[validations[index + 2]] = result ? "success" : "error";
+                details[validations[index + 2]] = validationResult ? "success" : "error";
             }
             index += increase;
         }

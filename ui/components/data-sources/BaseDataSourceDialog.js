@@ -57,7 +57,7 @@ class BaseDataSourceDialog extends Component {
         ]);
 
         const { validations } = this.state;
-        const newValidations = { ...validations, optionsValidation };
+        const newValidations = { ...validations, options: optionsValidation };
 
         this.setState({ inMemoryOptions, validations: newValidations });
     }
@@ -67,22 +67,17 @@ class BaseDataSourceDialog extends Component {
 
         // Set the initial validation state and assume that port is valid
         // (because we set a default value there)
-        const validationDetails = {
-            url: "error",
-            database: "error",
-            username: "error",
-            port: "success"
-        };
+        const postgresDetails = {};
 
-        Validate([
+        const options = Validate([
             Validators.URL.valid, url, "url",
             Validators.String.nonBlank, database, "database",
             Validators.String.nonBlank, username, "username",
-            Validators.Port.valid, port, "port"
-        ], validationDetails);
+            Validators.Number.natural, port, "port"
+        ], postgresDetails);
 
         const { validations } = this.state;
-        const newValidations = { ...validations, ...validationDetails };
+        const newValidations = { ...validations, postgresDetails, options };
         this.setState({ postgresOptions, validations: newValidations });
     }
 
@@ -200,7 +195,17 @@ class BaseDataSourceDialog extends Component {
     render() {
         const { visible } = this.props;
         const { name, type, err, success, validations } = this.state;
-        const submitButtonDisabled = some(validations, s => !s || s === "error");
+
+        // InMemory options are always correct: there is only one options which
+        // is a checkbox.
+        let validationResult;
+        if (type === DataSourceType.InMemory) {
+            validationResult = { ...validations, options: "success" };
+        } else {
+            validationResult = validations;
+        }
+
+        const submitButtonDisabled = some(validationResult, s => !s || s === "error");
 
         return (
             <Modal show={visible}>

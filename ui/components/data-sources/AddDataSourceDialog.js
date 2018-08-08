@@ -13,7 +13,7 @@ const INITIAL_STATE = {
     },
     postgresOptions: {
         url: "",
-        port: 5432,
+        port: "5432",
         database: "",
         username: "",
         password: ""
@@ -22,7 +22,13 @@ const INITIAL_STATE = {
     validations: {
         name: null,
         type: "warning",
-        options: "success"
+        options: "error",
+
+        // Stores validation states for postgres
+        // properties
+        postgresDetails: {
+            port: "success"
+        }
     }
 };
 
