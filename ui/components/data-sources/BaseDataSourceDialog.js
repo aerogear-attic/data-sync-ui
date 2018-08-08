@@ -73,7 +73,7 @@ class BaseDataSourceDialog extends Component {
             Validators.URL.valid, url, "url",
             Validators.String.nonBlank, database, "database",
             Validators.String.nonBlank, username, "username",
-            Validators.Number.natural, port, "port"
+            Validators.Port.valid, port, "port"
         ], postgresDetails);
 
         const { validations } = this.state;

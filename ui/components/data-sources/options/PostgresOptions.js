@@ -63,7 +63,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) 
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="password" validationState="success">
+        <FormGroup controlId="password" validationState={validations.postgresDetails.password}>
             <Col sm={3}>Password</Col>
             <Col sm={9}>
                 <FormControl

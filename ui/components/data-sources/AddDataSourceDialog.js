@@ -27,7 +27,8 @@ const INITIAL_STATE = {
         // Stores validation states for postgres
         // properties
         postgresDetails: {
-            port: "success"
+            port: "success",
+            password: "success"
         }
     }
 };
