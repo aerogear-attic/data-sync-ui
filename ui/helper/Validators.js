@@ -32,6 +32,9 @@ const Validators = {
                 return false;
             }
         }
+    },
+    Password: {
+        valid: p => typeof p === "string"
     }
 };
 

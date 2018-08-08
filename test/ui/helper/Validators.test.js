@@ -142,3 +142,15 @@ describe("URL", () => {
         expect(Validate([Validators.URL.valid, {}])).toEqual("error");
     });
 });
+
+describe("Password", () => {
+    it("should validate a password as long as it is a string", () => {
+        expect(Validate([Validators.Password.valid, ""])).toEqual("success");
+        expect(Validate([Validators.Password.valid, "123123"])).toEqual("success");
+        expect(Validate([Validators.Password.valid, "null"])).toEqual("success");
+        expect(Validate([Validators.Password.valid, null])).toEqual("error");
+        expect(Validate([Validators.Password.valid, undefined])).toEqual("error");
+        expect(Validate([Validators.Password.valid, NaN])).toEqual("error");
+        expect(Validate([Validators.Password.valid, 1234])).toEqual("error");
+    });
+});
