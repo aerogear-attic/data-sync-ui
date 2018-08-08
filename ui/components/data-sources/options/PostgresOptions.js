@@ -7,7 +7,7 @@ import {
 
 const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) => (
     <React.Fragment>
-        <FormGroup controlId="url" validationState={validations.url}>
+        <FormGroup controlId="url" validationState={validations.postgresDetails.url}>
             <Col sm={3}>Server</Col>
             <Col sm={9}>
                 <FormControl
@@ -21,7 +21,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) 
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="port" validationState={validations.port}>
+        <FormGroup controlId="port" validationState={validations.postgresDetails.port}>
             <Col sm={3}>Port</Col>
             <Col sm={9}>
                 <FormControl
@@ -35,7 +35,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) 
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="database" validationState={validations.database}>
+        <FormGroup controlId="database" validationState={validations.postgresDetails.database}>
             <Col sm={3}>Database</Col>
             <Col sm={9}>
                 <FormControl
@@ -49,7 +49,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) 
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="username" validationState={validations.username}>
+        <FormGroup controlId="username" validationState={validations.postgresDetails.username}>
             <Col sm={3}>Username</Col>
             <Col sm={9}>
                 <FormControl
@@ -63,7 +63,7 @@ const PostgresOptions = ({ options, onOptionsChange, isDisabled, validations }) 
                 />
             </Col>
         </FormGroup>
-        <FormGroup controlId="password" validationState={validations.password}>
+        <FormGroup controlId="password" validationState="success">
             <Col sm={3}>Password</Col>
             <Col sm={9}>
                 <FormControl
