@@ -9,7 +9,9 @@ const Validators = {
     },
     Number: {
         natural: n => {
-            if (!n) return false;
+            if (!n) {
+                return false;
+            }
             const n0 = n.toString();
             const n1 = Math.abs(n);
             const n2 = parseInt(n0, 10);
