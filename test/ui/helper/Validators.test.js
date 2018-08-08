@@ -3,9 +3,9 @@ import { Validate, Validators } from "../../../ui/helper/Validators";
 it("should correctly validate a bunch of cases", () => {
     const result = Validate([
         Validators.String.nonBlank, "some random string",
-        Validators.Number.natural, 123,
+        Validators.Number.natural, "123",
         Validators.URL.valid, "http://localhost",
-        Validators.Port.valid, 123
+        Validators.Port.valid, "123"
     ]);
 
     expect(result).toEqual("success");
@@ -16,7 +16,7 @@ it("should find a wrong value from a bunch of validations", () => {
         Validators.String.nonBlank, "some random string",
         Validators.Number.natural, null,
         Validators.URL.valid, "http://localhost",
-        Validators.Port.valid, 123
+        Validators.Port.valid, "123"
     ]);
 
     expect(result).toEqual("error");
@@ -28,7 +28,7 @@ it("should correctly validate a bunch of cases and put results in a details obje
     Validate([
         Validators.String.nonBlank, "some random string", "string",
         Validators.String.nonBlank, null, "nullString",
-        Validators.Port.valid, 123, "port"
+        Validators.Port.valid, "123", "port"
     ], results);
 
     expect(results).toEqual({
@@ -40,8 +40,8 @@ it("should correctly validate a bunch of cases and put results in a details obje
     Validate([
         Validators.String.nonBlank, "some random string", "string",
         Validators.String.nonBlank, null, "nullString",
-        Validators.Port.valid, 123, "port",
-        Validators.URL.valid, "http://localhost", url
+        Validators.Port.valid, "123", "port",
+        Validators.URL.valid, "http://localhost", "url"
     ], results);
 
     expect(results).toEqual({
@@ -49,6 +49,7 @@ it("should correctly validate a bunch of cases and put results in a details obje
         nullString: "error",
         port: "success",
         url: "success"
+    });
 });
 
 describe("String", () => {
@@ -81,27 +82,41 @@ describe("String", () => {
 
 describe("Number", () => {
     it("should validate a natural number", () => {
-        expect(Validate([Validators.Number.natural, 4])).toEqual("success");
-        expect(Validate([Validators.Number.natural, 0])).toEqual("success");
-        expect(Validate([Validators.Number.natural, -0])).toEqual("success");
+        expect(Validate([Validators.Number.natural, 4])).toEqual("error");
+        expect(Validate([Validators.Number.natural, 0])).toEqual("error");
+        expect(Validate([Validators.Number.natural, -0])).toEqual("error");
         expect(Validate([Validators.Number.natural, 1.1])).toEqual("error");
         expect(Validate([Validators.Number.natural, -1])).toEqual("error");
         expect(Validate([Validators.Number.natural, -1.1])).toEqual("error");
+
+        expect(Validate([Validators.Number.natural, "4"])).toEqual("success");
+        expect(Validate([Validators.Number.natural, "0"])).toEqual("success");
+        expect(Validate([Validators.Number.natural, "-0"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "1.1"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "-1"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "-1.1"])).toEqual("error");
     });
 });
 
 describe("Port", () => {
     it("should validate a valid port", () => {
-        expect(Validate([Validators.Port.valid, 0])).toEqual("success");
-        expect(Validate([Validators.Port.valid, 22])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "22"])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "0"])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "65535"])).toEqual("success");
+
+        expect(Validate([Validators.Port.valid, "22.22"])).toEqual("error");
+        expect(Validate([Validators.Port.valid, ""])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "asdf"])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "-1"])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "-0"])).toEqual("error");
+        expect(Validate([Validators.Port.valid, 22.22])).toEqual("error");
+        expect(Validate([Validators.Port.valid, 0])).toEqual("error");
+        expect(Validate([Validators.Port.valid, 22])).toEqual("error");
         expect(Validate([Validators.Port.valid, 65535])).toEqual("error");
         expect(Validate([Validators.Port.valid, -1])).toEqual("error");
-        expect(Validate([Validators.Port.valid, ""])).toEqual("error");
         expect(Validate([Validators.Port.valid, null])).toEqual("error");
         expect(Validate([Validators.Port.valid, undefined])).toEqual("error");
         expect(Validate([Validators.Port.valid, NaN])).toEqual("error");
-        expect(Validate([Validators.Port.valid, "222"])).toEqual("error");
-        expect(Validate([Validators.Port.valid, 22.22])).toEqual("error");
     });
 });
 
