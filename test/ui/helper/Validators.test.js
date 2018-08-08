@@ -30,27 +30,28 @@ describe("String", () => {
 
 describe("Number", () => {
     it("should validate a natural number", () => {
-        expect(Validate([Validators.Number.natural, 4])).toEqual("success");
-        expect(Validate([Validators.Number.natural, 0])).toEqual("success");
-        expect(Validate([Validators.Number.natural, -0])).toEqual("success");
-        expect(Validate([Validators.Number.natural, 1.1])).toEqual("error");
-        expect(Validate([Validators.Number.natural, -1])).toEqual("error");
-        expect(Validate([Validators.Number.natural, -1.1])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "4"])).toEqual("success");
+        expect(Validate([Validators.Number.natural, "0"])).toEqual("success");
+        // Anything with a minus (even zero) is not considered a natural number
+        expect(Validate([Validators.Number.natural, "-0"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "1.1"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "-1"])).toEqual("error");
+        expect(Validate([Validators.Number.natural, "-1.1"])).toEqual("error");
     });
 });
 
 describe("Port", () => {
     it("should validate a valid port", () => {
-        expect(Validate([Validators.Port.valid, 0])).toEqual("success");
-        expect(Validate([Validators.Port.valid, 22])).toEqual("success");
-        expect(Validate([Validators.Port.valid, 65535])).toEqual("error");
-        expect(Validate([Validators.Port.valid, -1])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "0"])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "22"])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "65535"])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "-1"])).toEqual("error");
         expect(Validate([Validators.Port.valid, ""])).toEqual("error");
         expect(Validate([Validators.Port.valid, null])).toEqual("error");
         expect(Validate([Validators.Port.valid, undefined])).toEqual("error");
         expect(Validate([Validators.Port.valid, NaN])).toEqual("error");
-        expect(Validate([Validators.Port.valid, "222"])).toEqual("error");
-        expect(Validate([Validators.Port.valid, 22.22])).toEqual("error");
+        expect(Validate([Validators.Port.valid, "222"])).toEqual("success");
+        expect(Validate([Validators.Port.valid, "22.22"])).toEqual("error");
     });
 });
 
