@@ -31,13 +31,11 @@ const DeleteResolverDialog = ({
             Are you sure you want to delete this resolver?
         </p>
     );
-    const secondaryContent = <p>Secondary content</p>;
 
     return (
         <MessageDialog
             title={title}
             primaryContent={primaryContent}
-            secondaryContent={secondaryContent}
             show={showModal}
             onHide={onClose}
 
