@@ -6,6 +6,7 @@ import {
     Button,
     Icon
 } from "patternfly-react";
+import { Validate, Validators } from "../../helper/Validators";
 
 import { verifyButton, verifyButtonLabel } from "./HookFormGroup.css";
 
@@ -22,13 +23,20 @@ class HookFormGroup extends Component {
     }
 
     testHook() {
-        // TODO: implement verification with server
         const { url = "" } = this.props;
-        console.log("Verifying url...", url);
-
         this.setState({ verifyingUrl: true, verificationResult: null });
 
-        setTimeout(() => this.setState({ verifyingUrl: false, verificationResult: "error" }), 1000);
+        if (Validate([Validators.URL.valid, url]) !== "success") {
+            this.setState({ verifyingUrl: false, verificationResult: "error" });
+            return;
+        }
+
+        fetch(url)
+            .then(res => {
+                const verificationResult = res.ok ? "success" : "error";
+                this.setState({ verifyingUrl: false, verificationResult });
+            })
+            .catch(() => this.setState({ verifyingUrl: false, verificationResult: "error" }));
     }
 
     renderVerificationIcon() {
@@ -59,7 +67,7 @@ class HookFormGroup extends Component {
                 <Col sm={9}>
                     <InputGroup>
                         <FormControl
-                            disabled={disabled}
+                            disabled={disabled || verifyingUrl}
                             type="url"
                             value={url}
                             onChange={ev => onChange(ev.currentTarget.value)}
@@ -67,7 +75,7 @@ class HookFormGroup extends Component {
                         />
                         <InputGroup.Button>
                             <Button
-                                disabled={disabled}
+                                disabled={disabled || verifyingUrl}
                                 onClick={() => this.testHook()}
                                 className={verifyButton}
                             >
