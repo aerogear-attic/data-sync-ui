@@ -51,14 +51,14 @@ class PostgresOptions extends Component {
         this.props.onOptionsChange({ ...this.props.options, database });
     }
 
-    onUsernameChange(username) {
+    onUsernameChange(user) {
         const usernameValidation = Validate([
-            Validators.String.nonBlank, username
+            Validators.String.nonBlank, user
         ]);
 
         this.setState({ usernameValidation });
 
-        this.props.onOptionsChange({ ...this.props.options, username });
+        this.props.onOptionsChange({ ...this.props.options, user });
     }
 
     onPasswordChange(password) {
@@ -114,9 +114,9 @@ class PostgresOptions extends Component {
                     <Col sm={3}>Username</Col>
                     <Col sm={9}>
                         <FormControl
-                            disabled={isDisabled("username")}
+                            disabled={isDisabled("user")}
                             type="text"
-                            value={options.username}
+                            value={options.user}
                             onChange={e => this.onUsernameChange(e.target.value)}
                         />
                     </Col>
