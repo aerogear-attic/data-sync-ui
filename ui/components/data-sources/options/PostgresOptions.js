@@ -24,7 +24,7 @@ class PostgresOptions extends Component {
 
     onUrlChange(url) {
         const urlValidation = Validate([
-            Validators.URL.valid, url
+            Validators.String.nonBlank, url
         ]);
 
         this.setState({ urlValidation });
