@@ -108,6 +108,10 @@ const listResolvers = ({ schemaId, type }) => resolver.findAll({
     }
 });
 
+const getOneResolver = ({ id }) => resolver.findById(id, {
+    include: [{ all: true }]
+});
+
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
     requestMapping, responseMapping
@@ -142,9 +146,7 @@ const upsertResolver = async ({
 
     // Don't return the result directly because including associations
     // doesn't seem to work with create/update
-    return result.then(resolver => {
-        return getOneResolver(resolver);
-    });
+    return result.then(r => getOneResolver(r));
 };
 
 const deleteResolver = async ({ id }) => {
@@ -168,10 +170,6 @@ const deleteResolver = async ({ id }) => {
 
 
 const getOneDataSource = ({ id }) => dataSource.findById(id, {
-    include: [{ all: true }]
-});
-
-const getOneResolver = ({ id }) => resolver.findById(id, {
     include: [{ all: true }]
 });
 
