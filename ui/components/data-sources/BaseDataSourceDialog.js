@@ -89,10 +89,10 @@ class BaseDataSourceDialog extends Component {
     }
 
     validatePostgresOptions(postgresOptions = this.state.postgresOptions) {
-        const { url, port, database, username, password } = postgresOptions;
+        const { host, port, database, username, password } = postgresOptions;
 
         const optionsValidation = Validate([
-            Validators.String.nonBlank, url,
+            Validators.String.nonBlank, host,
             Validators.String.nonBlank, database,
             Validators.String.nonBlank, username,
             Validators.Port.valid, port,

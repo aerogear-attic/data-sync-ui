@@ -22,13 +22,13 @@ class PostgresOptions extends Component {
         this.state = INITIAL_STATE;
     }
 
-    onUrlChange(url) {
+    onHostChange(host) {
         const urlValidation = Validate([
-            Validators.String.nonBlank, url
+            Validators.String.nonBlank, host
         ]);
 
         this.setState({ urlValidation });
-        this.props.onOptionsChange({ ...this.props.options, url });
+        this.props.onOptionsChange({ ...this.props.options, host });
     }
 
     onPortChange(port) {
@@ -77,14 +77,14 @@ class PostgresOptions extends Component {
 
         return (
             <React.Fragment>
-                <FormGroup controlId="url" validationState={urlValidation}>
-                    <Col sm={3}>Server</Col>
+                <FormGroup controlId="host" validationState={urlValidation}>
+                    <Col sm={3}>Host</Col>
                     <Col sm={9}>
                         <FormControl
-                            disabled={isDisabled("url")}
+                            disabled={isDisabled("host")}
                             type="text"
-                            value={options.url}
-                            onChange={e => this.onUrlChange(e.target.value)}
+                            value={options.host}
+                            onChange={e => this.onHostChange(e.target.value)}
                         />
                     </Col>
                 </FormGroup>

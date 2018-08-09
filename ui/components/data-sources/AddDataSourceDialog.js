@@ -12,7 +12,7 @@ const INITIAL_STATE = {
         timestampData: true
     },
     postgresOptions: {
-        url: "",
+        host: "",
         port: "5432",
         database: "",
         username: "",
