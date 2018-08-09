@@ -15,7 +15,7 @@ const INITIAL_STATE = {
         host: "",
         port: "5432",
         database: "",
-        username: "",
+        user: "",
         password: ""
     },
     err: "",
