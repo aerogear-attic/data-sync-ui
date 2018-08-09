@@ -63,6 +63,7 @@ class HookFormGroup extends Component {
                             type="url"
                             value={url}
                             onChange={ev => onChange(ev.currentTarget.value)}
+                            placeholder="https://example.com/yourhook"
                         />
                         <InputGroup.Button>
                             <Button
