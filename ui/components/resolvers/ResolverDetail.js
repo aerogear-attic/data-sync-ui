@@ -193,7 +193,8 @@ class ResolverDetail extends Component {
                         Save
                     </Button>
                     <Button
-                        bsStyle="default"
+                        bsStyle="danger"
+                        disabled={!resolver || !resolver.id}
                         onClick={() => this.removeResolver()}
                     >
                         Delete Resolver
