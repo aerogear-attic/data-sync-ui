@@ -26,7 +26,7 @@ const DeleteResolverDialog = ({
         });
     };
 
-    const title = `Delete Resolver ${resolver.id}`;
+    const title = "Delete Resolver";
     const primaryContent = (
         <p style={{ fontSize: 18 }}>
             Are you sure you want to delete this resolver?
