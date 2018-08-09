@@ -1,9 +1,11 @@
 import React from "react";
 
-import { MessageDialog } from "patternfly-react";
-import { graphql } from "react-apollo";
+import { MessageDialog, Spinner } from "patternfly-react";
+import { graphql, Query } from "react-apollo";
 import DeleteResolver from "../../graphql/DeleteResolver.graphql";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
+import GetSchema from "../../graphql/GetSchema.graphql";
+
 
 const DeleteResolverDialog = ({
     showModal,
@@ -12,11 +14,10 @@ const DeleteResolverDialog = ({
     onDelete,
     onClose
 }) => {
-    const removeResolver = () => {
-        const resolverId = resolver.id;
-        const { schemaId, type } = resolver;
+    const removeResolver = schemaId => {
+        const { id, type } = resolver;
         mutate({
-            variables: { resolverId },
+            variables: { resolverId: id },
             refetchQueries: [{ query: GetResolvers, variables: { schemaId, type } }]
         }).then(() => {
             onDelete();
@@ -33,19 +34,32 @@ const DeleteResolverDialog = ({
     );
 
     return (
-        <MessageDialog
-            title={title}
-            primaryContent={primaryContent}
-            show={showModal}
-            onHide={onClose}
+        <Query query={GetSchema} variables={{ name: "default" }}>
+            {({ loading, error, data }) => {
+                if (loading) {
+                    return <Spinner className="spinner" loading />;
+                }
+                if (error) {
+                    return error.message;
+                }
 
-            primaryActionButtonContent="Delete"
-            primaryActionButtonBsStyle="danger"
-            primaryAction={removeResolver}
+                const { getSchema: { id } } = data;
 
-            secondaryActionButtonContent="Cancel"
-            secondaryAction={onClose}
-        />
+                return (
+                    <MessageDialog
+                        title={title}
+                        primaryContent={primaryContent}
+                        show={showModal}
+                        onHide={onClose}
+                        primaryActionButtonContent="Delete"
+                        primaryActionButtonBsStyle="danger"
+                        primaryAction={() => removeResolver(id)}
+                        secondaryActionButtonContent="Cancel"
+                        secondaryAction={onClose}
+                    />
+                );
+            }}
+        </Query>
     );
 };
 
