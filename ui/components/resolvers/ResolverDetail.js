@@ -53,14 +53,14 @@ class ResolverDetail extends Component {
         }
     }
 
-    onRequestTemplateSelect(template) {
-        this.setState({ requestMappingTemplate: template.key });
-        this.updateResolver({ requestMapping: template.value });
+    onRequestTemplateSelect({ key, value }) {
+        this.setState({ requestMappingTemplate: key });
+        this.onRequestMappingChange(value);
     }
 
-    onResponseTemplateSelect(template) {
-        this.setState({ responseMappingTemplate: template.key });
-        this.updateResolver({ responseMapping: template.value });
+    onResponseTemplateSelect({ key, value }) {
+        this.setState({ responseMappingTemplate: key });
+        this.onResponseMappingChange(value);
     }
 
     onRequestMappingChange(text) {
@@ -73,6 +73,16 @@ class ResolverDetail extends Component {
 
         this.setState({ validations: newValidations });
         this.updateResolver({ requestMapping: text });
+    }
+
+    onResponseMappingChange(text) {
+        const responseMappingValidation = "success";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, responseMapping: responseMappingValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ responseMapping: text });
     }
 
     onDataSourceSelect(DataSource) {
