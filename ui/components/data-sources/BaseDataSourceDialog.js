@@ -40,50 +40,66 @@ class BaseDataSourceDialog extends Component {
     }
 
     onTypeChange(type) {
-        let typeValidation = DataSourceType[type] ? "success" : "error";
-        typeValidation = type === DataSourceType.InMemory ? "warning" : typeValidation;
-
         const { validations } = this.state;
-        const newValidations = { ...validations, type: typeValidation };
 
+        let newValidations = {};
+        switch (type) {
+            case DataSourceType.InMemory:
+                newValidations = { ...validations, type: "warning", options: this.validateInMemoryOptions() };
+                break;
+
+            case DataSourceType.Postgres:
+                newValidations = { ...validations, type: "success", options: this.validatePostgresOptions() };
+                break;
+
+            default:
+                newValidations = { ...validations, type: "error", options: "error" };
+        }
         this.setState({ type, validations: newValidations });
     }
 
     onInMemoryOptionsChange(inMemoryOptions) {
+        const { validations } = this.state;
+        const newValidations = {
+            ...validations,
+            options: this.validateInMemoryOptions(inMemoryOptions)
+        };
+
+        this.setState({ inMemoryOptions, validations: newValidations });
+    }
+
+    validateInMemoryOptions(inMemoryOptions = this.state.inMemoryOptions) {
         const { timestampData } = inMemoryOptions;
 
         const optionsValidation = Validate([
             Validators.Boolean.valid, timestampData
         ]);
 
-        const { validations } = this.state;
-        const newValidations = { ...validations, optionsValidation };
-
-        this.setState({ inMemoryOptions, validations: newValidations });
+        return optionsValidation;
     }
 
     onPostgresOptionsChange(postgresOptions) {
-        const { url, port, database, username } = postgresOptions;
-
-        // Set the initial validation state and assume that port is valid
-        // (because we set a default value there)
-        const validationDetails = {
-            url: "error",
-            database: "error",
-            username: "error",
-            port: "success"
+        const { validations } = this.state;
+        const newValidations = {
+            ...validations,
+            options: this.validatePostgresOptions(postgresOptions)
         };
 
-        Validate([
-            Validators.URL.valid, url, "url",
-            Validators.String.nonBlank, database, "database",
-            Validators.String.nonBlank, username, "username",
-            Validators.Port.valid, port, "port"
-        ], validationDetails);
-
-        const { validations } = this.state;
-        const newValidations = { ...validations, ...validationDetails };
         this.setState({ postgresOptions, validations: newValidations });
+    }
+
+    validatePostgresOptions(postgresOptions = this.state.postgresOptions) {
+        const { url, port, database, username, password } = postgresOptions;
+
+        const optionsValidation = Validate([
+            Validators.URL.valid, url,
+            Validators.String.nonBlank, database,
+            Validators.String.nonBlank, username,
+            Validators.Port.valid, port,
+            Validators.Password.valid, password
+        ]);
+
+        return optionsValidation;
     }
 
     renderSpecificOptionsFormsForSelectedType() {
@@ -200,6 +216,7 @@ class BaseDataSourceDialog extends Component {
     render() {
         const { visible } = this.props;
         const { name, type, err, success, validations } = this.state;
+
         const submitButtonDisabled = some(validations, s => !s || s === "error");
 
         return (

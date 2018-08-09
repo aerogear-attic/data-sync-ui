@@ -13,7 +13,7 @@ const INITIAL_STATE = {
     },
     postgresOptions: {
         url: "",
-        port: 5432,
+        port: "5432",
         database: "",
         username: "",
         password: ""
