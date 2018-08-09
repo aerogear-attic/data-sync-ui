@@ -68,10 +68,11 @@ class ResolverDetail extends Component {
     save() {
         const { onResolverEdit } = this.props;
         this.upsertResolver()
-            .then(() => {
+            .then(resolver => {
                 onResolverEdit({ isResolverSaved: true });
-                this.setState({ isResolverSaved: true,
-                    resolver: null });
+
+                const { upsertResolver } = resolver.data;
+                this.setState({ isResolverSaved: true, resolver: upsertResolver });
             })
             .catch(err => console.log(err));
     }
