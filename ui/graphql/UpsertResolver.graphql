@@ -17,5 +17,14 @@ mutation UpsertResolver(
         responseMapping: $responseMapping
     ) {
         id
+        type
+        field
+        responseMapping
+        requestMapping
+        DataSource {
+            id
+            name
+            type
+        }
     }
 }

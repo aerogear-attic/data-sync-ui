@@ -1,0 +1,5 @@
+mutation DeleteResolver($resolverId: Int!) {
+ 	deleteResolver(id: $resolverId) {
+        id
+  } 
+}

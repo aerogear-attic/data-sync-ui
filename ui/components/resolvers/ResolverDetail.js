@@ -12,6 +12,7 @@ import {
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 import { HookFormGroup } from "./HookFormGroup";
+import { DeleteResolverDialog } from "./DeleteResolverDialog";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
@@ -29,7 +30,8 @@ const INITIAL_STATE = {
     requestMappingTemplate: "Custom",
     responseMappingTemplate: "Custom",
     isResolverSaved: true,
-    err: ""
+    err: "",
+    showDeleteModal: false
 };
 
 class ResolverDetail extends Component {
@@ -66,9 +68,11 @@ class ResolverDetail extends Component {
     save() {
         const { onResolverEdit } = this.props;
         this.upsertResolver()
-            .then(() => {
+            .then(resolver => {
                 onResolverEdit({ isResolverSaved: true });
-                this.setState({ isResolverSaved: true });
+
+                const { upsertResolver } = resolver.data;
+                this.setState({ isResolverSaved: true, resolver: upsertResolver });
             })
             .catch(err => console.log(err));
     }
@@ -76,7 +80,6 @@ class ResolverDetail extends Component {
     upsertResolver() {
         const { resolver } = this.state;
         const { id, schemaId, DataSource, type, field, requestMapping, responseMapping } = resolver;
-
         return this.props.mutate({
             variables: {
                 id,
@@ -94,6 +97,14 @@ class ResolverDetail extends Component {
         });
     }
 
+    removeResolver() {
+        this.setState({ showDeleteModal: true });
+    }
+
+    onDeleteResolver() {
+        this.setState(INITIAL_STATE);
+    }
+
     renderEmptyScreen() {
         return (
             <EmptyState className={detailEmpty}>
@@ -106,8 +117,7 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved } = this.state;
-
+        const { resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved, showDeleteModal } = this.state;
         if (!resolver) {
             return this.renderEmptyScreen();
         }
@@ -182,9 +192,21 @@ class ResolverDetail extends Component {
                     >
                         Save
                     </Button>
-                    {/* <Button bsStyle="default" onClick={() => console.log("cancel")}>Cancel</Button> */}
+                    <Button
+                        bsStyle="danger"
+                        disabled={!resolver || !resolver.id}
+                        onClick={() => this.removeResolver()}
+                    >
+                        Delete Resolver
+                    </Button>
                 </div>
 
+                <DeleteResolverDialog
+                    showModal={showDeleteModal}
+                    resolver={resolver}
+                    onClose={() => this.setState({ showDeleteModal: false })}
+                    onDelete={() => this.onDeleteResolver()}
+                />
             </React.Fragment>
         );
     }
