@@ -55,8 +55,8 @@ const Schema = buildSchema(`
         id: Int! 
         type: String!
         field: String!
-        preHook: String!
-        postHook: String!
+        preHook: String
+        postHook: String
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
