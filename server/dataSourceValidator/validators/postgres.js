@@ -35,8 +35,8 @@ module.exports = async config => {
 
     try {
         client = new Client({
-            user: config.options.username,
-            host: config.options.url,
+            user: config.options.user,
+            host: config.options.host,
             database: config.options.database,
             password: config.options.password,
             port: config.options.port,
