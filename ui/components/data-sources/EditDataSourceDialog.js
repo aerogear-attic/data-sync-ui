@@ -52,7 +52,7 @@ class EditDataSourceDialog extends BaseDataSourceDialog {
     }
 
     getSubmitTitle() {
-        return "Edit";
+        return "Save";
     }
 
     onSubmit() {
