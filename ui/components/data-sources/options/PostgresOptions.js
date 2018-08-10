@@ -8,7 +8,7 @@ import {
 import { Validate, Validators } from "../../../helper/Validators";
 
 const INITIAL_STATE = {
-    urlValidation: "null",
+    hostValidation: "null",
     portValidation: "success",
     databaseValidation: "null",
     usernameValidation: "null",
@@ -23,11 +23,11 @@ class PostgresOptions extends Component {
     }
 
     onHostChange(host) {
-        const urlValidation = Validate([
+        const hostValidation = Validate([
             Validators.String.nonBlank, host
         ]);
 
-        this.setState({ urlValidation });
+        this.setState({ hostValidation });
         this.props.onOptionsChange({ ...this.props.options, host });
     }
 
@@ -73,11 +73,11 @@ class PostgresOptions extends Component {
 
     render() {
         const { options, isDisabled } = this.props;
-        const { urlValidation, portValidation, databaseValidation, usernameValidation, passwordValidation } = this.state;
+        const { hostValidation, portValidation, databaseValidation, usernameValidation, passwordValidation } = this.state;
 
         return (
             <React.Fragment>
-                <FormGroup controlId="host" validationState={urlValidation}>
+                <FormGroup controlId="host" validationState={hostValidation}>
                     <Col sm={3}>Host</Col>
                     <Col sm={9}>
                         <FormControl
