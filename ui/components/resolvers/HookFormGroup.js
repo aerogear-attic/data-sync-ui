@@ -1,35 +1,40 @@
-import React from "react";
+import React, { Component } from "react";
 import {
     Col,
-    FormControl,
-    InputGroup,
-    Button
+    FormControl
 } from "patternfly-react";
 
-const HookFormGroup = ({ url, label, onChange }) => {
-    const testHook = () => {
-        console.log(`Test url: ${url}`);
-    };
+import { hookControlLabel } from "./HookFormGroup.css";
 
-    return (
-        <React.Fragment>
-            <Col sm={3}>{label}</Col>
-            <Col sm={9}>
-                <InputGroup>
+const INITIAL_STATE = {
+};
+
+class HookFormGroup extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = INITIAL_STATE;
+    }
+
+    render() {
+        const { url = "", label, onChange, disabled = false } = this.props;
+
+        return (
+            <React.Fragment>
+                <Col sm={2} className={hookControlLabel}>{label}</Col>
+                <Col sm={6}>
                     <FormControl
+                        disabled={disabled}
                         type="url"
                         value={url}
                         onChange={ev => onChange(ev.currentTarget.value)}
+                        placeholder="https://example.com/yourhook"
                     />
-                    <InputGroup.Button>
-                        <Button onClick={testHook}>
-                            Verify URL
-                        </Button>
-                    </InputGroup.Button>
-                </InputGroup>
-            </Col>
-        </React.Fragment>
-    );
-};
+                </Col>
+            </React.Fragment>
+        );
+    }
+
+}
 
 export { HookFormGroup };

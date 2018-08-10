@@ -8,6 +8,12 @@ import {
     EmptyStateIcon,
     EmptyStateTitle
 } from "patternfly-react";
+import some from "lodash.some";
+import {
+    Validate,
+    ValidateAny,
+    Validators
+} from "../../helper/Validators";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
@@ -22,7 +28,7 @@ import { getTemplatesForDataSource } from "./MappingTemplates";
 
 import {
     detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
-    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle
+    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle, buttonDelete
 } from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
@@ -31,30 +37,101 @@ const INITIAL_STATE = {
     responseMappingTemplate: "Custom",
     isResolverSaved: true,
     err: "",
-    showDeleteModal: false
+    showDeleteModal: false,
+    validations: {
+        dataSource: null,
+        requestMapping: null
+    }
 };
 
 class ResolverDetail extends Component {
 
     constructor(props) {
         super(props);
-        this.state = INITIAL_STATE;
+        const { resolver } = this.props;
+        this.state = { ...INITIAL_STATE, resolver };
+
+        if (resolver && resolver.id) {
+            this.state.validations = {};
+        }
     }
 
     componentWillReceiveProps({ resolver }) {
         if (this.props.resolver !== resolver) {
-            this.setState({ ...INITIAL_STATE, resolver });
+            const newState = { ...INITIAL_STATE, resolver };
+            if (resolver && resolver.id) {
+                newState.validations = {};
+            }
+            this.setState(newState);
         }
     }
 
-    onRequestTemplateSelect(template) {
-        this.setState({ requestMappingTemplate: template.key });
-        this.updateResolver({ requestMapping: template.value });
+    onRequestTemplateSelect({ key, value }) {
+        this.onRequestMappingChange(value);
+        this.setState({ requestMappingTemplate: key });
     }
 
-    onResponseTemplateSelect(template) {
-        this.setState({ responseMappingTemplate: template.key });
-        this.updateResolver({ responseMapping: template.value });
+    onResponseTemplateSelect({ key, value }) {
+        this.onResponseMappingChange(value);
+        this.setState({ responseMappingTemplate: key });
+    }
+
+    onRequestMappingChange(text) {
+        const requestMappingValidation = Validate([
+            Validators.String.nonBlank, text
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, requestMapping: requestMappingValidation };
+
+        this.setState({ validations: newValidations, requestMappingTemplate: "Custom" });
+        this.updateResolver({ requestMapping: text });
+    }
+
+    onResponseMappingChange(text) {
+        const responseMappingValidation = "success";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, responseMapping: responseMappingValidation };
+
+        this.setState({ validations: newValidations, requestMappingTemplate: "Custom" });
+        this.updateResolver({ responseMapping: text });
+    }
+
+    onDataSourceSelect(DataSource) {
+        const dsValidation = DataSource !== null ? "success" : "error";
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, dataSource: dsValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ DataSource });
+    }
+
+    onPreHookChange(preHook) {
+        const preHookValidation = ValidateAny([
+            Validators.URL.valid, preHook,
+            s => s === "", preHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, preHook: preHookValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ preHook });
+    }
+
+    onPostHookChange(postHook) {
+        const postHookValidation = ValidateAny([
+            Validators.URL.valid, postHook,
+            s => s === "", postHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, postHook: postHookValidation };
+
+        this.setState({ validations: newValidations });
+        this.updateResolver({ postHook });
     }
 
     updateResolver(newProps) {
@@ -79,7 +156,8 @@ class ResolverDetail extends Component {
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { id, schemaId, DataSource, type, field, requestMapping, responseMapping } = resolver;
+        const { id, schemaId, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+
         return this.props.mutate({
             variables: {
                 id,
@@ -87,6 +165,8 @@ class ResolverDetail extends Component {
                 dataSourceId: DataSource.id,
                 type,
                 field,
+                preHook,
+                postHook,
                 requestMapping,
                 responseMapping
             },
@@ -117,13 +197,19 @@ class ResolverDetail extends Component {
     }
 
     render() {
-        const { resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved, showDeleteModal } = this.state;
+        const {
+            resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved,
+            showDeleteModal, validations
+        } = this.state;
+
         if (!resolver) {
             return this.renderEmptyScreen();
         }
 
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
+
+        const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
 
         return (
             <React.Fragment>
@@ -136,25 +222,25 @@ class ResolverDetail extends Component {
                     </h3>
 
                     <Form horizontal className={formContainer}>
-                        <FormGroup controlId="dataSource" className={detailFormGroup}>
+                        <FormGroup controlId="dataSource" className={detailFormGroup} validationState={validations.dataSource}>
                             <DataSourcesDropDown
                                 selected={DataSource}
-                                onDataSourceSelect={ds => this.updateResolver({ DataSource: ds })}
+                                onDataSourceSelect={ds => this.onDataSourceSelect(ds)}
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="requestMapping" className={detailFormGroup}>
+                        <FormGroup controlId="requestMapping" className={detailFormGroup} validationState={validations.requestMapping}>
                             <MappingTemplateDropDown
                                 label="Request Mapping Template"
                                 template={requestMappingTemplate}
                                 templates={requestMappingTemplates}
                                 text={requestMapping}
                                 onTemplateSelect={t => this.onRequestTemplateSelect(t)}
-                                onTextChange={t => this.updateResolver({ requestMapping: t })}
+                                onTextChange={t => this.onRequestMappingChange(t)}
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="responseMapping" className={detailFormGroup}>
+                        <FormGroup controlId="responseMapping" className={detailFormGroup} validationState={validations.responseMapping}>
                             <MappingTemplateDropDown
                                 label="Response Mapping Template"
                                 template={responseMappingTemplate}
@@ -165,19 +251,19 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="preHook" className={detailFormGroup}>
+                        <FormGroup controlId="preHook" className={detailFormGroup} validationState={validations.preHook}>
                             <HookFormGroup
                                 label="Pre Hook"
                                 url={preHook}
-                                onChange={h => this.updateResolver({ preHook: h })}
+                                onChange={hook => this.onPreHookChange(hook)}
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="postHook" className={detailFormGroup}>
+                        <FormGroup controlId="postHook" className={detailFormGroup} validationState={validations.postHook}>
                             <HookFormGroup
                                 label="Post Hook"
                                 url={postHook}
-                                onChange={h => this.updateResolver({ postHook: h })}
+                                onChange={hook => this.onPostHookChange(hook)}
                             />
                         </FormGroup>
                     </Form>
@@ -188,13 +274,14 @@ class ResolverDetail extends Component {
                         className={buttonSave}
                         bsStyle="primary"
                         onClick={() => this.save()}
-                        disabled={isResolverSaved}
+                        disabled={isSaveButtonDisabled}
                     >
                         Save
                     </Button>
                     <Button
                         bsStyle="danger"
-                        disabled={!resolver || !resolver.id}
+                        className={buttonDelete}
+                        style={!resolver || !resolver.id ? { display: "none" } : {}}
                         onClick={() => this.removeResolver()}
                     >
                         Delete Resolver

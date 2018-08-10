@@ -3,6 +3,8 @@ query GetResolvers($schemaId: Int!, $type: String!) {
         id
         type
         field
+        preHook
+        postHook
         responseMapping
         requestMapping
         DataSource {

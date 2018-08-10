@@ -44,6 +44,10 @@
     margin-right: 10px;
 }
 
+.buttonDelete {
+    float: right;
+}
+
 .learnMore {
     font-size: 9px;
     color: #4EABDA;
