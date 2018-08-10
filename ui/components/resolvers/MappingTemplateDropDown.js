@@ -13,6 +13,7 @@ import {
     detailCodeEditor
 } from "./mappingTemplateDropDown.css";
 
+// TODO: add validation state visual feedback (set in parent FormGroup)
 const MappingTemplateDropDown = ({ label, template, templates, text = "", onTemplateSelect, onTextChange }) => (
     <React.Fragment>
         <Col sm={6} className={mappingControlLabel}>{label}</Col>

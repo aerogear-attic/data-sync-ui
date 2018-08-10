@@ -86,4 +86,38 @@ const Validate = (validations, details) => {
     return result ? "success" : "error";
 };
 
-export { Validators, Validate };
+/**
+ * Same as Validate but only 1 validation has to pass.
+ * @param validations The validations array
+ * @param details An object to store the validation results per field. Must be set if Field Names
+ * are used in the validations
+ * @returns {string} "success" on success, otherwise "error"
+ */
+const ValidateAny = (validations, details) => {
+    let result = false;
+    let index = 0;
+
+    // One validation takes 3 arguments if fiel names are used (validator, input valud and field name)
+    // and only two if not (validator, input value)
+    const increase = details ? 3 : 2;
+
+    if (validations && validations.length % increase === 0) {
+        result = true; // Init value
+
+        // Don't exit early, always evaluate all inputs to gather all the results
+        // in the detaile object
+        while (index < validations.length) {
+            const validationResult = validations[index](validations[index + 1]);
+            result = result || validationResult;
+
+            if (details) {
+                details[validations[index + 2]] = validationResult ? "success" : "error";
+            }
+            index += increase;
+        }
+    }
+
+    return result ? "success" : "error";
+};
+
+export { Validators, Validate, ValidateAny };

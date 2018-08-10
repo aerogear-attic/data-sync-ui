@@ -9,7 +9,11 @@ import {
     EmptyStateTitle
 } from "patternfly-react";
 import some from "lodash.some";
-import { Validate, Validators } from "../../helper/Validators";
+import {
+    Validate,
+    ValidateAny,
+    Validators
+} from "../../helper/Validators";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
@@ -36,7 +40,8 @@ const INITIAL_STATE = {
     showDeleteModal: false,
     validations: {
         dataSource: null,
-        requestMapping: null
+        requestMapping: null,
+        responseMapping: "success"
     }
 };
 
@@ -44,23 +49,37 @@ class ResolverDetail extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { ...INITIAL_STATE, resolver: this.props.resolver };
+        const { resolver } = this.props;
+        this.state = { ...INITIAL_STATE, resolver };
+
+        if (resolver && resolver.type !== "Query") {
+            this.state.validations.preHook = "success";
+            this.state.validations.postHook = "success";
+        }
     }
 
     componentWillReceiveProps({ resolver }) {
         if (this.props.resolver !== resolver) {
-            this.setState({ ...INITIAL_STATE, resolver });
+            const newState = { ...INITIAL_STATE, resolver };
+            if (resolver.type === "Query") {
+                newState.validations.preHook = undefined;
+                newState.validations.postHook = undefined;
+            } else {
+                newState.validations.preHook = "success";
+                newState.validations.postHook = "success";
+            }
+            this.setState(newState);
         }
     }
 
     onRequestTemplateSelect({ key, value }) {
-        this.setState({ requestMappingTemplate: key });
         this.onRequestMappingChange(value);
+        this.setState({ requestMappingTemplate: key });
     }
 
     onResponseTemplateSelect({ key, value }) {
-        this.setState({ responseMappingTemplate: key });
         this.onResponseMappingChange(value);
+        this.setState({ responseMappingTemplate: key });
     }
 
     onRequestMappingChange(text) {
@@ -71,7 +90,7 @@ class ResolverDetail extends Component {
         const { validations } = this.state;
         const newValidations = { ...validations, requestMapping: requestMappingValidation };
 
-        this.setState({ validations: newValidations });
+        this.setState({ validations: newValidations, requestMappingTemplate: "Custom" });
         this.updateResolver({ requestMapping: text });
     }
 
@@ -81,7 +100,7 @@ class ResolverDetail extends Component {
         const { validations } = this.state;
         const newValidations = { ...validations, responseMapping: responseMappingValidation };
 
-        this.setState({ validations: newValidations });
+        this.setState({ validations: newValidations, requestMappingTemplate: "Custom" });
         this.updateResolver({ responseMapping: text });
     }
 
@@ -96,10 +115,28 @@ class ResolverDetail extends Component {
     }
 
     onPreHookChange(preHook) {
+        const preHookValidation = ValidateAny([
+            Validators.URL.valid, preHook,
+            s => s === "", preHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, preHook: preHookValidation };
+
+        this.setState({ validations: newValidations });
         this.updateResolver({ preHook });
     }
 
     onPostHookChange(postHook) {
+        const postHookValidation = ValidateAny([
+            Validators.URL.valid, postHook,
+            s => s === "", postHook
+        ]);
+
+        const { validations } = this.state;
+        const newValidations = { ...validations, postHook: postHookValidation };
+
+        this.setState({ validations: newValidations });
         this.updateResolver({ postHook });
     }
 
@@ -179,7 +216,6 @@ class ResolverDetail extends Component {
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         const disableHooks = type === "Query";
-        // TODO: are preHook and postHook mandatory? Can they be saved if wrong urls?
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => !s || s === "error");
 
         return (
@@ -200,7 +236,6 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        {/* FIXME: add validation state visual feedback */}
                         <FormGroup controlId="requestMapping" className={detailFormGroup} validationState={validations.requestMapping}>
                             <MappingTemplateDropDown
                                 label="Request Mapping Template"
@@ -212,7 +247,7 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="responseMapping" className={detailFormGroup}>
+                        <FormGroup controlId="responseMapping" className={detailFormGroup} validationState={validations.responseMapping}>
                             <MappingTemplateDropDown
                                 label="Response Mapping Template"
                                 template={responseMappingTemplate}
