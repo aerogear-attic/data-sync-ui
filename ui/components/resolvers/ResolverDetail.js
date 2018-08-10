@@ -28,7 +28,7 @@ import { getTemplatesForDataSource } from "./MappingTemplates";
 
 import {
     detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
-    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle
+    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle, buttonDelete
 } from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
@@ -52,7 +52,9 @@ class ResolverDetail extends Component {
         const { resolver } = this.props;
         this.state = { ...INITIAL_STATE, resolver };
 
-        if (resolver && resolver.type !== "Query") {
+        if (resolver && resolver.id) {
+            this.state.validations = {};
+        } else if (resolver && resolver.type !== "Query") {
             this.state.validations.preHook = "success";
             this.state.validations.postHook = "success";
         }
@@ -61,10 +63,9 @@ class ResolverDetail extends Component {
     componentWillReceiveProps({ resolver }) {
         if (this.props.resolver !== resolver) {
             const newState = { ...INITIAL_STATE, resolver };
-            if (resolver.type === "Query") {
-                newState.validations.preHook = undefined;
-                newState.validations.postHook = undefined;
-            } else {
+            if (resolver.id) {
+                newState.validations = {};
+            } else if (resolver.type !== "Query") {
                 newState.validations.preHook = "success";
                 newState.validations.postHook = "success";
             }
@@ -216,7 +217,7 @@ class ResolverDetail extends Component {
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         const disableHooks = type === "Query";
-        const isSaveButtonDisabled = isResolverSaved || some(validations, s => !s || s === "error");
+        const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
 
         return (
             <React.Fragment>
@@ -289,7 +290,8 @@ class ResolverDetail extends Component {
                     </Button>
                     <Button
                         bsStyle="danger"
-                        disabled={!resolver || !resolver.id}
+                        className={buttonDelete}
+                        style={!resolver || !resolver.id ? { display: "none" } : {}}
                         onClick={() => this.removeResolver()}
                     >
                         Delete Resolver
