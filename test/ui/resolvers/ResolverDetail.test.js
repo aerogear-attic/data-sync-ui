@@ -57,12 +57,7 @@ describe("When resolver is defined", () => {
         expect(wrapper.find(HookFormGroup)).toHaveLength(2);
     });
 
-    it("should disable preHook and postHook if type is Query", () => {
-        wrapper = getWrapper({ ...resolver, type: "Query" }).find(ResolverDetail).first();
-        expect(wrapper.find(HookFormGroup).everyWhere(n => n.prop("disabled"))).toBe(true);
-    });
-
-    it("should enable preHook and postHook if type is Mutation", () => {
+    it("should have preHook and postHook enabled by default", () => {
         wrapper = getWrapper({ ...resolver, type: "Other" }).find(ResolverDetail).first();
         expect(wrapper.find(HookFormGroup).everyWhere(n => !n.prop("disabled"))).toBe(true);
     });
