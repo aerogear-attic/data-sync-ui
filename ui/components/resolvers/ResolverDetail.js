@@ -40,8 +40,7 @@ const INITIAL_STATE = {
     showDeleteModal: false,
     validations: {
         dataSource: null,
-        requestMapping: null,
-        responseMapping: "success"
+        requestMapping: null
     }
 };
 
@@ -54,20 +53,14 @@ class ResolverDetail extends Component {
 
         if (resolver && resolver.id) {
             this.state.validations = {};
-        } else if (resolver && resolver.type !== "Query") {
-            this.state.validations.preHook = "success";
-            this.state.validations.postHook = "success";
         }
     }
 
     componentWillReceiveProps({ resolver }) {
         if (this.props.resolver !== resolver) {
             const newState = { ...INITIAL_STATE, resolver };
-            if (resolver.id) {
+            if (resolver && resolver.id) {
                 newState.validations = {};
-            } else if (resolver.type !== "Query") {
-                newState.validations.preHook = "success";
-                newState.validations.postHook = "success";
             }
             this.setState(newState);
         }
@@ -216,7 +209,6 @@ class ResolverDetail extends Component {
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
-        const disableHooks = type === "Query";
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
 
         return (
@@ -261,7 +253,6 @@ class ResolverDetail extends Component {
 
                         <FormGroup controlId="preHook" className={detailFormGroup} validationState={validations.preHook}>
                             <HookFormGroup
-                                disabled={disableHooks}
                                 label="Pre Hook"
                                 url={preHook}
                                 onChange={hook => this.onPreHookChange(hook)}
@@ -270,7 +261,6 @@ class ResolverDetail extends Component {
 
                         <FormGroup controlId="postHook" className={detailFormGroup} validationState={validations.postHook}>
                             <HookFormGroup
-                                disabled={disableHooks}
                                 label="Post Hook"
                                 url={postHook}
                                 onChange={hook => this.onPostHookChange(hook)}
