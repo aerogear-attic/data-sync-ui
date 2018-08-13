@@ -102,6 +102,7 @@ module.exports = {
           postHook
           responseMapping
           requestMapping
+          GraphQLSchemaId
           DataSource {
             id
             name

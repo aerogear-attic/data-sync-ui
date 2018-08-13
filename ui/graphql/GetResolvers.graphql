@@ -1,6 +1,7 @@
 query GetResolvers($schemaId: Int!, $type: String!) {
     resolvers(schemaId: $schemaId, type: $type) {
         id
+        GraphQLSchemaId
         type
         field
         preHook

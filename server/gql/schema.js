@@ -53,6 +53,7 @@ const Schema = buildSchema(`
     },
     type Resolver {
         id: Int! 
+        GraphQLSchemaId: Int!
         type: String!
         field: String!
         preHook: String
