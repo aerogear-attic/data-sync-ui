@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const { join } = require("path");
+const cors = require("cors");
+const axios = require("axios");
 const { runHealthChecks } = require("../health");
 const { log } = require("../logger");
 const { compileSchemaString } = require("../gql/helper");
@@ -34,6 +36,17 @@ router.get("/schema/:schemaId", async (req, res) => {
     } catch (err) {
         log.error(err);
         res.sendStatus(500);
+    }
+});
+
+router.post("/testHook", cors(), async (req, res) => {
+    const { hook } = req.body;
+    try {
+        const hookResponse = await axios.get(hook);
+        res.sendStatus(hookResponse.status);
+    } catch (err) {
+        log.error(err);
+        res.sendStatus(404);
     }
 });
 
