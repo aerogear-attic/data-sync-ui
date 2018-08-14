@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
     Col,
     FormControl,
@@ -30,13 +31,15 @@ class HookFormGroup extends Component {
             this.setState({ verifyingUrl: false, verificationResult: "error" });
             return;
         }
-
-        fetch(url)
+        const testHookRoute = "/testHook";
+        axios.post(testHookRoute, { hook: url })
             .then(res => {
-                const verificationResult = res.ok ? "success" : "error";
+                const verificationResult = res.statusText === "OK" ? "success" : "error";
                 this.setState({ verifyingUrl: false, verificationResult });
             })
-            .catch(() => this.setState({ verifyingUrl: false, verificationResult: "error" }));
+            .catch(() => {
+                this.setState({ verifyingUrl: false, verificationResult: "error" });
+            });
     }
 
     renderVerificationIcon() {
