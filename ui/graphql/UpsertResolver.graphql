@@ -21,6 +21,7 @@ mutation UpsertResolver(
         responseMapping: $responseMapping
     ) {
         id
+        GraphQLSchemaId
         type
         field
         preHook

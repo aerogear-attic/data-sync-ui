@@ -156,7 +156,9 @@ class ResolverDetail extends Component {
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { id, schemaId, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+        const { id, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+
+        const schemaId = resolver.schemaId || resolver.GraphQLSchemaId;
 
         return this.props.mutate({
             variables: {

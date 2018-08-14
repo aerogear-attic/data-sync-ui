@@ -38,9 +38,9 @@ describe("When resolver is defined", () => {
         postHook: ""
     };
 
-    const getWrapper = r => mount(
+    const getWrapper = (r, props) => mount(
         <MockedProvider mocks={[]} addTypename={false}>
-            <ResolverDetail resolver={r} />
+            <ResolverDetail resolver={r} {...props} />
         </MockedProvider>
     );
 
@@ -60,5 +60,30 @@ describe("When resolver is defined", () => {
     it("should have preHook and postHook enabled by default", () => {
         wrapper = getWrapper({ ...resolver, type: "Other" }).find(ResolverDetail).first();
         expect(wrapper.find(HookFormGroup).everyWhere(n => !n.prop("disabled"))).toBe(true);
+    });
+
+    it("should display a disabled 'save' button by default", () => {
+        wrapper = getWrapper(resolver).find(ResolverDetail).first();
+        expect(wrapper.containsMatchingElement(
+            <button disabled>Save</button>
+        )).toBe(true);
+    });
+
+    it.skip("should enable the save button after making any valid change", () => {
+        // FIXME: Enzyme does not support changes in children nodes state, and ResolverDetail
+        // has to be wrapped in a MockedProvider for Apollo to work. This test should be present
+        // though
+
+        // wrapper = getWrapper(resolver, { onResolverEdit: () => {} });
+
+        // wrapper.find("input").first().simulate("change", { target: { value: "http://example.hook" } });
+        // wrapper.update();
+
+        // expect(wrapper.containsMatchingElement(
+        //     <button disabled={false}>Save</button>
+        // )).toBe(true);
+    });
+
+    it.skip("should keep the save button disabled in any invalid change is made", () => {
     });
 });
