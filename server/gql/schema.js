@@ -33,6 +33,7 @@ const Schema = buildSchema(`
             postHook: String
             requestMapping: String!
             responseMapping: String
+            publish: String
         ): Resolver
         deleteResolver(id: Int!): Resolver
     },  
@@ -61,6 +62,7 @@ const Schema = buildSchema(`
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
+        publish: String
     },
     type DataSourceTestResult {
         status: Boolean!
@@ -115,7 +117,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping = ""
+    requestMapping, responseMapping = "", publish
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
@@ -126,6 +128,7 @@ const upsertResolver = async ({
         responseMapping,
         type,
         field
+        publish
     };
 
     let result;
