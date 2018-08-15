@@ -47,10 +47,10 @@ router.post("/testHook", cors(), async (req, res) => {
     } catch (err) {
         log.error({
             message: err.message,
-            statusCode: 404,
+            statusCode: err.response.status,
             stack: err.stack
         });
-        res.sendStatus(404);
+        res.sendStatus(err.response.status);
     }
 });
 
