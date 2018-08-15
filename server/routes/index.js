@@ -45,7 +45,11 @@ router.post("/testHook", cors(), async (req, res) => {
         const hookResponse = await axios.post(hook);
         res.sendStatus(hookResponse.status);
     } catch (err) {
-        log.error(err);
+        log.error({
+            message: err.message,
+            statusCode: 404,
+            stack: err.stack
+        });
         res.sendStatus(404);
     }
 });
