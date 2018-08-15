@@ -42,7 +42,7 @@ router.get("/schema/:schemaId", async (req, res) => {
 router.post("/testHook", cors(), async (req, res) => {
     const { hook } = req.body;
     try {
-        const hookResponse = await axios.get(hook);
+        const hookResponse = await axios.post(hook);
         res.sendStatus(hookResponse.status);
     } catch (err) {
         log.error(err);

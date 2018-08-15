@@ -9,7 +9,9 @@ import {
 } from "patternfly-react";
 import { Validate, Validators } from "../../helper/Validators";
 
-import { verifyButton, verifyButtonLabel } from "./HookFormGroup.css";
+import {
+    verifyButton, verifyButtonLabel, hookControlLabel
+} from "./HookFormGroup.css";
 
 const INITIAL_STATE = {
     verifyingUrl: false,
@@ -66,7 +68,7 @@ class HookFormGroup extends Component {
 
         return (
             <React.Fragment>
-                <Col sm={3}>{label}</Col>
+                <Col sm={3} className={hookControlLabel}>{label}</Col>
                 <Col sm={9}>
                     <InputGroup>
                         <FormControl
