@@ -1,6 +1,6 @@
 const { buildSchema } = require("graphql");
 const { log, auditLog } = require("../logger");
-const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
+const { dataSource, database, supportsiLike, schema, resolver, subscription } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
 const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
@@ -33,7 +33,7 @@ const Schema = buildSchema(`
             postHook: String
             requestMapping: String!
             responseMapping: String
-            publish: String
+            publisher: String
         ): Resolver
         deleteResolver(id: Int!): Resolver
     },  
@@ -62,7 +62,7 @@ const Schema = buildSchema(`
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
-        publish: String
+        publisher: String
     },
     type DataSourceTestResult {
         status: Boolean!
@@ -117,7 +117,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping = "", publish
+    requestMapping, responseMapping = "", publisher
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
@@ -127,14 +127,24 @@ const upsertResolver = async ({
         requestMapping,
         responseMapping,
         type,
-        field
-        publish
+        field,
+        publish: publisher
     };
 
     let result;
     if (id) {
         const updated = await resolver.findById(id);
         result = updated.update(properties);
+        if (properties.publish) {
+            const subExists = await subscription.findOne({ where: { field: properties.publish } });
+            if (!subExists) {
+                subscription.create({
+                    field: properties.publish,
+                    type: "Subscription",
+                    GraphQLSchemaId: schemaId
+                });
+            }
+        }
     } else {
         result = resolver.create(properties);
     }
