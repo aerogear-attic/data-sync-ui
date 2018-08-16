@@ -1,0 +1,18 @@
+.structureFieldRow {
+    font-weight: bold;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 5px;
+}
+
+.structureItemRow {
+    margin-top: 5px;
+}
+
+.structureHeading {
+    font-weight: 600;
+    border-left: 1px solid lightgray;
+    padding-left: 15px;
+    margin-left: 5px;
+}
+
+.structureListItem {}

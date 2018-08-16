@@ -12,20 +12,8 @@ div.list-group-item-container .pficon-close {
     display: none;
 }
 
-.structure-list-item {
-    border-bottom: 1px solid lightgrey !important;
-}
-
-.structure-list-item span.fa-angle-right {
-    border-right: 1px solid lightgrey;
-    font-weight: bold;
-    font-size: 24px;
-    padding-right: 25px;
-    padding-bottom: 3px;
-}
-
-.structure-list-item div.row {
-    font-size: 14px;
+.list-view-pf-main-info {
+    height: 70px;
 }
 
 .resolvers-list div.list-group-item-text {

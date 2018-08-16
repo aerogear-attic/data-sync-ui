@@ -8,7 +8,7 @@ import { StructureView } from "./StructureView";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import UpdateSchema from "../../graphql/UpdateSchema.graphql";
 
-import style from "./schemaContainer.css";
+import styles from "./schemaContainer.css";
 
 const INITIAL_STATE = {
     schema: "",
@@ -92,6 +92,7 @@ class SchemaContainer extends Component {
                 title: "Download Compiled Schema",
                 props: {
                     key: "export_schema",
+                    bsStyle: "default",
                     disabled: !valid || saving,
                     href: `/schema/${id}`
                 }
@@ -113,18 +114,20 @@ class SchemaContainer extends Component {
 
     renderContent() {
         const { error, saving, schema, compiled, schemaId } = this.state;
+        const { editorContainer, structureViewContainer, schemaContainer } = styles;
+
         return (
             <React.Fragment>
                 <CommonToolbar buttons={this.getToolbarButtons()} />
-                <div className={style.flexWrapper}>
-                    <div className={style.left}>
+                <div className={schemaContainer}>
+                    <div className={editorContainer}>
                         <CodeEditor
                             value={schema}
                             onChange={updated => this.onSchemaChange(updated)}
                             disabled={saving}
                         />
                     </div>
-                    <div className={style.right}>
+                    <div className={structureViewContainer}>
                         <StructureView
                             compiled={JSON.parse(compiled)}
                             error={error}

@@ -1,23 +1,15 @@
-.flexWrapper {
-    /* 206 being the exact height of the components on top of SchemaContainer */
-    height: calc(100vh - 206px) !important;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    height: 100%;
-    min-height: 100%;
-    margin: 0 auto;
-    background-color: #f5f5f5;
+.schemaContainer {
+    composes: flexWrapper from "../common/common.css";
 }
 
-.left {
+.editorContainer {
     width: 70%;
     background-color: white;
 }
 
-.right {
+.structureViewContainer {
     width: 30%;
-    border-left: 1px solid lightgrey;
+    border-left: 6px solid #EDEDED;
     background-color: white;
     overflow: auto;
 }
