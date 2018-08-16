@@ -19,11 +19,11 @@ The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync
 
 ## Prerequisites
 
-* A running PostgreSQL server. To run postgres in a docker container use the following command
+A running PostgreSQL server. To run postgres in a docker container use the following command
 
-    ```shell
-    docker-compose up
-    ```
+   ```shell
+   docker-compose up
+   ```
 
 > Database credentials can be found in [docker-compose.yml](docker-compose.yml)
 
