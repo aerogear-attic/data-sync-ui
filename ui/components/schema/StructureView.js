@@ -47,7 +47,13 @@ const StructureView = props => {
     } if (compiled) {
         return renderContent(compiled, schemaId);
     }
-    return <DefaultEmptyView text="No Schema Defined" />;
+    return (
+        <DefaultEmptyView
+            text="You must define a Schema for data sync to work correctly"
+            infoText="Schema Reference"
+            infoURL="https://graphql.org/learn/schema/"
+        />
+    );
 };
 
 export { StructureView };

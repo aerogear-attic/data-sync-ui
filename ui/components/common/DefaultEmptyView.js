@@ -5,14 +5,23 @@ import {
     EmptyStateTitle
 } from "patternfly-react";
 
-import style from "./defaultEmptyView.css";
+import {
+    emptyContainer,
+    emptyTitle,
+    learnMore
+} from "./defaultEmptyView.css";
 
-const DefaultEmptyView = ({ text }) => (
-    <EmptyState style={{ margin: "5px" }} className={style.reducePadding}>
-        <EmptyStateIcon />
-        <EmptyStateTitle>
+const DefaultEmptyView = ({ text, infoText, infoURL }) => (
+    <EmptyState className={emptyContainer}>
+        <EmptyStateIcon name="info" />
+        <EmptyStateTitle className={emptyTitle}>
             {text}
         </EmptyStateTitle>
+        {infoText ? (
+            <span className={learnMore}>
+                <a href={infoURL}>{infoText} <span className="fa fa-external-link" /></a>
+            </span>
+        ) : null}
     </EmptyState>
 );
 
