@@ -1,9 +1,9 @@
 # AeroGear Sync UI
 
 [![circle-ci](https://img.shields.io/circleci/project/github/aerogear/data-sync-ui/master.svg)](https://circleci.com/gh/aerogear/data-sync-ui)
-[![Docker Hub](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aerogearcatalog/data-sync-ui/)
-[![Docker Stars](https://img.shields.io/docker/stars/aerogearcatalog/data-sync-ui.svg)](https://registry.hub.docker.com/v2/repositories/aerogearcatalog/data-sync-ui/stars/count/)
-[![Docker pulls](https://img.shields.io/docker/pulls/aerogearcatalog/data-sync-ui.svg)](https://registry.hub.docker.com/v2/repositories/aerogearcatalog/data-sync-ui/)
+[![Docker Hub](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aerogear/data-sync-ui/)
+[![Docker Stars](https://img.shields.io/docker/stars/aerogear/data-sync-ui.svg)](https://registry.hub.docker.com/v2/repositories/aerogear/data-sync-ui/stars/count/)
+[![Docker pulls](https://img.shields.io/docker/pulls/aerogear/data-sync-ui.svg)](https://registry.hub.docker.com/v2/repositories/aerogear/data-sync-ui/)
 [![License](https://img.shields.io/:license-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync-server). Based on [React](https://reactjs.org/) and [PatternFly](https://www.patternfly.org/).
@@ -19,8 +19,8 @@ The UI for the [AeroGear Data Sync Server](https://github.com/aerogear/data-sync
 
 ## Prerequisites
 
-There is a dependency on having a running postgres server. To run postgres in a docker container use the following command:
- 
+* A running PostgreSQL server. To run postgres in a docker container use the following command
+
     ```shell
     docker-compose up
     ```
