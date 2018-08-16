@@ -269,7 +269,7 @@ describe("Database", () => {
             const fetchAfterUpsert = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
             expect(fetchAfterUpsert.data.resolvers[1]).toHaveProperty("publish", "");
         });
-        
+
         // FIXME: toMatchObject throws TypeError for unknown reason
         it.skip("should be able to create a resolver with hooks", async () => {
             await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
