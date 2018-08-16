@@ -5,15 +5,17 @@ import {
     MenuItem
 } from "patternfly-react";
 
+import styles from "./DataSourcesListItem.css";
+
 const DataSourcesListItem = ({ item, onEditDataSource, onDeleteDataSource }) => {
     const { type, name } = item;
-
+    const { dsItem, dsItemType, dsItemName } = styles;
     return (
         <ListView.Item
-            className="ds-list-item"
-            heading={type}
+            className={dsItem}
+            heading={<span className={dsItemType}>{type}</span>}
             leftContent={(
-                <span className="list-item-name">{name}</span>
+                <span className={dsItemName}>{name}</span>
             )}
             actions={(
                 <div>
