@@ -11,22 +11,28 @@ if (notifier.enabled && notifiers[notifier.type]) {
     log.warn(`notifier unknown or disabled: ${notifier.type}`);
 }
 
-exports.DEFAULT_CHANNEL = notifier.config.channel;
-
-exports.publish = (channel, payload) => {
+function publish(channel, payload) {
     if (instance) {
         instance.publish(channel, payload);
     }
-};
+}
 
-exports.addChannel = (channel, onNotification) => {
+function addChannel(channel, onNotification) {
     if (instance) {
         instance.addChannel(channel, onNotification);
     }
-};
+}
 
-exports.stopNotifications = () => {
+function stopNotifications() {
     if (instance) {
         instance.close();
     }
+}
+
+module.exports = {
+
+    DEFAULT_CHANNEL: notifier.config.channel,
+    publish,
+    addChannel,
+    stopNotifications
 };
