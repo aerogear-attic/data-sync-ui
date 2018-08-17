@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Toolbar, Button } from "patternfly-react";
 import { DebounceInput } from "react-debounce-input";
+import get from "lodash.get";
 
 import styles from "./commonToolbar.css";
+
 
 class CommonToolbar extends Component {
 
@@ -47,6 +49,7 @@ class CommonToolbar extends Component {
                 type="text"
                 placeholder="Filter by Name"
                 className={toolbarFilter}
+                value={get(this.props.filter, "name", "")}
                 onChange={e => onFilter(e.target.value)}
                 onKeyPress={e => this.handleKeyPress(e)}
             />
