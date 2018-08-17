@@ -2,8 +2,10 @@ import React from "react";
 import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
 import { ResolversListItem } from "./ResolversListItem";
+
+import styles from "./ResolversListItem.css";
+
 import GetResolvers from "../../graphql/GetResolvers.graphql";
-import style from "./resolversList.css";
 
 /**
  * A generic type ite is used to render Queries, Mutations and Subscriptions in
@@ -21,6 +23,7 @@ const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
         return null;
     }
 
+    const { resolversContent, resolversHeader, resolversList } = styles;
     const { name, fields } = items[0];
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -41,18 +44,18 @@ const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
                             type={name}
                             kind={kind}
                             item={field}
-                            resolvers={data}
+                            resolvers={data.resolvers}
                             onClick={onClick}
                         />
                     );
                 });
 
                 return (
-                    <div className={style["structure-content"]}>
-                        <div className={style["structure-header"]}>
+                    <div className={resolversContent}>
+                        <div className={resolversHeader}>
                             <span>{text}</span>
                         </div>
-                        <ListView>
+                        <ListView className={resolversList}>
                             { list }
                         </ListView>
                     </div>

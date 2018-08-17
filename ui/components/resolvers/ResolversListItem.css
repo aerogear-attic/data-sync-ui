@@ -1,0 +1,62 @@
+.resolversHeader {
+    padding-top: 30px;
+    font-size: 18px;
+    padding-left: 15px;
+    padding-bottom: 5px;
+}
+
+.resolversContent {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.resolversHeading {
+    font-weight: 600;
+    border-left: 1px solid lightgray;
+    padding-left: 15px;
+    margin-left: 5px;
+}
+
+.resolversList {
+    margin-top: 3px;
+}
+
+.structureListItem {
+    height: 70px;
+    text-align: right;
+}
+
+.itemName {
+    overflow-wrap: break-word;
+}
+
+.itemType {
+
+}
+
+.itemResolver {
+    color: #4EABDA;
+}
+
+.resolverFieldRow {
+    composes: structureFieldRow from "../schema/TypeList.css";
+}
+
+.resolverItemRow {
+    composes: structureItemRow from "../schema/TypeList.css";
+}
+
+.headingDescription {
+    
+}
+
+.headingResolverSet,
+.headingResolverUnset {
+    width: 100%;
+    text-align: end;
+    font-weight: 400;
+}
+
+.headingResolverSet {
+    color: #4EABDA;
+}

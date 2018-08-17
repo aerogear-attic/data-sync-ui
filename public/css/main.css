@@ -16,25 +16,9 @@ div.list-group-item-container .pficon-close {
     height: 70px;
 }
 
-.resolvers-list div.list-group-item-text {
-    text-align: right;
-}
-
-.resolvers-list div.list-view-pf-additional-info {
-    text-align: right;
-    color: #188bcc;
-}
-
-.resolvers-list span {
-    width: 100%;
-}
-
 .resolvers-list div.list-view-pf-left {
-    width: auto;
-}
-
-.resolvers-list div.list-view-pf-main-info {
-    margin-top: 7px;
+    min-width: 200px;
+    text-align: left;
 }
 
 .blank-slate-pf .blank-slate-pf-icon {
