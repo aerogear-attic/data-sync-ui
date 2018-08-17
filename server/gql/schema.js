@@ -287,6 +287,10 @@ const updateSchema = async args => {
     }
 };
 
+const listSubscriptions = () => subscription.findAll({
+    include: [{ all: true }]
+});
+
 const root = {
     dataSources: listDataSources,
     resolvers: listResolvers,
@@ -299,7 +303,8 @@ const root = {
     updateDataSource,
     updateSchema,
     schemas: listSchemas,
-    getSchema
+    getSchema,
+    subscriptions: listSubscriptions
 };
 
 module.exports = { Schema, root };

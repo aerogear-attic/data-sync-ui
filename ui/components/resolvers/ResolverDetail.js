@@ -13,6 +13,7 @@ import {
 } from "../../helper/Validators";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
+import { SubscriptionsDropDown } from "./SubscriptionsDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 import { HookFormGroup } from "./HookFormGroup";
 import { DeleteResolverDialog } from "./DeleteResolverDialog";
@@ -133,6 +134,10 @@ class ResolverDetail extends Component {
         this.updateResolver({ postHook });
     }
 
+    onSubscriptionSelect(subscription) {
+        this.updateResolver({ subscription });
+    }
+
     updateResolver(newProps) {
         const { resolver } = this.state;
         const { onResolverEdit } = this.props;
@@ -197,7 +202,7 @@ class ResolverDetail extends Component {
             return <DefaultEmptyView text="Select an item to view and edit its details" />;
         }
 
-        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
+        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook, subscription } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
@@ -256,6 +261,13 @@ class ResolverDetail extends Component {
                                 label="Post Hook"
                                 url={postHook}
                                 onChange={hook => this.onPostHookChange(hook)}
+                            />
+                        </FormGroup>
+
+                        <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
+                            <SubscriptionsDropDown
+                                selected={subscription}
+                                onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
                             />
                         </FormGroup>
                     </Form>

@@ -1,5 +1,10 @@
+.dataSourceFormControl {
+    background: unset;
+    color: #363636;
+}
+
 .dataSourceControlLabel {
-  margin-right: -50px;
-  margin-top: 3px;
-  font-weight: 600;
+    margin-right: -50px;
+    margin-top: 3px;
+    font-weight: 600;
 }

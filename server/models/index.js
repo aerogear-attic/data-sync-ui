@@ -34,6 +34,7 @@ subscription.belongsTo(schema, {
 
 dataSource.hasMany(resolver, { as: "resolvers" });
 schema.hasMany(resolver, { as: "resolvers" });
+schema.hasMany(subscription, { as: "subscriptions" });
 
 /**
  * Syncs the models with the database to create all tables

@@ -1,0 +1,8 @@
+query GetSubscriptions {
+    subscriptions {
+        type
+        field
+        topic
+        filter
+    }
+}
