@@ -22,7 +22,16 @@ const CodeEditor = class extends Component {
             // When the user presses tab we prevent the default propagation, so we need to udpate
             // the state manually here
             this.props.onChange(`${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`);
+            this.updateCursorPosition(selectionStart + 1);
         }
+    }
+
+    updateCursorPosition(position) {
+        const editor = this.editor.current;
+        this.setState({}, () => {
+            editor.selectionStart = position;
+            editor.selectionEnd = position;
+        });
     }
 
     onEditorScroll() {
