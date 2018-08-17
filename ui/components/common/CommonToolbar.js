@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Toolbar, Button } from "patternfly-react";
 import { DebounceInput } from "react-debounce-input";
-
 import styles from "./commonToolbar.css";
+
 
 class CommonToolbar extends Component {
 
@@ -40,6 +40,8 @@ class CommonToolbar extends Component {
     renderFilterSearch() {
         const { onFilter } = this.props;
         const { toolbarFilter } = styles;
+        const { name: filterOnName } = this.props.filter;
+
         return (
             <DebounceInput
                 minLength={1}
@@ -47,6 +49,7 @@ class CommonToolbar extends Component {
                 type="text"
                 placeholder="Filter by Name"
                 className={toolbarFilter}
+                value={filterOnName || ""}
                 onChange={e => onFilter(e.target.value)}
                 onKeyPress={e => this.handleKeyPress(e)}
             />

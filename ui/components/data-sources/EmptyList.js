@@ -11,26 +11,25 @@ import {
 
 import { emptyListContainer } from "./EmptyList.css";
 
-const EmptyList = ({ createDataSource }) => (
+const EmptyList = ({ action, title, info, actionName }) => (
     <EmptyState className={emptyListContainer}>
-        <EmptyStateIcon name="info" />
+        <EmptyStateIcon />
         <EmptyStateTitle>
-                You have no data sources attached to this project
+            {title}
         </EmptyStateTitle>
         <EmptyStateInfo>
-                Data Sources are used to store and retrieve your data.
-                You should define at least one in order to use it in a resolver mapping.
+            {info}
         </EmptyStateInfo>
         <EmptyStateHelp>
-                For more information have a look at the <a href="https://docs.aerogear.org">docs</a>
+            For more information have a look at the <a href="https://docs.aerogear.org">&nbsp;docs</a>
         </EmptyStateHelp>
         <EmptyStateAction>
             <Button
                 bsStyle="primary"
                 bsSize="large"
-                onClick={createDataSource}
+                onClick={action}
             >
-                    Add a Data Source
+                {actionName}
             </Button>
         </EmptyStateAction>
     </EmptyState>
