@@ -169,7 +169,8 @@ describe("Database", () => {
             preHook: "",
             postHook: "",
             requestMapping: "",
-            responseMapping: ""
+            responseMapping: "",
+            publish: ""
         };
 
         it("should not have any resolvers by default", async () => {
@@ -231,6 +232,42 @@ describe("Database", () => {
             expect(fetch.data.resolvers).toHaveLength(1);
             expect(fetch.data.resolvers[0]).toHaveProperty("preHook", "");
             expect(fetch.data.resolvers[0]).toHaveProperty("postHook", "");
+        });
+
+        it("should add empty publish", async () => {
+            await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
+            await graphql(Schema, CREATE_DATA_SOURCE, root, null, dataSource);
+
+            await graphql(Schema, UPSERT_RESOLVER, root, null, {
+                ...resolver,
+                publish: ""
+            });
+
+            const fetch = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
+            expect(fetch.data.resolvers).toHaveLength(1);
+            expect(fetch.data.resolvers[0]).toHaveProperty("publish", "");
+        });
+
+        it("should upsert publish correctly", async () => {
+            await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
+            await graphql(Schema, CREATE_DATA_SOURCE, root, null, dataSource);
+
+            await graphql(Schema, UPSERT_RESOLVER, root, null, {
+                ...resolver,
+                publish: "some-subscription"
+            });
+
+            const fetch = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
+            expect(fetch.data.resolvers).toHaveLength(1);
+            expect(fetch.data.resolvers[0]).toHaveProperty("publish", "some-subscription");
+
+            await graphql(Schema, UPSERT_RESOLVER, root, null, {
+                ...resolver,
+                publish: ""
+            });
+
+            const fetchAfterUpsert = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
+            expect(fetchAfterUpsert.data.resolvers[1]).toHaveProperty("publish", "");
         });
 
         // FIXME: toMatchObject throws TypeError for unknown reason

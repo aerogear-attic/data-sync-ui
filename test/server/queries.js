@@ -103,6 +103,7 @@ module.exports = {
           responseMapping
           requestMapping
           GraphQLSchemaId
+          publish
           DataSource {
             id
             name
@@ -121,7 +122,8 @@ module.exports = {
         $preHook: String,
         $postHook: String,
         $requestMapping: String!,
-        $responseMapping: String
+        $responseMapping: String,
+        $publish: String
       ) {
         upsertResolver(
           id: $id,
@@ -133,6 +135,7 @@ module.exports = {
           postHook: $postHook,
           requestMapping: $requestMapping,
           responseMapping: $responseMapping
+          publish: $publish
         ) {
           id
         }

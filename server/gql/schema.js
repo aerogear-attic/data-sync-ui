@@ -1,8 +1,8 @@
 const { buildSchema } = require("graphql");
 const { log, auditLog } = require("../logger");
-const { dataSource, database, supportsiLike, schema, resolver } = require("../models");
+const { dataSource, database, supportsiLike, schema, resolver, subscription } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
-const { publish, DEFAULT_CHANNEL } = require("../configNotifiers/configNotifierCreator");
+const configNotifier = require("../configNotifiers/configNotifierCreator");
 const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
 
 const Schema = buildSchema(`
@@ -33,6 +33,7 @@ const Schema = buildSchema(`
             postHook: String
             requestMapping: String!
             responseMapping: String
+            publish: String
         ): Resolver
         deleteResolver(id: Int!): Resolver
     },  
@@ -61,6 +62,7 @@ const Schema = buildSchema(`
         requestMapping: String!
         responseMapping: String!
         DataSource: DataSource!
+        publish: String
     },
     type DataSourceTestResult {
         status: Boolean!
@@ -77,7 +79,7 @@ const createDataSource = async ({ name, type, config }) => {
         config
     });
 
-    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "DataSource" });
     auditLog({
         operation: "createDataSource",
         name,
@@ -115,7 +117,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping = ""
+    requestMapping, responseMapping = "", publish
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
@@ -125,18 +127,25 @@ const upsertResolver = async ({
         requestMapping,
         responseMapping,
         type,
-        field
+        field,
+        publish
     };
 
     let result;
     if (id) {
         const updated = await resolver.findById(id);
         result = updated.update(properties);
+        if (properties.publish) {
+            subscription.findOrCreate({
+                where: { field: properties.publish },
+                defaults: { type: "Subscription", GraphQLSchemaId: schemaId }
+            });
+        }
     } else {
         result = resolver.create(properties);
     }
 
-    publish(DEFAULT_CHANNEL, { reload: "Resolver" });
+    configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Resolver" });
     auditLog({
         operation: "upsertResolver",
         id,
@@ -159,7 +168,7 @@ const deleteResolver = async ({ id }) => {
     const destroyedResolver = await foundResolver.destroy({ force: true });
     log.info(`Resolver with id ${destroyedResolver.id} deleted`);
 
-    publish(DEFAULT_CHANNEL, { reload: "Resolver" });
+    configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Resolver" });
     auditLog({
         operation: "deleteResolver",
         id,
@@ -183,7 +192,7 @@ const deleteDataSource = async ({ id }) => {
     const destroyed = await foundDataSource.destroy({ force: true });
     log.info(`Data source with id ${destroyed.id} deleted`);
 
-    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "DataSource" });
     auditLog({
         operation: "deleteDataSource",
         id,
@@ -202,7 +211,7 @@ const updateDataSource = async ({ id, name, type, config }) => {
         config
     });
 
-    publish(DEFAULT_CHANNEL, { reload: "DataSource" });
+    configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "DataSource" });
     auditLog({
         operation: "updateDataSource",
         id,
@@ -259,7 +268,7 @@ const updateSchema = async args => {
             schema: args.schema
         });
 
-        publish(DEFAULT_CHANNEL, { reload: "Schema" });
+        configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Schema" });
         auditLog({
             operation: "updateSchema",
             id: args.id,
