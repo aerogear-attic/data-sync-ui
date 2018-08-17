@@ -38,7 +38,6 @@ const DataSourcesList = ({
                 const title = whenFiltered ? "No item found while filtering the data sources" : "No Data Sources defined";
                 const info = whenFiltered ? "Please change your filtering query or empty the Filter field." : "Data Sources are used to store and retrieve your data. You should define at least one in order to use it in a resolver mapping.";
                 const actionName = whenFiltered ? "Clear the filter" : "Add a Data Source";
-
                 return <EmptyList action={whenFiltered ? onClearFilter : onCreate} title={title} info={info} actionName={actionName} />;
             }}
         </Query>
