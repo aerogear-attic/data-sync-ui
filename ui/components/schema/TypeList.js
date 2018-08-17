@@ -12,9 +12,9 @@ class TypeList extends Component {
     renderAdditionalInfo({ fields }) {
         if (fields && fields.length) {
             return (
-                <span>
+                <span key="Fields">
                     <span style={{ fontWeight: "600" }}>{fields.length}</span>
-                    <span style={{ fontWeight: "300" }}>{fields.length > 1 ? " Fields" : " Field"}</span>
+                    <span style={{ fontWeight: "300" }}>{fields.length !== 1 ? " Fields" : " Field"}</span>
                 </span>
             );
         }
@@ -32,12 +32,8 @@ class TypeList extends Component {
             const type = field.type.name || field.type.kind;
             return (
                 <Row key={type + field.name} className={structureItemRow}>
-                    <Col xs={6} md={6}>
-                        {field.name}
-                    </Col>
-                    <Col xs={6} md={6}>
-                        {formatType(field.type)}
-                    </Col>
+                    <Col xs={8}>{field.name}</Col>
+                    <Col xs={4}>{formatType(field.type)}</Col>
                 </Row>
             );
         });
@@ -55,19 +51,14 @@ class TypeList extends Component {
                 leftContent={<div className={structureHeading}>{type.name}</div>}
                 description={<span />}
                 hideCloseIcon
-                additionalInfo={this.renderAdditionalInfo(type)}
+                additionalInfo={[this.renderAdditionalInfo(type)]}
             >
                 <Grid fluid>
                     <Row className={structureFieldRow}>
-                        <Col xs={6} md={6}>
-                            Field
-                        </Col>
-                        <Col xs={6} md={6}>
-                            Type
-                        </Col>
+                        <Col xs={8}>Field</Col>
+                        <Col xs={4}>Type</Col>
                     </Row>
                     {subItems}
-                    <div hidden="true">Resolver Dialog Here</div>
                 </Grid>
             </ListViewItem>
         );
