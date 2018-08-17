@@ -49,7 +49,6 @@ class TypeList extends Component {
                 key={type.name}
                 className={structureListItem}
                 leftContent={<div className={structureHeading}>{type.name}</div>}
-                description={<span />}
                 hideCloseIcon
                 additionalInfo={[this.renderAdditionalInfo(type)]}
             >
