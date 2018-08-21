@@ -273,5 +273,14 @@ describe("Database", () => {
             expect(fetch.data.resolvers[0]).toHaveProperty("preHook", "preHook");
             expect(fetch.data.resolvers[0]).toHaveProperty("postHook", "postHook");
         });
+
+        it("should get the GraphQLSchemaId with the resolvers", async () => {
+            await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
+            await graphql(Schema, CREATE_DATA_SOURCE, root, null, dataSource);
+            await graphql(Schema, UPSERT_RESOLVER, root, null, resolver);
+
+            const fetch = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
+            expect(fetch.data.resolvers[0]).toHaveProperty("GraphQLSchemaId", 1);
+        });
     });
 });

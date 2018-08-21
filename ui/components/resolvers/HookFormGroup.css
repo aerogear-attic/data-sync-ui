@@ -5,3 +5,8 @@
 .verifyButtonLabel { 
     margin-right: 5px;
 }
+
+.hookControlLabel {
+    margin-top: 3px;
+    font-weight: 600;
+}
