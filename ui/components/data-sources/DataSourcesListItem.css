@@ -1,0 +1,15 @@
+.dsItem {
+    border-top-color: #EDEDED !important;
+    border-bottom-color: #EDEDED !important;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.dsItemType {
+    font-weight: normal;
+}
+
+.dsItemName {
+    color: #0088ce;
+    font-weight: bold;
+}

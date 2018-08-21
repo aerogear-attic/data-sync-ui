@@ -2,8 +2,10 @@ import React from "react";
 import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
 import { ResolversListItem } from "./ResolversListItem";
+
+import styles from "./ResolversListItem.css";
+
 import GetResolvers from "../../graphql/GetResolvers.graphql";
-import style from "./resolversList.css";
 
 const renderCustomType = ({ schemaId, item, kind, onClick }) => {
     const { name } = item;
@@ -24,7 +26,7 @@ const renderCustomType = ({ schemaId, item, kind, onClick }) => {
                         type={name}
                         kind={kind}
                         item={item}
-                        resolvers={data}
+                        resolvers={data.resolvers}
                         onClick={onClick}
                     />
                 );
@@ -39,14 +41,13 @@ const renderCustomType = ({ schemaId, item, kind, onClick }) => {
  */
 const CustomTypeItem = props => {
     const { items, text } = props;
+    const { resolversContent, resolversHeader, resolversList } = styles;
     const list = items.map(item => renderCustomType({ ...props, item }));
 
     return (
-        <div className={style["structure-content"]}>
-            <div className={style["structure-header"]}>
-                <span>{text}</span>
-            </div>
-            <ListView>
+        <div className={resolversContent}>
+            <div className={resolversHeader}>{text}</div>
+            <ListView className={resolversList}>
                 { list }
             </ListView>
         </div>

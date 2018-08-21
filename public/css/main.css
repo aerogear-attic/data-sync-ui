@@ -4,59 +4,6 @@
     width: 100%;
 }
 
-.ag-header {
-    padding: 15px;
-    height: 64px;
-    background-color: #f5f5f5;
-}
-
-.ag-header > p {
-    font-size: 24px;
-    font-weight: lighter;
-    font-family: "Arial";
-}
-
-ul.nav {
-    background-color: #f5f5f5;
-}
-
-ul.nav li {
-    margin-left: 15px;
-}
-
-.toolbar-container {
-    border-top: 1px solid lightgrey;
-}
-
-div.list-group {
-    background-color: white;
-}
-
-.ds-list-item {
-    margin-left: 15px;
-    margin-right: 15px;
-    border-top: 1px solid lightgrey !important;
-    border-bottom: 1px solid lightgrey !important;
-}
-
-div.list-view-pf-left {
-    width: 20%;
-    text-align: left;
-}
-
-span.list-item-name {
-    color: #188bcc;
-    font-weight: bold;
-}
-
-.nav-tabs {
-    border-bottom: none !important;
-}
-
-.nav-tabs > li > a:hover{
-    border: 1px solid lightgrey;
-}
-
 .spinner {
     margin-top: 100px;
 }
@@ -65,41 +12,13 @@ div.list-group-item-container .pficon-close {
     display: none;
 }
 
-.structure-list-item {
-    border-bottom: 1px solid lightgrey !important;
-}
-
-.structure-list-item span.fa-angle-right {
-    border-right: 1px solid lightgrey;
-    font-weight: bold;
-    font-size: 24px;
-    padding-right: 25px;
-    padding-bottom: 3px;
-}
-
-.structure-list-item div.row {
-    font-size: 14px;
-}
-
-.resolvers-list div.list-group-item-text {
-    text-align: right;
-}
-
-.resolvers-list div.list-view-pf-additional-info {
-    text-align: right;
-    color: #188bcc;
-}
-
-.resolvers-list span {
-    width: 100%;
+.list-view-pf-main-info {
+    height: 70px;
 }
 
 .resolvers-list div.list-view-pf-left {
-    width: auto;
-}
-
-.resolvers-list div.list-view-pf-main-info {
-    margin-top: 7px;
+    min-width: 200px;
+    text-align: left;
 }
 
 .blank-slate-pf .blank-slate-pf-icon {

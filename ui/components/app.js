@@ -13,18 +13,20 @@ import { SchemaContainer } from "./schema";
 import { QueriesContainer } from "./queries";
 import { ResolversContainer } from "./resolvers";
 
+import { header, tabs } from "./App.css";
+
 const App = () => (
     <div>
         <Masthead iconImg="img/logo.png" title="AeroGear Sync" navToggle={false} />
         <div>
-            <div className="ag-header">
+            <div className={header}>
                 <p>My Data Sync API</p>
             </div>
 
             <TabContainer id="my-data-sync-tabs" defaultActiveKey={0}>
                 <div>
                     {/* Tabs */}
-                    <Nav bsClass="nav nav-tabs">
+                    <Nav bsClass="nav nav-tabs" className={tabs}>
                         <NavItem eventKey={0}>
                             <div>Data Sources</div>
                         </NavItem>

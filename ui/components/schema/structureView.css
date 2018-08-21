@@ -1,13 +1,11 @@
-.structure-header {
-    padding: 15px;
-    height: 64px;
-    font-size: 24px;
-    border-bottom: 1px solid lightgrey;
+.structureHeader {
+    padding-top: 10px;
+    font-size: 18px;
 }
 
-.structure-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.structureContent {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .ag-link {
@@ -19,28 +17,6 @@
     margin: 10px;
 }
 
-.structure-name {
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.structure-field-row {
-    font-weight: bold;
-    border-bottom: 1px solid lightgrey;
-    padding-bottom: 5px;
-}
-
-.structure-item-row {
-    margin-top: 5px;
-}
-.structure-item-edit-btn{
-    margin-right:2px;
-}
-.structure-item-delete-btn {
-    margin-left:5px;
-}
-
-.structure-heading {
-    font-size: 16px;
-    padding-top: 4px;
+.structureViewList {
+    margin-top: 15px;
 }

@@ -4,15 +4,13 @@ import { DefaultEmptyView } from "../common/DefaultEmptyView";
 import { TypeList } from "./TypeList";
 import { wellKnownTypes } from "../../graphql/types/GraphQLWellKnownTypes";
 
-import style from "./structureView.css";
-
-// Graphql internal types that we don't want to render
+import styles from "./structureView.css";
 
 const renderListView = (compiled, schemaId) => {
     const { types } = compiled.data.__schema;
     const relevantTypes = types.filter(type => wellKnownTypes.indexOf(type.name) < 0);
     return (
-        <ListView>
+        <ListView className={styles.structureViewList}>
             {
                 relevantTypes.map(type => (
                     <TypeList
@@ -27,8 +25,8 @@ const renderListView = (compiled, schemaId) => {
 };
 
 const renderContent = (compiled, schemaId) => (
-    <div className={style["structure-content"]}>
-        <div className={style["structure-header"]}>
+    <div className={styles.structureContent}>
+        <div className={styles.structureHeader}>
             <span>Data Types</span>
         </div>
         { renderListView(compiled, schemaId) }
@@ -37,7 +35,7 @@ const renderContent = (compiled, schemaId) => (
 
 const renderError = error => {
     const { message } = error;
-    return (<Alert className={style.alertBox}>{message}</Alert>);
+    return (<Alert className={styles.alertBox}>{message}</Alert>);
 };
 
 const StructureView = props => {
@@ -47,7 +45,13 @@ const StructureView = props => {
     } if (compiled) {
         return renderContent(compiled, schemaId);
     }
-    return <DefaultEmptyView text="No Schema Defined" />;
+    return (
+        <DefaultEmptyView
+            text="You must define a Schema for data sync to work correctly"
+            infoText="Schema Reference"
+            infoURL="https://graphql.org/learn/schema/"
+        />
+    );
 };
 
 export { StructureView };

@@ -3,10 +3,7 @@ import { graphql } from "react-apollo";
 import {
     Form,
     FormGroup,
-    Button,
-    EmptyState,
-    EmptyStateIcon,
-    EmptyStateTitle
+    Button
 } from "patternfly-react";
 import some from "lodash.some";
 import {
@@ -19,6 +16,7 @@ import { DataSourcesDropDown } from "./DataSourcesDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 import { HookFormGroup } from "./HookFormGroup";
 import { DeleteResolverDialog } from "./DeleteResolverDialog";
+import { DefaultEmptyView } from "../common/DefaultEmptyView";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
@@ -28,7 +26,7 @@ import { getTemplatesForDataSource } from "./MappingTemplates";
 
 import {
     detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
-    detailFormGroup, detailButtonFooter, buttonSave, detailEmpty, emptyTitle, buttonDelete
+    detailFormGroup, detailButtonFooter, buttonSave, buttonDelete
 } from "./ResolverDetail.css";
 
 const INITIAL_STATE = {
@@ -187,17 +185,6 @@ class ResolverDetail extends Component {
         this.setState(INITIAL_STATE);
     }
 
-    renderEmptyScreen() {
-        return (
-            <EmptyState className={detailEmpty}>
-                <EmptyStateIcon name="info" />
-                <EmptyStateTitle className={emptyTitle}>
-                    Select an item to view and edit its details
-                </EmptyStateTitle>
-            </EmptyState>
-        );
-    }
-
     render() {
         const {
             resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved,
@@ -205,7 +192,7 @@ class ResolverDetail extends Component {
         } = this.state;
 
         if (!resolver) {
-            return this.renderEmptyScreen();
+            return <DefaultEmptyView text="Select an item to view and edit its details" />;
         }
 
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
@@ -217,7 +204,8 @@ class ResolverDetail extends Component {
             <React.Fragment>
                 <h3 className={detailHeader}>Edit {type}.{field}</h3>
                 <div className={detailFormsContainer}>
-                    <h3 className={detailFormsHeader}>Resolver
+                    <h3 className={detailFormsHeader}>
+                        <span style={{ marginRight: "12px" }}>Resolver</span>
                         <span className={learnMore}>
                             <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
                         </span>

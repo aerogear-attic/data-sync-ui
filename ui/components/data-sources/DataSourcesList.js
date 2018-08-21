@@ -5,6 +5,8 @@ import { EmptyList } from "./EmptyList";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 import { DataSourcesListItem } from "./DataSourcesListItem";
 
+import { dataSourcesList } from "./DataSourcesList.css";
+
 const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSource }) => {
     const renderItems = data => data.dataSources.map(item => (
         <DataSourcesListItem
@@ -27,7 +29,7 @@ const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSourc
                 }
 
                 if (data.dataSources.length) {
-                    return <ListView>{renderItems(data)}</ListView>;
+                    return <ListView className={dataSourcesList}>{renderItems(data)}</ListView>;
                 }
 
                 return <EmptyList createDataSource={onCreate} />;

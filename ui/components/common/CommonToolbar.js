@@ -18,9 +18,11 @@ class CommonToolbar extends Component {
 
     renderElements() {
         const { buttons } = this.state;
+        const { toolbarButton } = styles;
+
         return buttons.map(button => (
             <Button
-                className={styles.toolbarButton}
+                className={toolbarButton}
                 bsStyle="primary"
                 {...button.props}
             >
@@ -37,20 +39,23 @@ class CommonToolbar extends Component {
 
     render() {
         const { onFilter } = this.props;
+        const { toolbarContainer, toolbarFilter, toolbarButtonContainer } = styles;
 
         return (
-            <div className="toolbar-container">
+            <div className={toolbarContainer}>
                 <Toolbar>
                     <DebounceInput
                         minLength={1}
                         debounceTimeout={300}
                         type="text"
                         placeholder="Filter by Name"
-                        style={{ height: "26px" }}
+                        className={toolbarFilter}
                         onChange={e => onFilter(e.target.value)}
                         onKeyPress={e => this.handleKeyPress(e)}
                     />
-                    {this.renderElements()}
+                    <div className={toolbarButtonContainer}>
+                        {this.renderElements()}
+                    </div>
                 </Toolbar>
             </div>
         );

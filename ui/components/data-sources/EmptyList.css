@@ -1,0 +1,3 @@
+.emptyListContainer {
+    composes: emptyContainer from "../common/defaultEmptyView.css";
+}

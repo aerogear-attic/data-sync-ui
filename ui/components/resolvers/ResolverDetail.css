@@ -1,13 +1,3 @@
-.detailEmpty {
-    border: none;
-    background-color: unset;
-    margin-top: 20%;
-}
-
-.emptyTitle {
-    font-size: 17px;
-}
-
 .detailHeader {
     padding: 12px 15px;
     margin: 0;
@@ -49,9 +39,7 @@
 }
 
 .learnMore {
-    font-size: 9px;
-    color: #4EABDA;
-    margin-left: 12px;
+    composes: learnMore from "../common/common.css";
 }
 
 .formContainer {

@@ -1,8 +1,8 @@
 import React, { Component, createRef } from "react";
 
-import style from "./codeEditor.css";
+import styles from "./codeEditor.css";
 
-const CodeEditor = class extends Component {
+class CodeEditor extends Component {
 
     constructor(props) {
         super(props);
@@ -57,7 +57,7 @@ const CodeEditor = class extends Component {
         const lines = this.getLineCount();
 
         return [...Array(lines).keys()].map(index => (
-            <div key={index} className={style.vcenter}>
+            <div key={index} className={styles.vcenter}>
                 {index + 1}
             </div>
         ));
@@ -65,18 +65,19 @@ const CodeEditor = class extends Component {
 
     render() {
         const { disabled, placeholder, value, onChange } = this.props;
+        const { editorContainer, numbers, expand, editorArea } = styles;
 
         return (
-            <div className={style["editor-container"]}>
-                <div className={style.numbers} ref={this.gutter}>
+            <div className={editorContainer}>
+                <div className={numbers} ref={this.gutter}>
                     {this.drawLineNumbers()}
                 </div>
-                <div className={style.expand}>
+                <div className={expand}>
                     <textarea
                         ref={this.editor}
                         value={value}
                         style={{ opacity: disabled ? 0.2 : 1 }}
-                        className={style["editor-area"]}
+                        className={editorArea}
                         onKeyDown={ev => this.onEditorKeyDown(ev)}
                         onChange={ev => onChange(ev.currentTarget.value)}
                         onScroll={() => this.onEditorScroll()}
@@ -88,6 +89,6 @@ const CodeEditor = class extends Component {
         );
     }
 
-};
+}
 
 export { CodeEditor };
