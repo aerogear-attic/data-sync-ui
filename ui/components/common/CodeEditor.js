@@ -9,8 +9,7 @@ const CodeEditor = class extends Component {
 
         this.editor = createRef();
         this.gutter = createRef();
-        this.cursorPosition = 0;
-        this.tabWasPressed = false;
+        this.cursorPositionAfterTabPress = null;
     }
 
     // Deal with the tab key: we don't want to loose focus on the
@@ -20,8 +19,7 @@ const CodeEditor = class extends Component {
         if (event.keyCode === 9) {
             event.preventDefault();
             const { selectionStart, selectionEnd, value } = editor;
-            this.cursorPosition = selectionStart;
-            this.tabWasPressed = true;
+            this.cursorPositionAfterTabPress = selectionStart;
 
             // When the user presses tab we prevent the default propagation, so we need to udpate
             // the state manually here
@@ -30,9 +28,9 @@ const CodeEditor = class extends Component {
     }
 
     componentDidUpdate() {
-        if (this.tabWasPressed) {
-            this.updateCursorPosition(this.cursorPosition + 1);
-            this.tabWasPressed = false;
+        if (this.cursorPositionAfterTabPress !== null) {
+            this.updateCursorPosition(this.cursorPositionAfterTabPress + 1);
+            this.cursorPositionAfterTabPress = null;
         }
     }
 
