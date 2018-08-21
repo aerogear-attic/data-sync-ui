@@ -1,4 +1,8 @@
-import { Validate, Validators } from "../../../ui/helper/Validators";
+import {
+    Validate,
+    ValidateAny,
+    Validators
+} from "../../../ui/helper/Validators";
 
 it("should correctly validate a bunch of cases", () => {
     const result = Validate([
@@ -49,6 +53,25 @@ it("should correctly validate a bunch of cases and put results in a details obje
         nullString: "error",
         port: "success",
         url: "success"
+    });
+});
+
+describe("ValidateAny", () => {
+    it("should pass if at least 1 case is valid", () => {
+        expect(ValidateAny([
+            Validators.String.nonBlank, "some random string",
+            Validators.Number.natural, NaN
+        ])).toEqual("success");
+
+        expect(ValidateAny([
+            Validators.String.nonBlank, "",
+            Validators.Number.natural, "111"
+        ])).toEqual("success");
+
+        expect(ValidateAny([
+            Validators.String.nonBlank, "",
+            Validators.Number.natural, -1
+        ])).toEqual("error");
     });
 });
 

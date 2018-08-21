@@ -1,8 +1,8 @@
 const MAX_PORT_NUM = 65535;
 const Validators = {
     String: {
-        nonBlank: s => s
-                && typeof s === typeof ""
+        nonBlank: s => !!s
+                && typeof s === typeof "string"
                 && s.trim().length > 0,
         minLength: l => s => Validators.String.nonBlank(s) && s.length >= l,
         maxLength: l => s => Validators.String.nonBlank(s) && s.length < l
@@ -102,8 +102,6 @@ const ValidateAny = (validations, details) => {
     const increase = details ? 3 : 2;
 
     if (validations && validations.length % increase === 0) {
-        result = true; // Init value
-
         // Don't exit early, always evaluate all inputs to gather all the results
         // in the detaile object
         while (index < validations.length) {
