@@ -42,7 +42,7 @@ const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
                             />
                             <InputGroup.Button>
                                 <DropdownButton
-                                    disabled={loading || error}
+                                    disabled={loading || typeof error !== "undefined"}
                                     bsStyle="default"
                                     id="dropdown-type"
                                     title=""
