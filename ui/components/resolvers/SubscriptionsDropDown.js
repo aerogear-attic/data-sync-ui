@@ -24,7 +24,7 @@ const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
                     }
 
                     const options = [
-                        <MenuItem key="empty_subscription" eventKey={undefined} />,
+                        <MenuItem key="empty_subscription" eventKey={undefined}>None</MenuItem>,
                         ...data.subscriptions.map(subscription => (
                             <MenuItem key={subscription.field} eventKey={subscription}>
                                 {`${subscription.field} (${subscription.type})`}
@@ -38,7 +38,7 @@ const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
                                 disabled
                                 className={formControl}
                                 value={selected ? selected.type : ""}
-                                placeholder="Subscription"
+                                placeholder="None"
                             />
                             <InputGroup.Button>
                                 <DropdownButton

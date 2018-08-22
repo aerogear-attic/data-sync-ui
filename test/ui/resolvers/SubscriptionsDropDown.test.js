@@ -65,7 +65,7 @@ describe("When there are subscriptions", () => {
 
     it("should have an empty option", () => {
         expect(dropdown.containsMatchingElement(
-            <MenuItem key="empty_subscription" eventKey={undefined} />
+            <MenuItem key="empty_subscription" eventKey={undefined}>None</MenuItem>
         )).toBe(true);
     });
 
