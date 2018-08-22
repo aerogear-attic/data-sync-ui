@@ -4,7 +4,20 @@ import { mount } from "enzyme";
 import { MockedProvider } from "react-apollo/test-utils";
 import { ResolverDetail, HookFormGroup } from "../../../ui/components/resolvers";
 
+import GetDataSources from "../../../ui/graphql/GetDataSources.graphql";
+
 let wrapper;
+
+const mocks = [{
+    request: {
+        query: GetDataSources
+    },
+    result: {
+        data: {
+            resolvers: []
+        }
+    }
+}];
 
 afterEach(() => {
     wrapper = null;
@@ -13,7 +26,7 @@ afterEach(() => {
 describe("When resolver is undefined", () => {
     beforeEach(() => {
         wrapper = mount(
-            <MockedProvider mocks={[]} addTypename={false}>
+            <MockedProvider mocks={mocks} addTypename={false}>
                 <ResolverDetail />
             </MockedProvider>
         );
@@ -39,7 +52,7 @@ describe("When resolver is defined", () => {
     };
 
     const getWrapper = (r, props) => mount(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={false}>
             <ResolverDetail resolver={r} {...props} />
         </MockedProvider>
     );
@@ -60,6 +73,11 @@ describe("When resolver is defined", () => {
     it("should have preHook and postHook enabled by default", () => {
         wrapper = getWrapper({ ...resolver, type: "Other" }).find(ResolverDetail).first();
         expect(wrapper.find(HookFormGroup).everyWhere(n => !n.prop("disabled"))).toBe(true);
+    });
+
+    it("should render a subscriptions form", () => {
+        wrapper = getWrapper(resolver).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown")).toHaveLength(1);
     });
 
     it("should display a disabled 'save' button by default", () => {
