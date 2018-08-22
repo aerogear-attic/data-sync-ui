@@ -15,8 +15,8 @@ import { controlLabel, formControl } from "./SubscriptionsDropDown.css";
 
 const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
     <React.Fragment>
-        <Col sm={3} className={controlLabel}>Subscription</Col>
-        <Col sm={9}>
+        <Col sm={2} className={controlLabel}>Subscription</Col>
+        <Col sm={6}>
             <Query query={GetSubscriptions} variables={undefined}>
                 {({ loading, error, data }) => {
                     if (!data || !data.subscriptions || !data.subscriptions.length) {
