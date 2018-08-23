@@ -63,6 +63,7 @@ class ResolversContainer extends Component {
         return (
             <React.Fragment>
                 <CommonToolbar
+                    hideFilter
                     buttons={this.getToolbarButtons()}
                     onFilter={name => this.setFilter(name)}
                 />

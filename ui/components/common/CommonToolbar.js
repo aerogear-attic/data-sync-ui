@@ -38,21 +38,22 @@ class CommonToolbar extends Component {
     }
 
     render() {
-        const { onFilter } = this.props;
+        const { onFilter, hideFilter } = this.props;
         const { toolbarContainer, toolbarFilter, toolbarButtonContainer } = styles;
-
         return (
             <div className={toolbarContainer}>
                 <Toolbar>
-                    <DebounceInput
-                        minLength={1}
-                        debounceTimeout={300}
-                        type="text"
-                        placeholder="Filter by Name"
-                        className={toolbarFilter}
-                        onChange={e => onFilter(e.target.value)}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                    />
+                    <div hidden={hideFilter}>
+                        <DebounceInput
+                            minLength={1}
+                            debounceTimeout={300}
+                            type="text"
+                            placeholder="Filter by Name"
+                            className={toolbarFilter}
+                            onChange={e => onFilter(e.target.value)}
+                            onKeyPress={e => this.handleKeyPress(e)}
+                        />
+                    </div>
                     <div className={toolbarButtonContainer}>
                         {this.renderElements()}
                     </div>

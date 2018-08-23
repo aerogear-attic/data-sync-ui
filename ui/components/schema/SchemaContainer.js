@@ -118,7 +118,7 @@ class SchemaContainer extends Component {
 
         return (
             <React.Fragment>
-                <CommonToolbar buttons={this.getToolbarButtons()} />
+                <CommonToolbar hideFilter buttons={this.getToolbarButtons()} />
                 <div className={schemaContainer}>
                     <div className={editorContainer}>
                         <CodeEditor
