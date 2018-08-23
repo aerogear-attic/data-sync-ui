@@ -19,6 +19,7 @@ import { DeleteResolverDialog } from "./DeleteResolverDialog";
 import { DefaultEmptyView } from "../common/DefaultEmptyView";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
+import GetDataSources from "../../graphql/GetDataSources.graphql";
 import GetSchema from "../../graphql/GetSchema.graphql";
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
@@ -171,6 +172,7 @@ class ResolverDetail extends Component {
                 responseMapping
             },
             refetchQueries: [
+                { query: GetDataSources, variables: undefined },
                 { query: GetSchema, variables: { name: "default" } },
                 { query: GetResolvers, variables: { schemaId, type } }
             ]
