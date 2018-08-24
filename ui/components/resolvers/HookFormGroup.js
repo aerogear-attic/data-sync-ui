@@ -68,8 +68,8 @@ class HookFormGroup extends Component {
 
         return (
             <React.Fragment>
-                <Col sm={3} className={hookControlLabel}>{label}</Col>
-                <Col sm={9}>
+                <Col sm={2} className={hookControlLabel}>{label}</Col>
+                <Col sm={6}>
                     <InputGroup>
                         <FormControl
                             disabled={disabled || verifyingUrl}

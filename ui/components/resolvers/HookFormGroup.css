@@ -7,6 +7,5 @@
 }
 
 .hookControlLabel {
-    margin-top: 3px;
-    font-weight: 600;
+    composes: dataSourceControlLabel from "./DataSourcesDropDown.css";
 }
