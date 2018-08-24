@@ -10,9 +10,6 @@ const Schema = buildSchema(`
         InMemory,
         Postgres
     },
-    enum SubscriptionType {
-        Subscription
-    },
     type Query {
         dataSources(name: String): [DataSource]
         getOneDataSource(id: Int!): DataSource
@@ -20,7 +17,6 @@ const Schema = buildSchema(`
         getSchema(name: String!): Schema
         resolvers(schemaId: Int!, type: String): [Resolver]
         getDataSourceTestResult(type: DataSourceType!, config: JSON!): DataSourceTestResult
-        subscriptions(schemaId: Int!): [Subscription]
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
@@ -72,12 +68,6 @@ const Schema = buildSchema(`
         status: Boolean!
         message: String
     },
-    type Subscription {
-        type: SubscriptionType
-        field: String
-        topic: String
-        filter: JSON
-    }
 
     scalar JSON
 `);
@@ -297,10 +287,6 @@ const updateSchema = async args => {
     }
 };
 
-const listSubscriptions = () => subscription.findAll({
-    include: [{ all: true }]
-});
-
 const root = {
     dataSources: listDataSources,
     resolvers: listResolvers,
@@ -313,8 +299,7 @@ const root = {
     updateDataSource,
     updateSchema,
     schemas: listSchemas,
-    getSchema,
-    subscriptions: listSubscriptions
+    getSchema
 };
 
 module.exports = { Schema, root };

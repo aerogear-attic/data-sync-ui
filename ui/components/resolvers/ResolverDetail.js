@@ -134,8 +134,8 @@ class ResolverDetail extends Component {
         this.updateResolver({ postHook });
     }
 
-    onSubscriptionSelect(subscription) {
-        this.updateResolver({ subscription });
+    onSubscriptionSelect(publish) {
+        this.updateResolver({ publish });
     }
 
     updateResolver(newProps) {
@@ -192,6 +192,10 @@ class ResolverDetail extends Component {
         this.setState(INITIAL_STATE);
     }
 
+    getSubscriptionsFromSchema() {
+        return [];
+    }
+
     render() {
         const {
             resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved,
@@ -202,8 +206,9 @@ class ResolverDetail extends Component {
             return <DefaultEmptyView text="Select an item to view and edit its details" />;
         }
 
-        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook, subscription } = resolver;
+        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook, publish } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
+        const subscriptions = this.getSubscriptionsFromSchema();
 
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
 
@@ -266,7 +271,8 @@ class ResolverDetail extends Component {
 
                         <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
                             <SubscriptionsDropDown
-                                selected={subscription}
+                                selected={publish}
+                                subscriptions={subscriptions}
                                 onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
                             />
                         </FormGroup>

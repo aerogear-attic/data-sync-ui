@@ -1,6 +1,4 @@
 import React from "react";
-import { Query } from "react-apollo";
-
 import {
     MenuItem,
     InputGroup,
@@ -9,57 +7,51 @@ import {
     Col
 } from "patternfly-react";
 
-import GetSubscriptions from "../../graphql/GetSubscriptions.graphql";
-
 import { controlLabel, formControl } from "./SubscriptionsDropDown.css";
 
-const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
-    <React.Fragment>
-        <Col sm={2} className={controlLabel}>Subscription</Col>
-        <Col sm={6}>
-            <Query query={GetSubscriptions} variables={undefined}>
-                {({ loading, error, data }) => {
-                    if (loading || typeof error !== "undefined") {
-                        return <FormControl.Static>Loading subscriptions...</FormControl.Static>;
-                    }
+const SubscriptionsDropDown = ({ selected, subscriptions, onSubscriptionSelect }) => {
+    function renderDropdown() {
+        if (!subscriptions) {
+            return <FormControl.Static>Please first create a subscription</FormControl.Static>;
+        }
 
-                    if (!data || !data.subscriptions || !data.subscriptions.length) {
-                        return <FormControl.Static>Please first create a subscription</FormControl.Static>;
-                    }
+        const options = [
+            <MenuItem key="empty_subscription" eventKey={undefined}>None</MenuItem>,
+            ...subscriptions.map(subscription => (
+                <MenuItem key={subscription.field} eventKey={subscription}>
+                    {`${subscription.field} (${subscription.type})`}
+                </MenuItem>
+            ))
+        ];
 
-                    const options = [
-                        <MenuItem key="empty_subscription" eventKey={undefined}>None</MenuItem>,
-                        ...data.subscriptions.map(subscription => (
-                            <MenuItem key={subscription.field} eventKey={subscription}>
-                                {`${subscription.field} (${subscription.type})`}
-                            </MenuItem>
-                        ))
-                    ];
+        return (
+            <InputGroup>
+                <FormControl
+                    disabled
+                    className={formControl}
+                    value={selected ? selected.type : ""}
+                    placeholder="None"
+                />
+                <InputGroup.Button>
+                    <DropdownButton
+                        bsStyle="default"
+                        id="dropdown-type"
+                        title=""
+                        onSelect={s => onSubscriptionSelect(s)}
+                    >
+                        {options}
+                    </DropdownButton>
+                </InputGroup.Button>
+            </InputGroup>
+        );
+    }
 
-                    return (
-                        <InputGroup>
-                            <FormControl
-                                disabled
-                                className={formControl}
-                                value={selected ? selected.type : ""}
-                                placeholder="None"
-                            />
-                            <InputGroup.Button>
-                                <DropdownButton
-                                    bsStyle="default"
-                                    id="dropdown-type"
-                                    title=""
-                                    onSelect={s => onSubscriptionSelect(s)}
-                                >
-                                    {options}
-                                </DropdownButton>
-                            </InputGroup.Button>
-                        </InputGroup>
-                    );
-                }}
-            </Query>
-        </Col>
-    </React.Fragment>
-);
+    return (
+        <React.Fragment>
+            <Col sm={2} className={controlLabel}>Subscription</Col>
+            <Col sm={6}>{renderDropdown()}</Col>
+        </React.Fragment>
+    );
+};
 
 export { SubscriptionsDropDown };
