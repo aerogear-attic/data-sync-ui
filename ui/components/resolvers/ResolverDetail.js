@@ -269,13 +269,15 @@ class ResolverDetail extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
-                            <SubscriptionsDropDown
-                                selected={publish}
-                                subscriptions={subscriptions}
-                                onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
-                            />
-                        </FormGroup>
+                        {type === "Mutation" ? (
+                            <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
+                                <SubscriptionsDropDown
+                                    selected={publish}
+                                    subscriptions={subscriptions}
+                                    onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
+                                />
+                            </FormGroup>
+                        ) : null}
                     </Form>
                 </div>
 
