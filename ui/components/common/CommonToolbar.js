@@ -53,19 +53,13 @@ class CommonToolbar extends Component {
         );
     }
 
-    checkToRenderFilterSearch(showFilterSearch) {
-        if (showFilterSearch) {
-            return this.renderFilterSearch();
-        }
-    }
-
     render() {
         const { showFilterSearch } = this.props;
         const { toolbarContainer, toolbarButtonContainer } = styles;
         return (
             <div className={toolbarContainer}>
                 <Toolbar>
-                    {this.checkToRenderFilterSearch(showFilterSearch)}
+                    {showFilterSearch ? this.renderFilterSearch() : null}
                     <div className={toolbarButtonContainer}>
                         {this.renderElements()}
                     </div>
