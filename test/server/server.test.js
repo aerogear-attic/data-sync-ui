@@ -13,6 +13,7 @@ const {
     GET_SCHEMA,
     UPDATE_SCHEMA,
     GET_RESOLVERS,
+    GET_SUBSCRIPTIONS,
     UPSERT_RESOLVER
 } = require("./queries");
 
@@ -318,6 +319,17 @@ describe("Database", () => {
 
             const fetch = await graphql(Schema, GET_RESOLVERS, root, null, { schemaId: 1, type: "type" });
             expect(fetch.data.resolvers[0]).toHaveProperty("GraphQLSchemaId", 1);
+        });
+    });
+
+
+    describe("Subscriptions", () => {
+        it("should not have any subscriptions by default", async () => {
+            const createSchema = await graphql(Schema, GET_SCHEMA, root, null, { name: "test" });
+            const schemaId = createSchema.data.getSchema.id;
+
+            const fetch = await graphql(Schema, GET_SUBSCRIPTIONS, root, null, { schemaId, type: "type" });
+            expect(fetch.data.subscriptions).toHaveLength(0);
         });
     });
 });

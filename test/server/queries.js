@@ -92,6 +92,16 @@ module.exports = {
         }
       }
     `,
+    GET_SUBSCRIPTIONS: `
+      query listSubscriptions($schemaId: Int!) {
+        subscriptions(schemaId: $schemaId) {
+          type
+          field
+          topic
+          filter
+        }
+      }
+    `,
     GET_RESOLVERS: `
       query listResolvers($schemaId: Int!, $type: String!) {
         resolvers(schemaId: $schemaId, type: $type) {
