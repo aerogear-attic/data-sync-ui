@@ -33,12 +33,12 @@ class DataSourcesContainer extends Component {
         ];
     }
 
-    setFilter(nameToFilter) {
-        let name = nameToFilter;
-        if (name === "") {
-            name = undefined;
+    onFilterChange(newFilter) {
+        if (newFilter.name === "") {
+            newFilter.name = undefined;
         }
-        this.setState({ filter: { name } });
+        const { filter } = this.state;
+        this.setState({ filter: { ...filter, ...newFilter } });
     }
 
     addDataSource() {
@@ -51,6 +51,10 @@ class DataSourcesContainer extends Component {
 
     deleteDataSource(dataSource) {
         this.setState({ showDeleteModal: true, selectedDataSource: dataSource });
+    }
+
+    clearFilter() {
+        this.setState({ filter: {} });
     }
 
     render() {
@@ -70,8 +74,10 @@ class DataSourcesContainer extends Component {
                     filter={filter}
                 />
                 <EditDataSourceDialog
-                    onClose={() => this.setState({ showEditModal: false,
-                        selectedDataSource: null })}
+                    onClose={() => this.setState({
+                        showEditModal: false,
+                        selectedDataSource: null
+                    })}
                     dataSource={selectedDataSource}
                     visible={showEditModal}
                 />
@@ -79,13 +85,16 @@ class DataSourcesContainer extends Component {
                     showModal={showDeleteModal}
                     dataSource={selectedDataSource}
                     filter={filter}
-                    onClose={() => this.setState({ showDeleteModal: false,
-                        selectedDataSource: null })}
+                    onClose={() => this.setState({
+                        showDeleteModal: false,
+                        selectedDataSource: null
+                    })}
                 />
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
                     showFilterSearch
-                    onFilter={name => this.setFilter(name)}
+                    onFilterChange={f => this.onFilterChange(f)}
+                    filter={filter}
                 />
                 <div>
                     <DataSourcesList
@@ -93,6 +102,7 @@ class DataSourcesContainer extends Component {
                         onCreate={() => this.addDataSource()}
                         onEditDataSource={dataSource => this.editDataSource(dataSource)}
                         onDeleteDataSource={dataSource => this.deleteDataSource(dataSource)}
+                        onClearFilter={() => this.clearFilter()}
                     />
                 </div>
             </React.Fragment>

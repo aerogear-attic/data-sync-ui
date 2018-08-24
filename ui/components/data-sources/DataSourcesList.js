@@ -1,13 +1,19 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { ListView, Spinner } from "patternfly-react";
+import some from "lodash.some";
+
 import { EmptyList } from "./EmptyList";
-import GetDataSources from "../../graphql/GetDataSources.graphql";
 import { DataSourcesListItem } from "./DataSourcesListItem";
+
+import GetDataSources from "../../graphql/GetDataSources.graphql";
 
 import { dataSourcesList } from "./DataSourcesList.css";
 
-const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSource }) => {
+const DataSourcesList = ({
+    filter, onCreate, onEditDataSource,
+    onDeleteDataSource, onClearFilter
+}) => {
     const renderItems = data => data.dataSources.map(item => (
         <DataSourcesListItem
             item={item}
@@ -32,7 +38,27 @@ const DataSourcesList = ({ filter, onCreate, onEditDataSource, onDeleteDataSourc
                     return <ListView className={dataSourcesList}>{renderItems(data)}</ListView>;
                 }
 
-                return <EmptyList createDataSource={onCreate} />;
+                const thereIsFilter = some(filter, n => n !== undefined);
+
+                if (thereIsFilter) {
+                    return (
+                        <EmptyList
+                            action={onClearFilter}
+                            title="No item found while filtering the data sources"
+                            info="Please change your filtering query or empty the Filter field."
+                            actionName="Clear the filter"
+                        />
+                    );
+                }
+
+                return (
+                    <EmptyList
+                        action={onCreate}
+                        title="No Data Sources defined"
+                        info="Data Sources are used to store and retrieve your data. You should define at least one in order to use it in a resolver mapping."
+                        actionName="Add a Data Source"
+                    />
+                );
             }}
         </Query>
     );
