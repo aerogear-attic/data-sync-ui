@@ -83,7 +83,7 @@ class DataSourcesContainer extends Component {
                         selectedDataSource: null })}
                 />
                 <CommonToolbar
-                    hideFilter={false}
+                    showFilterSearch
                     buttons={this.getToolbarButtons()}
                     onFilter={name => this.setFilter(name)}
                 />

@@ -37,23 +37,35 @@ class CommonToolbar extends Component {
         }
     }
 
+    renderFilterSearch() {
+        const { onFilter } = this.props;
+        const { toolbarFilter } = styles;
+        return (
+            <DebounceInput
+                minLength={1}
+                debounceTimeout={300}
+                type="text"
+                placeholder="Filter by Name"
+                className={toolbarFilter}
+                onChange={e => onFilter(e.target.value)}
+                onKeyPress={e => this.handleKeyPress(e)}
+            />
+        );
+    }
+
+    checkToRenderFilterSearch(showFilterSearch) {
+        if (showFilterSearch) {
+            return this.renderFilterSearch();
+        }
+    }
+
     render() {
-        const { onFilter, hideFilter } = this.props;
-        const { toolbarContainer, toolbarFilter, toolbarButtonContainer } = styles;
+        const { showFilterSearch } = this.props;
+        const { toolbarContainer, toolbarButtonContainer } = styles;
         return (
             <div className={toolbarContainer}>
                 <Toolbar>
-                    <div hidden={hideFilter}>
-                        <DebounceInput
-                            minLength={1}
-                            debounceTimeout={300}
-                            type="text"
-                            placeholder="Filter by Name"
-                            className={toolbarFilter}
-                            onChange={e => onFilter(e.target.value)}
-                            onKeyPress={e => this.handleKeyPress(e)}
-                        />
-                    </div>
+                    {this.checkToRenderFilterSearch(showFilterSearch)}
                     <div className={toolbarButtonContainer}>
                         {this.renderElements()}
                     </div>
