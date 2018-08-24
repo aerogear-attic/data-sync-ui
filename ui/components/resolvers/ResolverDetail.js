@@ -192,10 +192,6 @@ class ResolverDetail extends Component {
         this.setState(INITIAL_STATE);
     }
 
-    getSubscriptionsFromSchema() {
-        return [];
-    }
-
     render() {
         const {
             resolver, requestMappingTemplate, responseMappingTemplate, isResolverSaved,
@@ -208,7 +204,6 @@ class ResolverDetail extends Component {
 
         const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook, publish } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
-        const subscriptions = this.getSubscriptionsFromSchema();
 
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
 
@@ -273,7 +268,6 @@ class ResolverDetail extends Component {
                             <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
                                 <SubscriptionsDropDown
                                     selected={publish}
-                                    subscriptions={subscriptions}
                                     onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
                                 />
                             </FormGroup>
