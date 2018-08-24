@@ -24,3 +24,7 @@ div.list-group-item-container .pficon-close {
 .blank-slate-pf .blank-slate-pf-icon {
     color: #D1D1D1;
 }
+
+.toolbar-pf {
+    min-height: 47px;
+}
