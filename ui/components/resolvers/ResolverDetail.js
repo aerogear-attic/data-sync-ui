@@ -134,8 +134,8 @@ class ResolverDetail extends Component {
         this.updateResolver({ postHook });
     }
 
-    onSubscriptionSelect(publish) {
-        this.updateResolver({ publish });
+    onSubscriptionSelect(subscription) {
+        this.updateResolver({ publish: subscription });
     }
 
     updateResolver(newProps) {
@@ -160,7 +160,7 @@ class ResolverDetail extends Component {
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { id, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+        const { id, DataSource, type, field, preHook, postHook, requestMapping, responseMapping, publish } = resolver;
 
         const schemaId = resolver.schemaId || resolver.GraphQLSchemaId;
 
@@ -174,7 +174,8 @@ class ResolverDetail extends Component {
                 preHook,
                 postHook,
                 requestMapping,
-                responseMapping
+                responseMapping,
+                publish
             },
             refetchQueries: [
                 { query: GetDataSources, variables: undefined },
