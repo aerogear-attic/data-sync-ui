@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Schema = sequelize.define("Resolver", {
+    const Resolver = sequelize.define("Resolver", {
         type: DataTypes.STRING,
         field: DataTypes.STRING,
         preHook: DataTypes.STRING,
@@ -8,5 +8,5 @@ module.exports = (sequelize, DataTypes) => {
         responseMapping: DataTypes.TEXT,
         publish: DataTypes.TEXT
     });
-    return Schema;
+    return Resolver;
 };
