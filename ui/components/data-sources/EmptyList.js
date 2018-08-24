@@ -13,7 +13,7 @@ import { emptyListContainer } from "./EmptyList.css";
 
 const EmptyList = ({ action, title, info, actionName }) => (
     <EmptyState className={emptyListContainer}>
-        <EmptyStateIcon />
+        <EmptyStateIcon name="info" />
         <EmptyStateTitle>
             {title}
         </EmptyStateTitle>
