@@ -19,6 +19,10 @@ const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
         <Col sm={6}>
             <Query query={GetSubscriptions} variables={undefined}>
                 {({ loading, error, data }) => {
+                    if (loading || typeof error !== "undefined") {
+                        return <FormControl.Static>Loading subscriptions...</FormControl.Static>;
+                    }
+
                     if (!data || !data.subscriptions || !data.subscriptions.length) {
                         return <FormControl.Static>Please first create a subscription</FormControl.Static>;
                     }
@@ -42,7 +46,6 @@ const SubscriptionsDropDown = ({ selected, onSubscriptionSelect }) => (
                             />
                             <InputGroup.Button>
                                 <DropdownButton
-                                    disabled={loading || typeof error !== "undefined"}
                                     bsStyle="default"
                                     id="dropdown-type"
                                     title=""
