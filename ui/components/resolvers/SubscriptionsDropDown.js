@@ -9,9 +9,9 @@ import {
 
 import { controlLabel, formControl } from "./SubscriptionsDropDown.css";
 
-const SubscriptionsDropDown = ({ selected, subscriptions, onSubscriptionSelect }) => {
+const SubscriptionsDropDown = ({ selected, subscriptions = [], onSubscriptionSelect }) => {
     function renderDropdown() {
-        if (!subscriptions) {
+        if (!subscriptions.length) {
             return <FormControl.Static>Please first create a subscription</FormControl.Static>;
         }
 
