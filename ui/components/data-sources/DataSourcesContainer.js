@@ -33,12 +33,12 @@ class DataSourcesContainer extends Component {
         ];
     }
 
-    setFilter(nameToFilter) {
-        const { name, ...newFilter } = this.state.filter;
-        if (nameToFilter !== "") {
-            newFilter.name = nameToFilter;
+    onFilterChange(newFilter) {
+        if (newFilter.name === "") {
+            newFilter.name = undefined;
         }
-        this.setState({ filter: newFilter });
+        const { filter } = this.state;
+        this.setState({ filter: { ...filter, ...newFilter } });
     }
 
     addDataSource() {
@@ -93,8 +93,8 @@ class DataSourcesContainer extends Component {
                 <CommonToolbar
                     buttons={this.getToolbarButtons()}
                     showFilterSearch
-                    onFilter={name => this.setFilter(name)}
-                    filter={this.state.filter}
+                    onFilterChange={f => this.onFilterChange(f)}
+                    filter={filter}
                 />
                 <div>
                     <DataSourcesList

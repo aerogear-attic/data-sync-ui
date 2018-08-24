@@ -38,9 +38,8 @@ class CommonToolbar extends Component {
     }
 
     renderFilterSearch() {
-        const { onFilter } = this.props;
+        const { onFilterChange, filter: { name = "" } } = this.props;
         const { toolbarFilter } = styles;
-        const { name: filterOnName } = this.props.filter;
 
         return (
             <DebounceInput
@@ -49,8 +48,8 @@ class CommonToolbar extends Component {
                 type="text"
                 placeholder="Filter by Name"
                 className={toolbarFilter}
-                value={filterOnName || ""}
-                onChange={e => onFilter(e.target.value)}
+                value={name}
+                onChange={e => onFilterChange({ name: e.target.value })}
                 onKeyPress={e => this.handleKeyPress(e)}
             />
         );
