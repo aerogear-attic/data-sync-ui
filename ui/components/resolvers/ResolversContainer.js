@@ -25,10 +25,6 @@ class ResolversContainer extends Component {
         return [];
     }
 
-    setFilter() {
-        // TODO
-    }
-
     onResolverClicked(resolver) {
         const { isResolverSaved } = this.state;
 
@@ -62,10 +58,7 @@ class ResolversContainer extends Component {
 
         return (
             <React.Fragment>
-                <CommonToolbar
-                    buttons={this.getToolbarButtons()}
-                    onFilter={name => this.setFilter(name)}
-                />
+                <CommonToolbar buttons={this.getToolbarButtons()} />
                 <div className={styles.flexWrapper}>
                     <div className={styles.resolversListContainer}>
                         <ResolversList onClick={res => this.onResolverClicked(res)} />
