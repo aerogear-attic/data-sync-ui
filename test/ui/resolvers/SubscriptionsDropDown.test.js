@@ -1,5 +1,5 @@
 import React from "react";
-import { mount } from "enzyme";
+import { shallow } from "enzyme";
 
 import { MenuItem } from "patternfly-react";
 import { SubscriptionsDropDown } from "../../../ui/components/resolvers";
@@ -8,7 +8,7 @@ let wrapper;
 let dropdown;
 
 function getWrapper(subscriptions) {
-    return mount(<SubscriptionsDropDown subscriptions={subscriptions} />);
+    return shallow(<SubscriptionsDropDown subscriptions={subscriptions} />);
 }
 
 afterEach(() => {

@@ -75,9 +75,18 @@ describe("When resolver is defined", () => {
         expect(wrapper.find(HookFormGroup).everyWhere(n => !n.prop("disabled"))).toBe(true);
     });
 
-    it("should render a subscriptions form", () => {
-        wrapper = getWrapper(resolver).find(ResolverDetail).first();
-        expect(wrapper.find("SubscriptionsDropDown")).toHaveLength(1);
+    it("should render a subscriptions form only for a Mutation", () => {
+        wrapper = getWrapper({ ...resolver, type: "Mutation" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(true);
+
+        wrapper = getWrapper({ ...resolver, type: "Query" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
+
+        wrapper = getWrapper({ ...resolver, type: "Subscription" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
+
+        wrapper = getWrapper({ ...resolver, type: "Custom" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
     });
 
     it("should display a disabled 'save' button by default", () => {
