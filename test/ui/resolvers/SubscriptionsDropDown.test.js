@@ -11,7 +11,7 @@ import GetSchema from "../../../ui/graphql/GetSchema.graphql";
 let wrapper;
 let dropdown;
 
-function getWrapper(subscriptions, error) {
+function getWrapper(subscriptions = [], error) {
     const schema = {
         data: { __schema: { types: [{
             name: "Subscription",
@@ -20,7 +20,8 @@ function getWrapper(subscriptions, error) {
     };
     const mocks = [{
         request: {
-            query: GetSchema
+            query: GetSchema,
+            variables: { name: "default" }
         },
         result: {
             data: { getSchema: { compiled: JSON.stringify(schema) } }
@@ -39,7 +40,7 @@ afterEach(() => {
     wrapper = null;
 });
 
-describe("When there are no subscriptions", () => {
+describe.only("When there are no subscriptions", () => {
     beforeEach(async () => {
         wrapper = getWrapper([]);
         await sleep(5); // Wait for the query to finish
