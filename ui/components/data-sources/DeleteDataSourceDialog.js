@@ -8,6 +8,7 @@ import {
 import { graphql } from "react-apollo";
 import DeleteDataSource from "../../graphql/DeleteDataSource.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
+import GetResolvers from "../../graphql/GetResolvers.graphql";
 
 const DeleteDataSourceDialog = ({
     showModal,
@@ -21,16 +22,26 @@ const DeleteDataSourceDialog = ({
     const removeDatasource = () => {
         const { name } = filter;
         const dataSourceId = dataSource.id;
+        const queriesToRefetch = [{
+            query: GetDataSources,
+            variables: { name }
+        }, {
+            query: GetDataSources,
+            variables: { name: undefined }
+        }];
+
+        if (hasResolvers) {
+            dataSource.resolvers.forEach(resolver => {
+                queriesToRefetch.push({
+                    query: GetResolvers,
+                    variables: { schemaId: resolver.GraphQLSchemaId, type: resolver.type }
+                });
+            });
+        }
 
         mutate({
             variables: { dataSourceId },
-            refetchQueries: [{
-                query: GetDataSources,
-                variables: { name }
-            }, {
-                query: GetDataSources,
-                variables: { name: undefined }
-            }]
+            refetchQueries: queriesToRefetch
         }).then(() => {
             onClose();
         }).catch(err => {
