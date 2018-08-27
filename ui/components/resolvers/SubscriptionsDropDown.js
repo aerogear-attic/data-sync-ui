@@ -21,7 +21,6 @@ const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
                     if (loading || typeof error !== "undefined") {
                         return <FormControl.Static>Loading subscriptions...</FormControl.Static>;
                     }
-                    console.log(data.getSchema);
 
                     const { getSchema: { compiled } } = data;
                     const schema = JSON.parse(compiled);
