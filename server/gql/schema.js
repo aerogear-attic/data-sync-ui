@@ -117,7 +117,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping = "", publish = ""
+    requestMapping, responseMapping = "", publish = null
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,

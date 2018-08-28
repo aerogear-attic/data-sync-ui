@@ -12,7 +12,7 @@ import GetSchema from "../../graphql/GetSchema.graphql";
 
 import { controlLabel, formControl } from "./SubscriptionsDropDown.css";
 
-const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
+const SubscriptionsDropDown = ({ selected = null, onSubscriptionSelect }) => (
     <React.Fragment>
         <Col sm={2} className={controlLabel}>Subscription</Col>
         <Col sm={6}>
@@ -23,8 +23,7 @@ const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
                     }
 
                     const { getSchema: { compiled } } = data;
-                    const schema = JSON.parse(compiled);
-                    const { types } = schema.data.__schema;
+                    const { types } = JSON.parse(compiled).data.__schema;
                     const subscriptions = types.find(n => n.name === "Subscription");
 
                     if (!subscriptions || !subscriptions.fields) {
@@ -32,7 +31,7 @@ const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
                     }
 
                     const options = [
-                        <MenuItem key="empty_subscription" eventKey="">None</MenuItem>,
+                        <MenuItem key="empty_subscription" eventKey={null}>None</MenuItem>,
                         ...subscriptions.fields.map(({ name }) => (
                             <MenuItem key={name} eventKey={name}>
                                 {name}
@@ -40,12 +39,14 @@ const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
                         ))
                     ];
 
+                    const value = selected === null ? "" : selected;
+
                     return (
                         <InputGroup>
                             <FormControl
                                 disabled
                                 className={formControl}
-                                value={selected}
+                                value={value}
                                 placeholder="None"
                             />
                             <InputGroup.Button>
