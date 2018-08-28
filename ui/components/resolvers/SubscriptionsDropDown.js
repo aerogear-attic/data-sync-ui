@@ -32,7 +32,7 @@ const SubscriptionsDropDown = ({ selected = "", onSubscriptionSelect }) => (
                     }
 
                     const options = [
-                        <MenuItem key="empty_subscription" eventKey={undefined}>None</MenuItem>,
+                        <MenuItem key="empty_subscription" eventKey="">None</MenuItem>,
                         ...subscriptions.fields.map(({ name }) => (
                             <MenuItem key={name} eventKey={name}>
                                 {name}
