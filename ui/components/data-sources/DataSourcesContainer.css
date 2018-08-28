@@ -1,0 +1,8 @@
+.flexWrapper {
+  composes: flexWrapper from "../common/common.css";
+}
+
+.dataSourcesListContainer {
+  width: 100%;
+  overflow-y: auto;
+}

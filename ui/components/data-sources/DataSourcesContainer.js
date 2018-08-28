@@ -6,6 +6,8 @@ import { EditDataSourceDialog } from "./EditDataSourceDialog";
 import { DataSourcesList } from "./DataSourcesList";
 import { DeleteDataSourceDialog } from "./DeleteDataSourceDialog";
 
+import styles from "./DataSourcesContainer.css";
+
 const INITIAL_STATE = {
     showAddModal: false,
     showEditModal: false,
@@ -96,14 +98,16 @@ class DataSourcesContainer extends Component {
                     onFilterChange={f => this.onFilterChange(f)}
                     filter={filter}
                 />
-                <div>
-                    <DataSourcesList
-                        filter={filter}
-                        onCreate={() => this.addDataSource()}
-                        onEditDataSource={dataSource => this.editDataSource(dataSource)}
-                        onDeleteDataSource={dataSource => this.deleteDataSource(dataSource)}
-                        onClearFilter={() => this.clearFilter()}
-                    />
+                <div className={styles.flexWrapper}>
+                    <div className={styles.dataSourcesListContainer}>
+                        <DataSourcesList
+                            filter={filter}
+                            onCreate={() => this.addDataSource()}
+                            onEditDataSource={dataSource => this.editDataSource(dataSource)}
+                            onDeleteDataSource={dataSource => this.deleteDataSource(dataSource)}
+                            onClearFilter={() => this.clearFilter()}
+                        />
+                    </div>
                 </div>
             </React.Fragment>
         );
