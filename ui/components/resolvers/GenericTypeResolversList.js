@@ -1,7 +1,7 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
-import { ResolversListItem } from "./ResolversListItem";
+import { GenericTypeResolversListItem } from "./resolvers-list-item";
 
 import styles from "./ResolversListItem.css";
 
@@ -17,7 +17,7 @@ import GetResolvers from "../../graphql/GetResolvers.graphql";
  * @param onClick Handler invoked when the user wants to add a resolver for the Query or
  * Mutation
  */
-const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
+const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
     // If there are no instances of a type render nothing (not even an empty list)
     if (!items || !items.length) {
         return null;
@@ -38,7 +38,7 @@ const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
                 const list = fields.map(field => {
                     field.isQuery = true;
                     return (
-                        <ResolversListItem
+                        <GenericTypeResolversListItem
                             schemaId={schemaId}
                             key={name + field.name}
                             type={name}
@@ -65,4 +65,4 @@ const GenericTypeItem = ({ schemaId, items, text, kind, onClick }) => {
     );
 };
 
-export { GenericTypeItem };
+export { GenericTypeResolversList };

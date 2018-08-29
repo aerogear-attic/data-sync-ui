@@ -6,6 +6,8 @@ query GetDataSources ($name: String) {
         config
         resolvers {
             id
+            GraphQLSchemaId
+            type
         }
     }
 }

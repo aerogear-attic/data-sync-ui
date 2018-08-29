@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { MessageDialog, Icon } from "patternfly-react";
 import { CommonToolbar } from "../common";
-import { ResolversList } from "./ResolversList";
+import { ResolversStructureView } from "./ResolversStructureView";
 import { ResolverDetail } from "./ResolverDetail";
 
 import styles from "./resolversContainer.css";
@@ -61,7 +61,7 @@ class ResolversContainer extends Component {
                 <CommonToolbar buttons={this.getToolbarButtons()} />
                 <div className={styles.flexWrapper}>
                     <div className={styles.resolversListContainer}>
-                        <ResolversList onClick={res => this.onResolverClicked(res)} />
+                        <ResolversStructureView onClick={res => this.onResolverClicked(res)} />
                     </div>
                     <div className={styles.resolverDetailContainer}>
                         <ResolverDetail resolver={resolver} onResolverEdit={e => this.onResolverEdit(e)} />
