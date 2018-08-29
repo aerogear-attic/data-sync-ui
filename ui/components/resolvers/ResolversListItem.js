@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
     ListViewItem,
     Grid,
@@ -10,29 +10,52 @@ import styles, { resolversHeading } from "./ResolversListItem.css";
 
 import { formatType } from "../../helper/GraphQLFormatters";
 
-const renderAdditionalInfo = (resolvers, schemaId, kind, field, type, onClick) => {
+const renderAdditionalInfo = (resolver, schemaId, kind, field, type, onClick) => {
     // TODO:implement subscription resolvers
     // For the moment we just don't display anything here
     if (kind === "subscription") {
-        return <span key={field} />;
+        return null;
     }
 
-    const resolver = resolvers.find(item => item.field === field);
-    const resolverText = resolver ? resolver.DataSource.name : "no resolver set";
-
     return (
-        <div className={resolver ? styles.headingResolverSet : styles.headingResolverUnset} key="Resolver">
-            <span
-                role="button"
-                tabIndex={0}
-                onClick={() => onClick({ schemaId, type, field, ...resolver })}
-                onKeyDown={() => onClick({ schemaId, type, field, ...resolver })}
-                key={field}
-            >{resolverText}
-            </span>
-        </div>
+        <AdditionalInfo
+            resolver={resolver}
+            onClick={onClick}
+            schemaId={schemaId}
+            type={type}
+            field={field}
+        />
     );
 };
+
+class AdditionalInfo extends Component {
+
+    componentWillReceiveProps(nextProps) {
+        const { schemaId, type, field, resolver, onClick } = this.props;
+
+        if (resolver && !nextProps.resolver) {
+            onClick({ schemaId, type, field: field.name });
+        }
+    }
+
+    render() {
+        const { resolver, onClick, schemaId, type, field } = this.props;
+
+        return (
+            <div className={resolver ? styles.headingResolverSet : styles.headingResolverUnset} key="Resolver">
+                <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onClick({ schemaId, type, field, ...resolver })}
+                    onKeyDown={() => onClick({ schemaId, type, field, ...resolver })}
+                    key={field}
+                >{resolver ? resolver.DataSource.name : "no resolver set"}
+                </span>
+            </div>
+        );
+    }
+
+}
 
 const renderGeneric = ({ kind, schemaId, type, item, resolvers, onClick }) => {
     const { args, name } = item;
@@ -43,6 +66,8 @@ const renderGeneric = ({ kind, schemaId, type, item, resolvers, onClick }) => {
         </span>
     );
 
+    const resolver = resolvers.find(r => r.field === name);
+
     return (
         <ListViewItem
             key={name}
@@ -50,7 +75,7 @@ const renderGeneric = ({ kind, schemaId, type, item, resolvers, onClick }) => {
             leftContent={<span className={resolversHeading}>{name}</span>}
             description={argsText}
             hideCloseIcon
-            additionalInfo={[renderAdditionalInfo(resolvers, schemaId, kind, name, type, onClick)]}
+            additionalInfo={[renderAdditionalInfo(resolver, schemaId, kind, name, type, onClick)]}
         >
             {
                 args.length ? (
@@ -74,28 +99,38 @@ const renderGeneric = ({ kind, schemaId, type, item, resolvers, onClick }) => {
     );
 };
 
-const renderCustomTypeArgs = (schemaId, type, fields, resolvers, onClick) => (
-    fields.map(field => {
-        const resolver = resolvers.find(item => item.field === field.name);
-        const resolverText = resolver ? resolver.DataSource.name : "no resolver set";
+class CustomTypeArgs extends Component {
 
+    componentWillReceiveProps(nextProps) {
+        const { schemaId, type, field, resolver, onClick } = this.props;
+
+        if (resolver && !nextProps.resolver) {
+            onClick({ schemaId, type, field: field.name });
+        }
+    }
+
+    render() {
+        const { field, onClick, resolver, schemaId, type } = this.props;
+        const resolverText = resolver ? resolver.DataSource.name : "no resolver set";
         return (
-            <Row key={field.name} className={styles.resolverItemRow}>
-                <Col xs={5} className={styles.itemName}>{field.name}</Col>
-                <Col xs={3} className={styles.itemType}>{formatType(field.type)}</Col>
-                <Col xs={4} className={styles.itemResolver}>
-                    <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => onClick({ schemaId, type, field: field.name, ...resolver })}
-                        onKeyDown={() => onClick({ schemaId, type, field: field.name, ...resolver })}
-                    >{resolverText}
-                    </span>
-                </Col>
-            </Row>
+            <React.Fragment>
+                <Row className={styles.resolverItemRow}>
+                    <Col xs={5} className={styles.itemName}>{field.name}</Col>
+                    <Col xs={3} className={styles.itemType}>{formatType(field.type)}</Col>
+                    <Col xs={4} className={styles.itemResolver}>
+                        <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => onClick({ schemaId, type, field: field.name, ...resolver })}
+                            onKeyDown={() => onClick({ schemaId, type, field: field.name, ...resolver })}
+                        >{resolverText}
+                        </span>
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
-    })
-);
+    }
+}
 
 const renderCustom = ({ schemaId, type, item, resolvers, onClick }) => {
     const { fields, name } = item;
@@ -120,7 +155,22 @@ const renderCustom = ({ schemaId, type, item, resolvers, onClick }) => {
                     <Col xs={3}>Type</Col>
                     <Col xs={4}>Resolver</Col>
                 </Row>
-                {renderCustomTypeArgs(schemaId, type, fields, resolvers, onClick)}
+                {
+                    fields.map(field => {
+                        const resolver = resolvers.find(r => r.field === field.name);
+
+                        return (
+                            <CustomTypeArgs
+                                key={field.name}
+                                field={field}
+                                schemaId={schemaId}
+                                type={type}
+                                resolver={resolver}
+                                onClick={onClick}
+                            />
+                        );
+                    })
+                }
             </Grid>
         </ListViewItem>
     );
