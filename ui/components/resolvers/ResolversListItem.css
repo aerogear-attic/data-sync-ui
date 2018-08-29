@@ -34,10 +34,6 @@
 
 }
 
-.itemResolver {
-    color: #4EABDA;
-}
-
 .resolverFieldRow {
     composes: structureFieldRow from "../schema/TypeList.css";
 }

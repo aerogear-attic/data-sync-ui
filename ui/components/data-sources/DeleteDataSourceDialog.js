@@ -32,10 +32,16 @@ const DeleteDataSourceDialog = ({
 
         if (hasResolvers) {
             dataSource.resolvers.forEach(resolver => {
-                queriesToRefetch.push({
-                    query: GetResolvers,
-                    variables: { schemaId: resolver.GraphQLSchemaId, type: resolver.type }
+                const queryExists = queriesToRefetch.some(query => {
+                    const { variables: { schemaId, type } } = query;
+                    return schemaId === resolver.GraphQLSchemaId && type === resolver.type;
                 });
+                if (!queryExists) {
+                    queriesToRefetch.push({
+                        query: GetResolvers,
+                        variables: { schemaId: resolver.GraphQLSchemaId, type: resolver.type }
+                    });
+                }
             });
         }
 
