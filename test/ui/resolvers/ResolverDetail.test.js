@@ -4,7 +4,20 @@ import { mount } from "enzyme";
 import { MockedProvider } from "react-apollo/test-utils";
 import { ResolverDetail, HookFormGroup } from "../../../ui/components/resolvers";
 
+import GetDataSources from "../../../ui/graphql/GetDataSources.graphql";
+
 let wrapper;
+
+const mocks = [{
+    request: {
+        query: GetDataSources
+    },
+    result: {
+        data: {
+            resolvers: []
+        }
+    }
+}];
 
 afterEach(() => {
     wrapper = null;
@@ -13,7 +26,7 @@ afterEach(() => {
 describe("When resolver is undefined", () => {
     beforeEach(() => {
         wrapper = mount(
-            <MockedProvider mocks={[]} addTypename={false}>
+            <MockedProvider mocks={mocks} addTypename={false}>
                 <ResolverDetail />
             </MockedProvider>
         );
@@ -39,7 +52,7 @@ describe("When resolver is defined", () => {
     };
 
     const getWrapper = (r, props) => mount(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={false}>
             <ResolverDetail resolver={r} {...props} />
         </MockedProvider>
     );
@@ -60,6 +73,20 @@ describe("When resolver is defined", () => {
     it("should have preHook and postHook enabled by default", () => {
         wrapper = getWrapper({ ...resolver, type: "Other" }).find(ResolverDetail).first();
         expect(wrapper.find(HookFormGroup).everyWhere(n => !n.prop("disabled"))).toBe(true);
+    });
+
+    it("should render a subscriptions form only for a Mutation", () => {
+        wrapper = getWrapper({ ...resolver, type: "Mutation" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(true);
+
+        wrapper = getWrapper({ ...resolver, type: "Query" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
+
+        wrapper = getWrapper({ ...resolver, type: "Subscription" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
+
+        wrapper = getWrapper({ ...resolver, type: "Custom" }).find(ResolverDetail).first();
+        expect(wrapper.find("SubscriptionsDropDown").exists()).toBe(false);
     });
 
     it("should display a disabled 'save' button by default", () => {

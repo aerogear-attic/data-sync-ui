@@ -7,7 +7,8 @@ mutation UpsertResolver(
     $preHook: String,
     $postHook: String
     $requestMapping: String!,
-    $responseMapping: String
+    $responseMapping: String,
+    $publish: String
 ) {
     upsertResolver(
         id: $id,
@@ -18,7 +19,8 @@ mutation UpsertResolver(
         preHook: $preHook,
         postHook: $postHook,
         requestMapping: $requestMapping,
-        responseMapping: $responseMapping
+        responseMapping: $responseMapping,
+        publish: $publish
     ) {
         id
         GraphQLSchemaId
@@ -28,6 +30,7 @@ mutation UpsertResolver(
         postHook
         responseMapping
         requestMapping
+        publish
         DataSource {
             id
             name

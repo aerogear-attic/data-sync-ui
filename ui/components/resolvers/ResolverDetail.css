@@ -6,6 +6,7 @@
     top: 0;
     left: 0;
     right: 0;
+    z-index: 10;
 }
 
 .detailFormsContainer {
@@ -28,6 +29,7 @@
     right: 0;
     background-color: white;
     box-shadow: 0 -0.5px 0.5px 0.5px lightgrey;
+    z-index: 10;
 }
 
 .buttonSave {

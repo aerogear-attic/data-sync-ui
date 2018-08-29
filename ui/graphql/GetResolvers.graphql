@@ -8,6 +8,7 @@ query GetResolvers($schemaId: Int!, $type: String!) {
         postHook
         responseMapping
         requestMapping
+        publish
         DataSource {
             id
             name

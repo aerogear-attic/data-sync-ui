@@ -320,4 +320,9 @@ describe("Database", () => {
             expect(fetch.data.resolvers[0]).toHaveProperty("GraphQLSchemaId", 1);
         });
     });
+
+
+    describe("Subscriptions", () => {
+        // TODO
+    });
 });

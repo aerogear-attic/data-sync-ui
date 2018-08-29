@@ -1,0 +1,7 @@
+.formControl {
+    composes: dataSourceFormControl from "./DataSourcesDropDown.css";
+}
+
+.controlLabel {
+    composes: dataSourceControlLabel from "./DataSourcesDropDown.css";
+}

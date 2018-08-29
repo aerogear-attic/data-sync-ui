@@ -13,6 +13,7 @@ import {
 } from "../../helper/Validators";
 
 import { DataSourcesDropDown } from "./DataSourcesDropDown";
+import { SubscriptionsDropDown } from "./SubscriptionsDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 import { HookFormGroup } from "./HookFormGroup";
 import { DeleteResolverDialog } from "./DeleteResolverDialog";
@@ -133,6 +134,10 @@ class ResolverDetail extends Component {
         this.updateResolver({ postHook });
     }
 
+    onSubscriptionSelect(subscription) {
+        this.updateResolver({ publish: subscription });
+    }
+
     updateResolver(newProps) {
         const { resolver } = this.state;
         const { onResolverEdit } = this.props;
@@ -155,7 +160,7 @@ class ResolverDetail extends Component {
 
     upsertResolver() {
         const { resolver } = this.state;
-        const { id, DataSource, type, field, preHook, postHook, requestMapping, responseMapping } = resolver;
+        const { id, DataSource, type, field, preHook, postHook, requestMapping, responseMapping, publish } = resolver;
 
         const schemaId = resolver.schemaId || resolver.GraphQLSchemaId;
 
@@ -169,7 +174,8 @@ class ResolverDetail extends Component {
                 preHook,
                 postHook,
                 requestMapping,
-                responseMapping
+                responseMapping,
+                publish
             },
             refetchQueries: [
                 { query: GetDataSources, variables: undefined },
@@ -197,7 +203,7 @@ class ResolverDetail extends Component {
             return <DefaultEmptyView text="Select an item to view and edit its details" />;
         }
 
-        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook } = resolver;
+        const { field, type, DataSource, requestMapping, responseMapping, preHook, postHook, publish } = resolver;
         const { requestMappingTemplates, responseMappingTemplates } = getTemplatesForDataSource(DataSource);
 
         const isSaveButtonDisabled = isResolverSaved || some(validations, s => s === null || s === "error");
@@ -258,6 +264,15 @@ class ResolverDetail extends Component {
                                 onChange={hook => this.onPostHookChange(hook)}
                             />
                         </FormGroup>
+
+                        {type === "Mutation" ? (
+                            <FormGroup controlId="subscription" className={detailFormGroup} validationState={validations.subscription}>
+                                <SubscriptionsDropDown
+                                    selected={publish}
+                                    onSubscriptionSelect={s => this.onSubscriptionSelect(s)}
+                                />
+                            </FormGroup>
+                        ) : null}
                     </Form>
                 </div>
 

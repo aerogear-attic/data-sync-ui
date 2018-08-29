@@ -11,13 +11,13 @@ import {
 
 import GetDataSources from "../../graphql/GetDataSources.graphql";
 
-import styles from "./DataSourcesDropDown.css";
+import { dataSourceControlLabel, dataSourceFormControl } from "./DataSourcesDropDown.css";
 
 const DataSourcesDropDown = ({ selected, onDataSourceSelect }) => {
     const filter = undefined;
     return (
         <React.Fragment>
-            <Col sm={2} className={styles.dataSourceControlLabel}>Data Source</Col>
+            <Col sm={2} className={dataSourceControlLabel}>Data Source</Col>
             <Col sm={6}>
                 <Query query={GetDataSources} variables={filter}>
                     {({ loading, error, data: { dataSources } }) => {
@@ -37,7 +37,7 @@ const DataSourcesDropDown = ({ selected, onDataSourceSelect }) => {
                             <InputGroup>
                                 <FormControl
                                     disabled
-                                    style={{ background: "unset", color: "#363636" }}
+                                    className={dataSourceFormControl}
                                     value={selected ? selected.name : ""}
                                     placeholder="Select a Data Source"
                                 />

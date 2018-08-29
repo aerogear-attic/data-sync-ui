@@ -15,7 +15,7 @@ const Schema = buildSchema(`
         getOneDataSource(id: Int!): DataSource
         schemas: [Schema]
         getSchema(name: String!): Schema
-        resolvers(schemaId: Int!, type: String):[Resolver]
+        resolvers(schemaId: Int!, type: String): [Resolver]
         getDataSourceTestResult(type: DataSourceType!, config: JSON!): DataSourceTestResult
     },
     type Mutation {
@@ -67,7 +67,7 @@ const Schema = buildSchema(`
     type DataSourceTestResult {
         status: Boolean!
         message: String
-    }
+    },
 
     scalar JSON
 `);
@@ -117,7 +117,7 @@ const getOneResolver = ({ id }) => resolver.findById(id, {
 
 const upsertResolver = async ({
     id, schemaId, dataSourceId, type, field, preHook = "", postHook = "",
-    requestMapping, responseMapping = "", publish
+    requestMapping, responseMapping = "", publish = null
 }) => {
     const properties = {
         GraphQLSchemaId: schemaId,
