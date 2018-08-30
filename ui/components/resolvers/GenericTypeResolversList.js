@@ -52,11 +52,6 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
                     );
                 });
 
-                const definedResolvers = fields.reduce((prev, curr) => {
-                    const resolver = data.resolvers.find(r => r.field === curr.name);
-                    return resolver ? prev + 1 : prev;
-                }, 0);
-
                 return (
                     <div className={resolversContent}>
                         <div className={resolversHeader}>
@@ -66,7 +61,7 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
                                     <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
                                 </span>
                             </div>
-                            {kind !== "subscription" ? <ResolversCount total={fields.length} defined={definedResolvers} /> : null}
+                            {kind !== "subscription" ? <ResolversCount fields={fields} resolvers={data.resolvers} /> : null}
                         </div>
                         <ListView className={resolversList}>
                             { list }
