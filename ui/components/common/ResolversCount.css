@@ -1,0 +1,18 @@
+.resolversCount {
+    flex: 1;
+    text-align: end;
+    display: inline-block;
+    align-self: flex-end;
+}
+
+.resolversCount > p {
+    font-weight: 300;
+    margin: 0;
+}
+
+.resolversCount > p > span {
+    font-weight: 400;
+    font-size: 14px;
+    margin-right: 5px;
+    letter-spacing: 2px;
+}
