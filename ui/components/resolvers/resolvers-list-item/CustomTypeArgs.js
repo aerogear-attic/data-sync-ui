@@ -10,10 +10,11 @@ import styles from "../ResolversListItem.css";
 class CustomTypeArgs extends Component {
 
     componentWillReceiveProps(nextProps) {
-        const { schemaId, type, field, resolver, onClick } = this.props;
+        const { resolver, onClick } = this.props;
 
+        // Close resolver editor when associated resolver does not exist
         if (resolver && !nextProps.resolver) {
-            onClick({ schemaId, type, field: field.name });
+            onClick(null);
         }
     }
 
