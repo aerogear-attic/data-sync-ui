@@ -8,7 +8,6 @@ import {
     Col
 } from "patternfly-react";
 import { CustomTypeArgs } from "./CustomTypeArgs";
-import { ResolversCount } from "../../common";
 
 import GetResolvers from "../../../graphql/GetResolvers.graphql";
 
@@ -37,7 +36,6 @@ const CustomTypeResolversListItem = ({ schemaId, type, item, onClick }) => {
                             <span style={{ fontWeight: "600" }}>{fields.length}</span>
                             <span style={{ fontWeight: "300" }}>{fields.length !== 1 ? " Arguments" : " Argument"}</span>
                         </span>
-                        <ResolversCount fields={fields} resolvers={data.resolvers} />
                     </div>
                 );
 
