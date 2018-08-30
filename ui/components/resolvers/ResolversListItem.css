@@ -37,9 +37,7 @@
     overflow-wrap: break-word;
 }
 
-.itemType {
-
-}
+.itemType {}
 
 .resolverFieldRow {
     composes: structureFieldRow from "../schema/TypeList.css";
@@ -49,12 +47,14 @@
     composes: structureItemRow from "../schema/TypeList.css";
 }
 
-.headingDescription {
-    
+.headingDescription {}
+
+.headingDescriptionContainer {
+    display: flex;
+    margin-right: -40px;
 }
 
-.headingResolverSet,
-.headingResolverUnset {
+.headingResolverSet, .headingResolverUnset {
     width: 100%;
     text-align: end;
     font-weight: 400;
