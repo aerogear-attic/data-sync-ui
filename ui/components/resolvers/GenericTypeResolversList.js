@@ -1,9 +1,12 @@
 import React from "react";
 import { Query } from "react-apollo";
-import { Spinner, ListView } from "patternfly-react";
+import {
+    Spinner, ListView, Icon
+} from "patternfly-react";
 import { GenericTypeResolversListItem } from "./resolvers-list-item";
 
 import styles from "./ResolversListItem.css";
+import { learnMore } from "../common/common.css";
 
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
@@ -23,7 +26,7 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
         return null;
     }
 
-    const { resolversContent, resolversHeader, resolversList } = styles;
+    const { resolversContent, resolversHeader, resolversHeaderName, resolversHeaderCount, resolversList } = styles;
     const { name, fields } = items[0];
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -53,7 +56,19 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
                 return (
                     <div className={resolversContent}>
                         <div className={resolversHeader}>
-                            <span>{text}</span>
+                            <div className={resolversHeaderName}>
+                                <span style={{ marginRight: "12px" }}>{text}</span>
+                                <span className={learnMore}>
+                                    <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
+                                </span>
+                            </div>
+                            <div className={resolversHeaderCount}>
+                                <p>
+                                    <Icon type="pf" name="ok" />
+                                    <span>0/{data.resolvers.length}</span>
+                                    {data.resolvers.length === 1 ? "Resolver" : "Resolvers"}
+                                </p>
+                            </div>
                         </div>
                         <ListView className={resolversList}>
                             { list }

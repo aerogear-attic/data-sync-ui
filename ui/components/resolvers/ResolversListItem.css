@@ -1,8 +1,33 @@
 .resolversHeader {
-    padding-top: 30px;
-    font-size: 18px;
+    display: flex;
+    flex-direction: row;
     padding-left: 15px;
     padding-bottom: 5px;
+    padding-top: 30px;
+    padding-right: 15px;
+}
+
+.resolversHeaderName {
+    font-size: 18px;
+    flex: 1;
+}
+
+.resolversHeaderCount {
+    flex: 1;
+    text-align: end;
+    display: inline-block;
+    align-self: flex-end;
+}
+
+.resolversHeaderCount > p {
+    font-weight: 300;
+    margin: 0;
+}
+
+.resolversHeaderCount > p > span {
+    font-weight: 400;
+    font-size: 16px;
+    margin-right: 5px;
 }
 
 .resolversContent {
