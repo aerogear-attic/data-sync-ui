@@ -12,24 +12,6 @@
     flex: 1;
 }
 
-.resolversHeaderCount {
-    flex: 1;
-    text-align: end;
-    display: inline-block;
-    align-self: flex-end;
-}
-
-.resolversHeaderCount > p {
-    font-weight: 300;
-    margin: 0;
-}
-
-.resolversHeaderCount > p > span {
-    font-weight: 400;
-    font-size: 14px;
-    margin-right: 5px;
-}
-
 .resolversContent {
     padding-left: 20px;
     padding-right: 20px;

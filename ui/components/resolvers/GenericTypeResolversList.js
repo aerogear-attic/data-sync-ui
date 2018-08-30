@@ -1,9 +1,8 @@
 import React from "react";
 import { Query } from "react-apollo";
-import {
-    Spinner, ListView, Icon
-} from "patternfly-react";
+import { Spinner, ListView } from "patternfly-react";
 import { GenericTypeResolversListItem } from "./resolvers-list-item";
+import { ResolversCount } from "../common";
 
 import styles from "./ResolversListItem.css";
 import { learnMore } from "../common/common.css";
@@ -26,7 +25,7 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
         return null;
     }
 
-    const { resolversContent, resolversHeader, resolversHeaderName, resolversHeaderCount, resolversList } = styles;
+    const { resolversContent, resolversHeader, resolversHeaderName, resolversList } = styles;
     const { name, fields } = items[0];
     return (
         <Query key={name} query={GetResolvers} variables={{ schemaId, type: name }}>
@@ -67,15 +66,7 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
                                     <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
                                 </span>
                             </div>
-                            {kind !== "subscription" ? (
-                                <div className={resolversHeaderCount}>
-                                    <p>
-                                        {definedResolvers === fields.length ? <Icon type="pf" name="ok" /> : null}
-                                        <span>{definedResolvers}/{fields.length}</span>
-                                        {fields.length === 1 ? "Resolver" : "Resolvers"}
-                                    </p>
-                                </div>
-                            ) : null}
+                            {kind !== "subscription" ? <ResolversCount total={fields.length} defined={definedResolvers} /> : null}
                         </div>
                         <ListView className={resolversList}>
                             { list }
