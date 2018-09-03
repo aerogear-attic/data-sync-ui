@@ -2,10 +2,9 @@ import React from "react";
 import { Query } from "react-apollo";
 import { Spinner, ListView } from "patternfly-react";
 import { GenericTypeResolversListItem } from "./resolvers-list-item";
-import { ResolversCount } from "../common";
+import { ResolversCount, LearnMore } from "../common";
 
 import styles from "./ResolversListItem.css";
-import { learnMore } from "../common/common.css";
 
 import GetResolvers from "../../graphql/GetResolvers.graphql";
 
@@ -56,10 +55,8 @@ const GenericTypeResolversList = ({ schemaId, items, text, kind, onClick }) => {
                     <div className={resolversContent}>
                         <div className={resolversHeader}>
                             <div className={resolversHeaderName}>
-                                <span style={{ marginRight: "12px" }}>{text}</span>
-                                <span className={learnMore}>
-                                    <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
-                                </span>
+                                <span>{text}</span>
+                                <LearnMore fragment="structure-view-2" />
                             </div>
                             {kind !== "subscription" ? <ResolversCount fields={fields} resolvers={data.resolvers} /> : null}
                         </div>

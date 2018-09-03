@@ -17,7 +17,7 @@ import { SubscriptionsDropDown } from "./SubscriptionsDropDown";
 import { MappingTemplateDropDown } from "./MappingTemplateDropDown";
 import { HookFormGroup } from "./HookFormGroup";
 import { DeleteResolverDialog } from "./DeleteResolverDialog";
-import { DefaultEmptyView } from "../common/DefaultEmptyView";
+import { LearnMore, DefaultEmptyView } from "../common";
 
 import UpsertResolver from "../../graphql/UpsertResolver.graphql";
 import GetDataSources from "../../graphql/GetDataSources.graphql";
@@ -27,7 +27,7 @@ import GetResolvers from "../../graphql/GetResolvers.graphql";
 import { getTemplatesForDataSource } from "./MappingTemplates";
 
 import {
-    detailHeader, detailFormsContainer, learnMore, detailFormsHeader, formContainer,
+    detailHeader, detailFormsContainer, detailFormsHeader, formContainer,
     detailFormGroup, detailButtonFooter, buttonSave, buttonDelete
 } from "./ResolverDetail.css";
 
@@ -214,9 +214,7 @@ class ResolverDetail extends Component {
                 <div className={detailFormsContainer}>
                     <h3 className={detailFormsHeader}>
                         <span style={{ marginRight: "12px" }}>Resolver</span>
-                        <span className={learnMore}>
-                            <a href="https://www.google.es">Learn More <span className="fa fa-external-link" /></a>
-                        </span>
+                        <LearnMore fragment="resolvers" />
                     </h3>
 
                     <Form horizontal className={formContainer}>

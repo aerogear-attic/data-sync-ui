@@ -8,7 +8,3 @@
 .emptyTitle {
     font-size: 17px;
 }
-
-.learnMore {
-    composes: learnMore from "./common.css";
-}
