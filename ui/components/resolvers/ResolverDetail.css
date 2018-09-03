@@ -40,10 +40,6 @@
     float: right;
 }
 
-.learnMore {
-    composes: learnMore from "../common/common.css";
-}
-
 .formContainer {
     padding-left: 35px;
     padding-top: 10px;

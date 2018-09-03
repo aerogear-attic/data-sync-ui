@@ -21,7 +21,7 @@ const EmptyList = ({ action, title, info, actionName }) => (
             {info}
         </EmptyStateInfo>
         <EmptyStateHelp>
-            For more information have a look at the <a href="https://docs.aerogear.org">&nbsp;docs</a>
+            For more information have a look at the <a href="https://docs.aerogear.org/aerogear/latest/data-sync">&nbsp;docs</a>
         </EmptyStateHelp>
         <EmptyStateAction>
             <Button

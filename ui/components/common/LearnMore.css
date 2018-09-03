@@ -1,0 +1,7 @@
+.wrapper {
+  font-size: 9px;
+}
+
+.wrapper > a > span {
+  margin-left: 3px;
+}

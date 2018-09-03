@@ -12,6 +12,10 @@
     flex: 1;
 }
 
+.resolversHeaderName > span {
+    margin-right: 12px;
+}
+
 .resolversContent {
     padding-left: 20px;
     padding-right: 20px;

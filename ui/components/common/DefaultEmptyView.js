@@ -4,12 +4,9 @@ import {
     EmptyStateIcon,
     EmptyStateTitle
 } from "patternfly-react";
+import { LearnMore } from "./LearnMore";
 
-import {
-    emptyContainer,
-    emptyTitle,
-    learnMore
-} from "./defaultEmptyView.css";
+import { emptyContainer, emptyTitle } from "./defaultEmptyView.css";
 
 const DefaultEmptyView = ({ text, infoText, infoURL }) => (
     <EmptyState className={emptyContainer}>
@@ -17,11 +14,7 @@ const DefaultEmptyView = ({ text, infoText, infoURL }) => (
         <EmptyStateTitle className={emptyTitle}>
             {text}
         </EmptyStateTitle>
-        {infoText ? (
-            <span className={learnMore}>
-                <a href={infoURL}>{infoText} <span className="fa fa-external-link" /></a>
-            </span>
-        ) : null}
+        {infoText ? <LearnMore text={infoText} url={infoURL} /> : null}
     </EmptyState>
 );
 

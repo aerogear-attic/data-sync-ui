@@ -49,7 +49,7 @@ const StructureView = props => {
         <DefaultEmptyView
             text="You must define a Schema for data sync to work correctly"
             infoText="Schema Reference"
-            infoURL="https://graphql.org/learn/schema/"
+            infoURL="https://docs.aerogear.org/aerogear/latest/data-sync#schema"
         />
     );
 };
