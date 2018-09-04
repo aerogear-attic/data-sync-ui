@@ -20,9 +20,9 @@ const DataSourcesDropDown = ({ selected, onDataSourceSelect }) => {
             <Col sm={2} className={dataSourceControlLabel}>Data Source</Col>
             <Col sm={6}>
                 <Query query={GetDataSources} variables={filter}>
-                    {({ loading, error, data: { dataSources } }) => {
+                    {({ loading, error, data: { dataSources } = {} }) => {
                         const disableDropdown = loading
-                            || error
+                            || typeof error === "object"
                             || !dataSources;
 
                         const options = dataSources
