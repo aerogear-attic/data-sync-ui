@@ -13,16 +13,22 @@ class AdditionalInfo extends Component {
         }
     }
 
-    render() {
+    onResolverClick(clickEvent) {
         const { resolver, onClick, schemaId, type, field } = this.props;
+        clickEvent.stopPropagation();
+        onClick({ schemaId, type, field, ...resolver });
+    }
+
+    render() {
+        const { resolver, field } = this.props;
 
         return (
             <div className={resolver ? headingResolverSet : headingResolverUnset}>
                 <span
                     role="button"
                     tabIndex={0}
-                    onClick={() => onClick({ schemaId, type, field, ...resolver })}
-                    onKeyDown={() => onClick({ schemaId, type, field, ...resolver })}
+                    onClick={e => this.onResolverClick(e)}
+                    onKeyDown={e => this.onResolverClick(e)}
                     key={field}
                 >{resolver ? resolver.DataSource.name : "no resolver set"}
                 </span>
