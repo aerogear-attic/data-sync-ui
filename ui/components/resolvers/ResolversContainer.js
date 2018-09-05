@@ -25,13 +25,19 @@ class ResolversContainer extends Component {
         return [];
     }
 
-    onResolverClicked(resolver) {
-        const { isResolverSaved } = this.state;
+    onResolverClicked(clickedResolver) {
+        const { resolver, isResolverSaved } = this.state;
+
+        if (resolver !== null
+            && resolver.type === clickedResolver.type
+            && resolver.field === clickedResolver.field) {
+            return;
+        }
 
         if (isResolverSaved) {
-            this.setState({ resolver });
+            this.setState({ resolver: clickedResolver });
         } else {
-            this.setState({ showChangeConfirmation: true, clickedResolver: resolver });
+            this.setState({ showChangeConfirmation: true, clickedResolver });
         }
     }
 
