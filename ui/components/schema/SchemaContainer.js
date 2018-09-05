@@ -40,7 +40,7 @@ class SchemaContainer extends Component {
         this.setState({ schema, saved: false });
     }
 
-    @keydown("ctrl + s")
+    @keydown("ctrl + s", "cmd + s")
     saveShortcut(e) {
         e.preventDefault();
 
