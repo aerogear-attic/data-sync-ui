@@ -5,7 +5,7 @@ import { Playground, store } from 'graphql-playground-react'
 
 const QueriesContainer = () => 
     <Provider store={store}>
-        <Playground endpoint="http://localhost:8000/graphql" settings={{'editor.theme': 'light'}} />
+        <Playground endpoint="http://localhost:8000/graphql" settings={{'editor.theme': 'light','editor.cursorShape': 'line' }} />
     </Provider>
 
 
