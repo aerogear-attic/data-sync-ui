@@ -11,6 +11,7 @@ import {
 import { DataSourcesContainer } from "./data-sources";
 import { SchemaContainer } from "./schema";
 import { ResolversContainer } from "./resolvers";
+import { QueriesContainer } from "./queries";
 
 import { header, tabs } from "./App.css";
 
@@ -35,6 +36,9 @@ const App = () => (
                         <NavItem eventKey={2}>
                             <div>Resolvers</div>
                         </NavItem>
+                        <NavItem eventKey={3}>
+                            <div>Query</div>
+                        </NavItem>
                     </Nav>
                     {/* Tabs Content */}
                     <TabContent>
@@ -46,6 +50,9 @@ const App = () => (
                         </TabPane>
                         <TabPane eventKey={2} animation={false}>
                             <ResolversContainer />
+                        </TabPane>
+                        <TabPane eventKey={3} animation={false}>
+                            <QueriesContainer />
                         </TabPane>
                     </TabContent>
                 </div>
