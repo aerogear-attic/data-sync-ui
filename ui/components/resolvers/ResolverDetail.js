@@ -190,6 +190,10 @@ class ResolverDetail extends Component {
     }
 
     onDeleteResolver() {
+        // Notify ResolversContainer, that there are no unsaved changes now
+        const { onResolverEdit } = this.props;
+        onResolverEdit({ isResolverSaved: true });
+
         this.setState(INITIAL_STATE);
     }
 
