@@ -28,7 +28,7 @@ class ResolversContainer extends Component {
     onResolverClicked(clickedResolver) {
         const { resolver, isResolverSaved } = this.state;
 
-        if (resolver !== null
+        if (resolver !== null && clickedResolver !== null
             && resolver.type === clickedResolver.type
             && resolver.field === clickedResolver.field) {
             return;
