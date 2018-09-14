@@ -6,7 +6,7 @@ let instance = null;
 if (notifier.enabled && notifiers[notifier.type]) {
     instance = new notifiers[notifier.type](notifier.config);
 } else {
-    // Notifications will not be available for testing because we don't have
+    // Notifications will not be available for testing because we dont have
     // a running postgres instance
     log.warn(`notifier unknown or disabled: ${notifier.type}`);
 }

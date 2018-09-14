@@ -1,7 +1,8 @@
 const { buildSchema } = require("graphql");
+const { KnexResolverManager, GraphQLBackendCreator, PostgresSchemaManager } = require("apollo-resolver-gen");
 const { log, auditLog } = require("../logger");
 const { dataSource, database, supportsiLike, schema, resolver, subscription } = require("../models");
-const { compileSchemaString, formatGraphqlErrors } = require("./helper");
+const { compileSchemaString } = require("./helper");
 const configNotifier = require("../configNotifiers/configNotifierCreator");
 const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
 
@@ -256,17 +257,119 @@ const getSchema = async ({ name }) => {
     return defaultSchema;
 };
 
+
+
 const updateSchema = async args => {
     try {
-        const compiled = await compileSchemaString(args.schema);
-        if (compiled.errors) {
-            return new Error(formatGraphqlErrors(compiled));
+        const currentSchema = await schema.findById(args.id);
+
+        const backend = new GraphQLBackendCreator(args.schema, { generateGraphQLSchema: true, createDatabaseSchema: true });
+        // UI part
+        const connectionConfig = {
+            user: "postgresql",
+            password: "postgres",
+            database: "memeolist_db",
+            host: "127.0.0.1",
+            port: "15432"
+        };
+        const manager = new PostgresSchemaManager(connectionConfig, "test_");
+        backend.registerDataResourcesManager(manager);
+        const resolverManager = new KnexResolverManager('test_');
+        backend.registerResolverManager(resolverManager);
+
+        const generated = await backend.createBackend();
+        const updatedSchema = await currentSchema.update({
+            schema: generated.schema
+        });
+
+        console.error(JSON.stringify(generated.schema, undefined, 4));
+        console.error(JSON.stringify(generated.resolvers, undefined, 4));
+        if (generated.resolvers && generated.resolvers.length == 6) {
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Mutation",
+                field: "createNote",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[0].implementation,
+                responseMapping: "",
+                publish: true
+            });
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Query",
+                field: "findNote",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[1].implementation,
+                responseMapping: "",
+                publish: true
+            });
+
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Query",
+                field: "updateNote",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[2].implementation,
+                responseMapping: "",
+                publish: true
+            });
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Query",
+                field: "findNoteBy",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[3].implementation,
+                responseMapping: "",
+                publish: true
+            });
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Query",
+                field: "findAllNote",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[4].implementation,
+                responseMapping: "",
+                publish: true
+            });
+
+            await upsertResolver({
+                id: undefined,
+                schemaId: 1,
+                dataSourceId: 1,
+                type: "Query",
+                field: "deleteNote",
+                preHook: "",
+                postHook: "",
+                requestMapping: generated.resolvers[5].implementation,
+                responseMapping: "",
+                publish: true
+            });
+        } else {
+            console.log("Invalid length for resolvers");
         }
 
-        const currentSchema = await schema.findById(args.id);
-        const updatedSchema = await currentSchema.update({
-            schema: args.schema
-        });
+        const exist = await manager.getConnection().schema.hasTable("test_note");
+        console.log(`Database created ${exist}`);
 
         configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Schema" });
         auditLog({
@@ -275,6 +378,12 @@ const updateSchema = async args => {
             name: updatedSchema.name,
             type: updatedSchema.schema
         });
+
+        const compiled = await compileSchemaString(updatedSchema.schema);
+        if (compiled.errors) {
+            return new Error(formatGraphqlErrors(compiled));
+        }
+
         return {
             id: args.id,
             name: updatedSchema.name,

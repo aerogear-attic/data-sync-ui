@@ -21,6 +21,7 @@
     "release:validate": "./scripts/validateRelease.sh"
   },
   "dependencies": {
+    "apollo-resolver-gen": "wtrocki/apollo-resolver-gen#ideas",
     "apollo-boost": "^0.1.13",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
