@@ -106,7 +106,7 @@ Writing tests cases with Enzyme, Apollo and React might be tricky. Before adding
     </MockedProvider>
    ```
    Read more about testing with Apollo and React ah the [Apollo testing guide](https://www.apollographql.com/docs/guides/testing-react-components.html).
-* When asserting using query result, you must define mocks for all involved ones. They have to be mocked in the exact way they are called and they are only valid for 1 call. Moreover, the process turns into async so this has to be handled properly to avoid false positives. This [Github issues answer](https://github.com/apollographql/react-apollo/issues/1711#issuecomment-369511476) describes briefly and concisely how to do it.
+* When asserting using query result, you must define mocks for all involved ones. They have to be mocked in the exact way they are called and they are only valid for 1 call. Moreover, this process is async and the compoent first render won't have any results yet (potentially ending up with a false negative). To workaround this, use the utility function `sleep()` and `wrapper.update()` in order for the queries to finish. This [Github issues answer](https://github.com/apollographql/react-apollo/issues/1711#issuecomment-369511476) describes briefly and concisely how to do it.
 * GraphQL-indenpendant components may be better rendered with `shallow()` and `render()`, read more about them at [Enzyme docs](http://airbnb.io/enzyme/docs/api/).
 * Enzyme wrappers are snapshots of the DOM. Whenever you expect something to change, don't forget calling `wrapper.update()`.
 * Use [it.skip()](https://jestjs.io/docs/en/api#testname-fn-timeout) instead of commenting out blocks or adding TODOs.
