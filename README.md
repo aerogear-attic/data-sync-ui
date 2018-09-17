@@ -70,3 +70,44 @@ A running PostgreSQL server. To run postgres in a docker container use the follo
 UI server has some environment variables to be set. If they're not set, defaults for development will be used.
 
 * `AUDIT_LOGGING`:   : If true, audit logs of resolver operations will be logged to stdout. Defaults to true.
+ 
+# Tests
+
+The UI makes use of [Jest](https://jestjs.io/) as assertion library and [Enzyme](http://airbnb.io/enzyme/) as DOM rendering and manipulation utility.
+
+## Running the test suite
+To execute the whole test suite:
+1. Make sure the app is stopped, otherwise server tests will fail.
+1. Install development dependencies:
+    ```shell
+    npm install --development
+    ```    
+1. Run:
+    ```shell
+    npm run test
+    ```
+
+To execute a single test file:
+1. Install Jest or run it from the project dependencies:
+    ```shell
+    node_modules/.bin/jest path/to/test.js
+    ```
+> You can also run a single test using [`it.only()`](https://jestjs.io/docs/en/api#testonlyname-fn-timeout).
+
+## Adding new tests
+
+Writing tests cases with Enzyme, Apollo and React might be tricky. Before adding any new ones, keep in mind:
+
+* Test files must end with `.test.js` for Jest to find them.
+* Components using GraphQL queries must be fully rendered and inside a `MockedProvided` component:
+   ```javascript
+    <MockedProvider mocks={[]} addTypename={false}>
+        <DataSourcesList />
+    </MockedProvider>
+   ```
+   Read more about testing with Apollo and React ah the [Apollo testing guide](https://www.apollographql.com/docs/guides/testing-react-components.html).
+* When asserting using query result, you must define mocks for all involved ones. They have to be mocked in the exact way they are called and they are only valid for 1 call. Moreover, this process is async and the component first render won't have any results yet (potentially ending up with a false negative). To workaround this, use the utility function `sleep()` and `wrapper.update()` in order for the queries to finish. This [Github issues answer](https://github.com/apollographql/react-apollo/issues/1711#issuecomment-369511476) describes briefly and concisely how to do it.
+* GraphQL-independent components may be better rendered with `shallow()` and `render()`, read more about them at [Enzyme docs](http://airbnb.io/enzyme/docs/api/).
+* Enzyme wrappers are snapshots of the DOM. Whenever you expect something to change, don't forget calling `wrapper.update()`.
+* Use [it.skip()](https://jestjs.io/docs/en/api#testname-fn-timeout) instead of commenting out blocks or adding TODOs.
+> If using *VSCode*, give [Jest VSCode Extension](https://github.com/jest-community/vscode-jest) a try.
