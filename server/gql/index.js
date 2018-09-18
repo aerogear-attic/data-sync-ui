@@ -12,5 +12,6 @@ module.exports = App => {
         graphiql: graphql.debug
     }));
 
+
     log.info(`GraphQl server mounted at /${GQL_PATH}`);
 };

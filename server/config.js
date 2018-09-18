@@ -6,7 +6,19 @@ exports.postgresConfig = {
     password: process.env.POSTGRES_PASSWORD || "postgres",
     host: process.env.POSTGRES_HOST || "127.0.0.1",
     port: process.env.POSTGRES_PORT || "5432",
-    logSql: false
+    logSql: false,
+    type: "postgres"
+};
+
+exports.sqLiteConfig = {
+    database: process.env.SQLITE_DATABASE || "sqlite://:memory:",
+    username: process.env.SQLITE_USERNAME || null,
+    password: process.env.SQLITE_PASSWORD || null,
+    options: {
+        dialect: "sqlite",
+        logging: false
+    },
+    type: "sqlite"
 };
 
 exports.notifier = {

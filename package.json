@@ -21,7 +21,9 @@
     "release:validate": "./scripts/validateRelease.sh"
   },
   "dependencies": {
+    "@aerogear/data-sync-gql-core": "git+https://git@github.com/aerogear/data-sync-gql-core.git#master",
     "apollo-boost": "^0.1.13",
+    "apollo-server-express": "^2.0.7",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
@@ -32,6 +34,7 @@
     "graphql": "^0.13.2",
     "graphql-playground-react": "^1.7.4",
     "graphql-tag": "^2.9.2",
+    "graphql-tools": "^3.1.1",
     "lodash.some": "^4.6.0",
     "patternfly-react": "^2.13.1",
     "pg": "^7.4.3",

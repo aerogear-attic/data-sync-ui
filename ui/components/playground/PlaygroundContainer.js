@@ -9,7 +9,7 @@ const settings = {
 
 const PlaygroundContainer = () => (
     <Provider store={store}>
-        <Playground endpoint="http://localhost:8000/graphql" settings={settings} />
+        <Playground endpoint="/graphqldata" settings={settings} />
     </Provider>
 );
 
