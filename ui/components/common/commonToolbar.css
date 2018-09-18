@@ -5,8 +5,8 @@
 }
 
 .toolbarButtonContainer {
-    float: right;
-    margin-right: -10px;
+    float: left;
+    /**margin-right: -10px;*/
 }
 
 .toolbarButton {

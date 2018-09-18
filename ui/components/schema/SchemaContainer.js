@@ -83,11 +83,56 @@ class SchemaContainer extends Component {
         });
     }
 
+    loadSchema(name) {
+        if (name) {
+            this.onSchemaChange(`
+type Note {
+    id: ID!
+    title: String!
+    description: String!
+}`);
+        } else {
+            this.onSchemaChange("");
+        }
+    }
+
     getToolbarButtons() {
         const { getSchema: { id, valid } } = this.props.data;
         const { saved, saving } = this.state;
 
         return [
+            {
+                title: "Example Hello world schema",
+                props: {
+                    key: "seed_hello_world_schema",
+                    bsStyle: "primary",
+                    onClick: () => this.loadSchema("hello_world")
+                }
+            },
+            {
+                title: "Example MemeoList Postgres schema",
+                props: {
+                    key: "seed_memeo_schema",
+                    bsStyle: "primary",
+                    onClick: () => this.loadSchema("memeolist")
+                }
+            },
+            {
+                title: "Example Chat Postgres schema",
+                props: {
+                    key: "seed_chat_schema",
+                    bsStyle: "primary",
+                    onClick: () => this.loadSchema("chat")
+                }
+            },
+            {
+                title: "Your own schema",
+                props: {
+                    key: "seed_new_schema",
+                    bsStyle: "primary",
+                    onClick: () => this.loadSchema()
+                }
+            },
             {
                 title: "Download Compiled Schema",
                 props: {

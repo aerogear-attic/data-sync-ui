@@ -284,8 +284,7 @@ const updateSchema = async args => {
 
         console.error(JSON.stringify(generated.schema, undefined, 4));
         console.error(JSON.stringify(generated.resolvers, undefined, 4));
-        if (generated.resolvers && generated.resolvers.length == 6) {
-
+        if (generated.resolvers && generated.resolvers.length === 6) {
             await upsertResolver({
                 id: undefined,
                 schemaId: 1,
@@ -295,8 +294,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[0].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
 
             await upsertResolver({
@@ -308,8 +306,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[1].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
 
 
@@ -322,8 +319,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[2].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
 
             await upsertResolver({
@@ -335,8 +331,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[3].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
 
             await upsertResolver({
@@ -348,8 +343,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[4].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
 
             await upsertResolver({
@@ -361,8 +355,7 @@ const updateSchema = async args => {
                 preHook: "",
                 postHook: "",
                 requestMapping: generated.resolvers[5].implementation,
-                responseMapping: "",
-                publish: true
+                responseMapping: ""
             });
         } else {
             console.log("Invalid length for resolvers");
