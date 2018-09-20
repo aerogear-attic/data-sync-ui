@@ -5,6 +5,7 @@ const { dataSource, database, supportsiLike, schema, resolver, subscription } = 
 const { compileSchemaString } = require("./helper");
 const configNotifier = require("../configNotifiers/configNotifierCreator");
 const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
+const { formatGraphqlErrors } = require("./helper");
 
 const Schema = buildSchema(`
     enum DataSourceType {
@@ -23,7 +24,7 @@ const Schema = buildSchema(`
         createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
         deleteDataSource(id: Int!): DataSource
         updateDataSource(id: Int!, name: String!, type: DataSourceType!, config: JSON!): DataSource
-        updateSchema(id: Int!, schema: String!): Schema
+        updateSchema(id: Int!, schema: String!, generate: Boolean): Schema
         upsertResolver(
             id: Int
             schemaId: Int!
@@ -258,113 +259,50 @@ const getSchema = async ({ name }) => {
 };
 
 
-
 const updateSchema = async args => {
+    console.error(`generate ${args.generate}`);
     try {
         const currentSchema = await schema.findById(args.id);
+        let updatedSchema;
+        if (args.generate) {
+            const backend =  new GraphQLBackendCreator(args.schema, { namespace: "project_" });
+            // UI part
+            const connectionConfig = {
+                user: "postgresql",
+                password: "postgres",
+                database: "memeolist_db",
+                host: "127.0.0.1",
+                port: "15432"
+            };
+            const manager = new PostgresSchemaManager(connectionConfig);
+            backend.registerDataResourcesManager(manager);
+            const resolverManager = new KnexResolverManager();
+            backend.registerResolverManager(resolverManager);
 
-        const backend = new GraphQLBackendCreator(args.schema, { generateGraphQLSchema: true, createDatabaseSchema: true });
-        // UI part
-        const connectionConfig = {
-            user: "postgresql",
-            password: "postgres",
-            database: "memeolist_db",
-            host: "127.0.0.1",
-            port: "15432"
-        };
-        const manager = new PostgresSchemaManager(connectionConfig, "test_");
-        backend.registerDataResourcesManager(manager);
-        const resolverManager = new KnexResolverManager('test_');
-        backend.registerResolverManager(resolverManager);
-
-        const generated = await backend.createBackend();
-        const updatedSchema = await currentSchema.update({
-            schema: generated.schema
-        });
-
-        console.error(JSON.stringify(generated.schema, undefined, 4));
-        console.error(JSON.stringify(generated.resolvers, undefined, 4));
-        if (generated.resolvers && generated.resolvers.length === 6) {
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Mutation",
-                field: "createNote",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[0].implementation,
-                responseMapping: ""
+            const generated = await backend.createBackend();
+            updatedSchema = await currentSchema.update({
+                schema: generated.schema
             });
 
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Query",
-                field: "findNote",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[1].implementation,
-                responseMapping: ""
-            });
-
-
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Query",
-                field: "updateNote",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[2].implementation,
-                responseMapping: ""
-            });
-
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Query",
-                field: "findNoteBy",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[3].implementation,
-                responseMapping: ""
-            });
-
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Query",
-                field: "findAllNote",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[4].implementation,
-                responseMapping: ""
-            });
-
-            await upsertResolver({
-                id: undefined,
-                schemaId: 1,
-                dataSourceId: 1,
-                type: "Query",
-                field: "deleteNote",
-                preHook: "",
-                postHook: "",
-                requestMapping: generated.resolvers[5].implementation,
-                responseMapping: ""
-            });
+            console.error(JSON.stringify(generated.resolvers, undefined, 4));
+            for (const generatedResolver of generated.resolvers) {
+                await upsertResolver({
+                    id: undefined,
+                    schemaId: 1,
+                    dataSourceId: 1,
+                    type: generatedResolver.resolverType,
+                    field: generatedResolver.fieldName,
+                    preHook: "",
+                    postHook: "",
+                    requestMapping: generatedResolver.implementation,
+                    responseMapping: ""
+                });
+            }
         } else {
-            console.log("Invalid length for resolvers");
+            updatedSchema = await currentSchema.update({
+                schema: args.schema
+            });
         }
-
-        const exist = await manager.getConnection().schema.hasTable("test_note");
-        console.log(`Database created ${exist}`);
-
-        configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Schema" });
         auditLog({
             operation: "updateSchema",
             id: args.id,
@@ -376,7 +314,7 @@ const updateSchema = async args => {
         if (compiled.errors) {
             return new Error(formatGraphqlErrors(compiled));
         }
-
+        configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Schema" });
         return {
             id: args.id,
             name: updatedSchema.name,

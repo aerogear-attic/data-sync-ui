@@ -14,6 +14,7 @@ const INITIAL_STATE = {
     schema: "",
     compiled: null,
     schemaId: null,
+    generate: false,
     error: null,
     saving: false,
     saved: true
@@ -49,10 +50,11 @@ class SchemaContainer extends Component {
         if (saved || saving) {
             return;
         }
-        this.save();
+        this.save(false);
     }
 
-    save() {
+    save(generate) {
+        console.log("GENERATE" + generate);
         const { schema } = this.state;
         const { getSchema } = this.props.data;
 
@@ -61,7 +63,8 @@ class SchemaContainer extends Component {
         this.props.mutate({
             variables: {
                 id: getSchema.id,
-                schema
+                schema,
+                generate
             },
             refetchQueries: [{
                 query: GetSchema,
@@ -90,7 +93,16 @@ type Note {
     id: ID!
     title: String!
     description: String!
-}`);
+    data: String!
+}
+
+type Comment {
+    id: ID!
+    title: String!
+    description: String!
+    author: String!
+}
+`);
         } else {
             this.onSchemaChange("");
         }
@@ -102,27 +114,11 @@ type Note {
 
         return [
             {
-                title: "Example Hello world schema",
+                title: "Example schema",
                 props: {
                     key: "seed_hello_world_schema",
                     bsStyle: "primary",
                     onClick: () => this.loadSchema("hello_world")
-                }
-            },
-            {
-                title: "Example MemeoList Postgres schema",
-                props: {
-                    key: "seed_memeo_schema",
-                    bsStyle: "primary",
-                    onClick: () => this.loadSchema("memeolist")
-                }
-            },
-            {
-                title: "Example Chat Postgres schema",
-                props: {
-                    key: "seed_chat_schema",
-                    bsStyle: "primary",
-                    onClick: () => this.loadSchema("chat")
                 }
             },
             {
@@ -147,6 +143,14 @@ type Note {
                 props: {
                     onClick: () => this.save(),
                     key: "save_schema",
+                    disabled: saved || saving
+                }
+            },
+            {
+                title: (saving && "Generating Schema...") || (saved && "Schema Generated") || "Generate Schema",
+                props: {
+                    onClick: () => this.save(true),
+                    key: "gen_schema",
                     disabled: saved || saving
                 }
             }

@@ -1,5 +1,5 @@
-mutation UpdateSchema($id: Int!, $schema: String!) {
-    updateSchema(id: $id, schema: $schema) {
+mutation UpdateSchema($id: Int!, $schema: String!, $generate: Boolean) {
+    updateSchema(id: $id, schema: $schema, generate: $generate) {
         compiled
     }
 }
