@@ -7,10 +7,10 @@ const settings = {
     "editor.cursorShape": "line"
 };
 
-const QueriesContainer = () => (
+const PlaygroundContainer = () => (
     <Provider store={store}>
         <Playground endpoint="http://localhost:8000/graphql" settings={settings} />
     </Provider>
 );
 
-export { QueriesContainer };
+export { PlaygroundContainer };
