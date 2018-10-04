@@ -8,7 +8,8 @@ const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator"
 const Schema = buildSchema(`
     enum DataSourceType {
         InMemory,
-        Postgres
+        Postgres,
+        Mongo
     },
     type Query {
         dataSources(name: String): [DataSource]

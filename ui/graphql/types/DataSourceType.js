@@ -1,4 +1,5 @@
 export const DataSourceType = {
     InMemory: "InMemory",
-    Postgres: "Postgres"
+    Postgres: "Postgres",
+    Mongo: "Mongo"
 };
