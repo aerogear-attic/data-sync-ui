@@ -4,10 +4,13 @@ exports.postgresConfig = {
     database: process.env.POSTGRES_DATABASE || "aerogear_data_sync_db",
     username: process.env.POSTGRES_USERNAME || "postgresql",
     password: process.env.POSTGRES_PASSWORD || "postgres",
-    host: process.env.POSTGRES_HOST || "127.0.0.1",
-    port: process.env.POSTGRES_PORT || "5432",
-    logSql: false,
-    type: "postgres"
+    options: {
+        host: process.env.POSTGRES_HOST || "127.0.0.1",
+        port: process.env.POSTGRES_PORT || "5432",
+        dialect: "postgres",
+        operatorAliases: false,
+        logging: false
+    }
 };
 
 exports.sqLiteConfig = {
@@ -17,8 +20,7 @@ exports.sqLiteConfig = {
     options: {
         dialect: "sqlite",
         logging: false
-    },
-    type: "sqlite"
+    }
 };
 
 exports.notifier = {
@@ -29,8 +31,8 @@ exports.notifier = {
         database: exports.postgresConfig.database,
         username: exports.postgresConfig.username,
         password: exports.postgresConfig.password,
-        host: exports.postgresConfig.host,
-        port: exports.postgresConfig.port
+        host: exports.postgresConfig.options.host,
+        port: exports.postgresConfig.options.port
     }
 };
 

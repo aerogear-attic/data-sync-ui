@@ -18,6 +18,7 @@ const builtSchema = buildSchema(`
         getSchema(name: String!): Schema
         resolvers(schemaId: Int!, type: String): [Resolver]
         getDataSourceTestResult(type: DataSourceType!, config: JSON!): DataSourceTestResult
+        getGraphQLEndpoint: String
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
@@ -51,7 +52,8 @@ const builtSchema = buildSchema(`
         schema: String!
         valid: Boolean!
         compiled: String!
-        resolvers: [Resolver]        
+        resolvers: [Resolver] 
+        graphQLEndpoint: String         
     },
     type Resolver {
         id: Int! 
@@ -288,6 +290,8 @@ const updateSchema = async args => {
     }
 };
 
+const getGraphQLEndpoint = () => "/graphqldata";
+
 const root = {
     dataSources: listDataSources,
     resolvers: listResolvers,
@@ -300,7 +304,8 @@ const root = {
     updateDataSource,
     updateSchema,
     schemas: listSchemas,
-    getSchema
+    getSchema,
+    getGraphQLEndpoint
 };
 
 module.exports = { Schema: builtSchema, root };

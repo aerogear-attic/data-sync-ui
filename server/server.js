@@ -7,9 +7,15 @@ const { sequelize } = require("./gql/models");
 const { stopNotifications } = require("./configNotifiers/configNotifierCreator");
 const serverApi = require("./routes");
 
-const applyExecutableMiddleware = require("./playground");
+const applyExecutionLayerForSchema = require("./executionLayer");
 
 const App = express();
+
+const schemaName = "default";
+
+const options = {
+    path: "/graphqldata"
+};
 
 // Set-up payload parsers. We accept url encoded and json values
 App.use(urlencoded({ extended: false }));
@@ -25,7 +31,7 @@ App.use("/", serverApi());
 
 async function setup() {
     try {
-        await applyExecutableMiddleware(App);
+        await applyExecutionLayerForSchema(App, schemaName, options);
     } catch (error) {
         log.error("Could not apply middleware.", error);
     }
