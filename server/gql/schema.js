@@ -18,7 +18,6 @@ const builtSchema = buildSchema(`
         getSchema(name: String!): Schema
         resolvers(schemaId: Int!, type: String): [Resolver]
         getDataSourceTestResult(type: DataSourceType!, config: JSON!): DataSourceTestResult
-        getGraphQLEndpoint: String
     },
     type Mutation {
         createDataSource(name: String!, type: DataSourceType!, config: JSON!): DataSource
@@ -290,8 +289,6 @@ const updateSchema = async args => {
     }
 };
 
-const getGraphQLEndpoint = () => "/graphqldata";
-
 const root = {
     dataSources: listDataSources,
     resolvers: listResolvers,
@@ -304,8 +301,7 @@ const root = {
     updateDataSource,
     updateSchema,
     schemas: listSchemas,
-    getSchema,
-    getGraphQLEndpoint
+    getSchema
 };
 
 module.exports = { Schema: builtSchema, root };

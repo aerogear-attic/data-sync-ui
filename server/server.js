@@ -13,10 +13,6 @@ const App = express();
 
 const schemaName = "default";
 
-const options = {
-    path: "/graphqldata"
-};
-
 // Set-up payload parsers. We accept url encoded and json values
 App.use(urlencoded({ extended: false }));
 App.use(json());
@@ -31,7 +27,7 @@ App.use("/", serverApi());
 
 async function setup() {
     try {
-        await applyExecutionLayerForSchema(App, schemaName, options);
+        await applyExecutionLayerForSchema(App, schemaName);
     } catch (error) {
         log.error("Could not apply middleware.", error);
     }
