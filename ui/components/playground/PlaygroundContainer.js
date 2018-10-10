@@ -7,10 +7,13 @@ const settings = {
     "editor.cursorShape": "line"
 };
 
-const PlaygroundContainer = () => (
-    <Provider store={store}>
-        <Playground endpoint="http://localhost:8000/graphql" settings={settings} />
-    </Provider>
-);
+const PlaygroundContainer = props => {
+    const { data } = props;
+    return (
+        <Provider store={store}>
+            <Playground endpoint={`/projects/${data.variables.name}`} settings={settings} />
+        </Provider>
+    );
+};
 
 export { PlaygroundContainer };

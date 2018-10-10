@@ -2,7 +2,7 @@ const { graphql } = require("graphql");
 const { agent } = require("supertest");
 const { Schema, root } = require("../../server/gql/schema");
 const { run, stop } = require("../../server/server");
-const { reset, sync } = require("../../server/models");
+const { reset, sync } = require("../../server/gql/models");
 const {
     CREATE_DATA_SOURCE,
     GET_DATA_SOURCES,

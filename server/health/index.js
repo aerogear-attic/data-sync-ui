@@ -1,8 +1,9 @@
-const { database } = require("../models");
+
+const { sequelize } = require("../gql/models");
 
 exports.runHealthChecks = function () {
     function databaseConnectivityCheck() {
-        return database.authenticate();
+        return sequelize.authenticate();
     }
 
     /**

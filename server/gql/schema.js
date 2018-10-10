@@ -1,11 +1,12 @@
 const { buildSchema } = require("graphql");
 const { log, auditLog } = require("../logger");
-const { dataSource, database, supportsiLike, schema, resolver, subscription } = require("../models");
 const { compileSchemaString, formatGraphqlErrors } = require("./helper");
 const configNotifier = require("../configNotifiers/configNotifierCreator");
 const dataSourceValidator = require("../dataSourceValidator/dataSourceValidator");
 
-const Schema = buildSchema(`
+const { DataSource, GraphQLSchema, Resolver, Subscription, sequelize } = require("./models");
+
+const builtSchema = buildSchema(`
     enum DataSourceType {
         InMemory,
         Postgres
@@ -50,7 +51,8 @@ const Schema = buildSchema(`
         schema: String!
         valid: Boolean!
         compiled: String!
-        resolvers: [Resolver]        
+        resolvers: [Resolver] 
+        graphQLEndpoint: String         
     },
     type Resolver {
         id: Int! 
@@ -73,7 +75,7 @@ const Schema = buildSchema(`
 `);
 
 const createDataSource = async ({ name, type, config }) => {
-    const created = await dataSource.create({
+    const created = await DataSource.create({
         name,
         type,
         config
@@ -91,27 +93,27 @@ const createDataSource = async ({ name, type, config }) => {
 
 const listDataSources = ({ name }) => {
     if (name) {
-        const operator = supportsiLike() ? database.Op.iLike : database.Op.like;
-        return dataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
+        const operator = sequelize.Op.like;
+        return DataSource.findAll({ where: { name: { [operator]: `%${name}%` } } });
     }
 
-    return dataSource.findAll({
+    return DataSource.findAll({
         include: [{ all: true }]
     });
 };
 
-const listResolvers = ({ schemaId, type }) => resolver.findAll({
+const listResolvers = ({ schemaId, type }) => Resolver.findAll({
     where: {
         GraphQLSchemaId: schemaId,
         type
     },
     include: {
-        model: dataSource,
+        model: DataSource,
         as: "DataSource"
     }
 });
 
-const getOneResolver = ({ id }) => resolver.findById(id, {
+const getOneResolver = ({ id }) => Resolver.findById(id, {
     include: [{ all: true }]
 });
 
@@ -133,16 +135,16 @@ const upsertResolver = async ({
 
     let result;
     if (id) {
-        const updated = await resolver.findById(id);
+        const updated = await Resolver.findById(id);
         result = updated.update(properties);
         if (properties.publish) {
-            subscription.findOrCreate({
+            Subscription.findOrCreate({
                 where: { field: properties.publish },
                 defaults: { type: "Subscription", GraphQLSchemaId: schemaId }
             });
         }
     } else {
-        result = resolver.create(properties);
+        result = Resolver.create(properties);
     }
 
     configNotifier.publish(configNotifier.DEFAULT_CHANNEL, { reload: "Resolver" });
@@ -160,8 +162,8 @@ const upsertResolver = async ({
 };
 
 const deleteResolver = async ({ id }) => {
-    const foundResolver = await resolver.findById(id);
-    if (!resolver) {
+    const foundResolver = await Resolver.findById(id);
+    if (!Resolver) {
         return null;
     }
 
@@ -179,12 +181,12 @@ const deleteResolver = async ({ id }) => {
 };
 
 
-const getOneDataSource = ({ id }) => dataSource.findById(id, {
+const getOneDataSource = ({ id }) => DataSource.findById(id, {
     include: [{ all: true }]
 });
 
 const deleteDataSource = async ({ id }) => {
-    const foundDataSource = await dataSource.findById(id);
+    const foundDataSource = await DataSource.findById(id);
     if (!foundDataSource) {
         return null;
     }
@@ -204,7 +206,7 @@ const deleteDataSource = async ({ id }) => {
 };
 
 const updateDataSource = async ({ id, name, type, config }) => {
-    const current = await dataSource.findById(id);
+    const current = await DataSource.findById(id);
     const updated = await current.update({
         name,
         type,
@@ -222,14 +224,14 @@ const updateDataSource = async ({ id, name, type, config }) => {
     return updated;
 };
 
-const listSchemas = async () => schema.findAll({
+const listSchemas = async () => GraphQLSchema.findAll({
     include: [{ all: true }]
 });
 
 const getDataSourceTestResult = async ({ type, config }) => dataSourceValidator(type, config);
 
 const getSchema = async ({ name }) => {
-    const [defaultSchema, created] = await schema.findOrCreate({
+    const [defaultSchema, created] = await GraphQLSchema.findOrCreate({
         where: { name },
         defaults: {
             schema: "# Add your schema here"
@@ -263,7 +265,7 @@ const updateSchema = async args => {
             return new Error(formatGraphqlErrors(compiled));
         }
 
-        const currentSchema = await schema.findById(args.id);
+        const currentSchema = await GraphQLSchema.findById(args.id);
         const updatedSchema = await currentSchema.update({
             schema: args.schema
         });
@@ -302,4 +304,4 @@ const root = {
     getSchema
 };
 
-module.exports = { Schema, root };
+module.exports = { Schema: builtSchema, root };
